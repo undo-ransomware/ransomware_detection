@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>ransomware_detection</id>
+    <name>Ransomware detection</name>
+    <summary><![CDATA[This app monitors file operations to detect ransomware attacks for a guided user-controlled recovery.]]></summary>
+    <description><![CDATA[This app monitors file operations to detect ransomware attacks by using generic indicators for a guided user-controlled recovery utilizing the integrated file versioning methods.]]></description>
+    <licence>agpl</licence>
+    <author mail="matthias.held@uni-konstanz.de">Matthias Held</author>
+    <version>0.2.3</version>
+    <namespace>RansomwareDetection</namespace>
+    <category>files</category>
+    <category>monitoring</category>
+    <category>security</category>
+    <bugs>https://github.com/ilovemilk/ransomware_detection/issues</bugs>
+    <dependencies>
+        <nextcloud min-version="13" max-version="13"/>
+    </dependencies>
+
+    <navigations>
+        <navigation>
+            <name>Ransomware recovery</name>
+            <route>ransomware_detection.recover.index</route>
+        </navigation>
+    </navigations>
+
+    <types>
+		<logging/>
+	</types>
+
+    <settings>
+        <admin>OCA\RansomwareDetection\Settings\Admin</admin>
+        <admin-section>OCA\RansomwareDetection\Settings\AdminSection</admin-section>
+        <personal>OCA\RansomwareDetection\Settings\Personal</personal>
+        <personal-section>OCA\RansomwareDetection\Settings\PersonalSection</personal-section>
+    </settings>
+
+    <background-jobs>
+        <job>OCA\RansomwareDetection\BackgroundJob\CleanUpJob</job>
+    </background-jobs>
+</info>
