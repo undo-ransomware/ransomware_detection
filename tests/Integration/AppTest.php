@@ -76,7 +76,7 @@ abstract class AppTest extends PHPUnit_Framework_TestCase
     protected function clearDatabase($user)
     {
         $sql = [
-            'DELETE FROM `*PREFIX*ransomware_detection_file_operation` WHERE `user_id` = ?',
+            'DELETE FROM `*PREFIX*ransomware_detection` WHERE `user_id` = ?',
         ];
         $db = $this->container->query(IDBConnection::class);
         foreach ($sql as $query) {

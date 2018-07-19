@@ -58,7 +58,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $userId = 'john';
         $id = 3;
         $rows = [['id' => $this->fileOperations[0]->getId()]];
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` '.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` '.
             'WHERE `id` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$id, $userId], $rows);
@@ -71,7 +71,7 @@ class FileOperationServiceTest extends MapperTestUtility
     {
         $userId = 'john';
         $id = 3;
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` '.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` '.
             'WHERE `id` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$id, $userId]);
@@ -86,7 +86,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $userId = 'john';
         $id = 3;
         $rows = $this->twoRows;
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` '.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` '.
             'WHERE `id` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$id, $userId], $rows);
@@ -101,7 +101,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $userId = 'john';
         $name = 'test';
         $rows = [['id' => $this->fileOperations[0]->getId()]];
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` '.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` '.
             'WHERE `original_name` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$name, $userId], $rows);
@@ -114,7 +114,7 @@ class FileOperationServiceTest extends MapperTestUtility
     {
         $userId = 'john';
         $name = 'test';
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` '.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` '.
             'WHERE `original_name` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$name, $userId]);
@@ -129,7 +129,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $userId = 'john';
         $name = 'test';
         $rows = $this->twoRows;
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` '.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` '.
             'WHERE `original_name` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$name, $userId], $rows);
@@ -143,7 +143,7 @@ class FileOperationServiceTest extends MapperTestUtility
     {
         $userId = 'john';
         $rows = [['id' => $this->fileOperations[0]->getId()]];
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` WHERE `user_id` = ?'.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `user_id` = ?'.
             'ORDER BY id DESC LIMIT 1';
 
         $this->setMapperResult($sql, [$userId], $rows);
@@ -155,7 +155,7 @@ class FileOperationServiceTest extends MapperTestUtility
     public function testFindOneWithHighestIdNotFound()
     {
         $userId = 'john';
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` WHERE `user_id` = ?'.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `user_id` = ?'.
             'ORDER BY id DESC LIMIT 1';
 
         $this->setMapperResult($sql, [$userId]);
@@ -169,7 +169,7 @@ class FileOperationServiceTest extends MapperTestUtility
     {
         $userId = 'john';
         $rows = $this->twoRows;
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` WHERE `user_id` = ?'.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `user_id` = ?'.
             'ORDER BY id DESC LIMIT 1';
 
         $this->setMapperResult($sql, [$userId], $rows);
@@ -183,7 +183,7 @@ class FileOperationServiceTest extends MapperTestUtility
     {
         $userId = 'john';
         $rows = $this->twoRows;
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` WHERE `user_id` = ?';
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `user_id` = ?';
 
         $this->setMapperResult($sql, [$userId], $rows);
         $result = $this->service->findAll();
@@ -195,7 +195,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $userId = 'john';
         $sequence = '1';
         $rows = $this->twoRows;
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` WHERE `sequence` = ? AND `user_id` = ?';
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `sequence` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$sequence, $userId], $rows);
         $result = $this->service->findSequenceById([$sequence]);
@@ -209,7 +209,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $fileOperation->setUserId($userId);
         $fileOperation->setId(3);
 
-        $sql = 'DELETE FROM `*PREFIX*ransomware_detection_file_operation` WHERE `id` = ? AND `user_id` = ?';
+        $sql = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `id` = ? AND `user_id` = ?';
         $arguments = [$fileOperation->getId(), $userId];
 
         $this->setMapperResult($sql, $arguments, [], null, null, true);
@@ -225,7 +225,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $fileOperation->setUserId($userId);
         $fileOperation->setSequence(1);
 
-        $sql = 'DELETE FROM `*PREFIX*ransomware_detection_file_operation` WHERE `sequence` = ? AND `user_id` = ?';
+        $sql = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `sequence` = ? AND `user_id` = ?';
         $arguments = [$fileOperation->getSequence(), $userId];
 
         $this->setMapperResult($sql, $arguments, [], null, null, true);
@@ -242,7 +242,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $fileOperation->setSequence(1);
         $fileOperation->setTimestamp(strtotime('-1 week'));
 
-        $sql = 'DELETE FROM `*PREFIX*ransomware_detection_file_operation` WHERE `timestamp` < ?';
+        $sql = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `timestamp` < ?';
         $time = time();
         $arguments = [$time];
 
