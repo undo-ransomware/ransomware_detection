@@ -16,7 +16,7 @@
 	<screenshot>https://github.com/ilovemilk/ransomware_detection/raw/master/screenshots/recovery-0.2.2.png</screenshot>
     <bugs>https://github.com/ilovemilk/ransomware_detection/issues</bugs>
     <dependencies>
-        <nextcloud min-version="13" max-version="14"/>
+        <nextcloud min-version="13" max-version="13"/>
     </dependencies>
 
     <navigations>
