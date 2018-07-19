@@ -1,6 +1,10 @@
 sudo: required
 dist: trusty
 language: php
+branches:
+  only:
+    - master
+    - /^feature.*$/
 php:
     - 5.6
     - 7
