@@ -6,7 +6,7 @@ php:
 
 env:
   global:
-    - CORE_BRANCH=stable13
+    - CORE_BRANCH=master
     - APP_NAME=ransomware_detection
   matrix:
     - DB=sqlite
