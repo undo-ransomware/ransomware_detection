@@ -74,21 +74,21 @@ class Classifier
     public function classifyFile($file)
     {
         $file->setSuspicionClass(self::NO_INFORMATION);
-        if ($file->getCommand() == Monitor::WRITE ||
-            $file->getCommand() == Monitor::RENAME ||
-            $file->getCommand() == Monitor::DELETE ||
-            $file->getCommand() == Monitor::CREATE
+        if ($file->getCommand() === Monitor::WRITE ||
+            $file->getCommand() === Monitor::RENAME ||
+            $file->getCommand() === Monitor::DELETE ||
+            $file->getCommand() === Monitor::CREATE
         ) {
-            if ($file->getFileClass() == EntropyResult::ENCRYPTED) {
-                if ($file->getFileNameClass() == FileNameResult::SUSPICIOUS) {
+            if ($file->getFileClass() === EntropyResult::ENCRYPTED) {
+                if ($file->getFileNameClass() === FileNameResult::SUSPICIOUS) {
                     $file->setSuspicionClass(self::HIGH_LEVEL_OF_SUSPICION);
                 } elseif ($file->getFileNameClass() > FileNameResult::NORMAL) {
                     $file->setSuspicionClass(self::MIDDLE_LEVEL_OF_SUSPICION);
                 } else {
                     $file->setSuspicionClass(self::NOT_SUSPICIOUS);
                 }
-            } elseif ($file->getFileClass() == EntropyResult::COMPRESSED) {
-                if ($file->getFileNameClass() == FileNameResult::SUSPICIOUS) {
+            } elseif ($file->getFileClass() === EntropyResult::COMPRESSED) {
+                if ($file->getFileNameClass() === FileNameResult::SUSPICIOUS) {
                     $file->setSuspicionClass(self::MIDDLE_LEVEL_OF_SUSPICION);
                 } elseif ($file->getFileNameClass() > FileNameResult::NORMAL) {
                     $file->setSuspicionClass(self::LOW_LEVEL_OF_SUSPICION);

@@ -175,11 +175,11 @@ class RequestPlugin extends ServerPlugin
         }
 
         // sequence suspicion level
-        if ($sequenceSuspicionLevel == 1) {
+        if ($sequenceSuspicionLevel === 1) {
             $level = 3;
-        } elseif ($sequenceSuspicionLevel == 2) {
+        } elseif ($sequenceSuspicionLevel === 2) {
             $level = 5;
-        } elseif ($sequenceSuspicionLevel == 3) {
+        } elseif ($sequenceSuspicionLevel === 3) {
             $level = 6;
         }
 

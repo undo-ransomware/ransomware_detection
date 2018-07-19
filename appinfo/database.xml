@@ -5,7 +5,7 @@
     <overwrite>false</overwrite>
     <charset>utf8</charset>
     <table>
-        <name>*dbprefix*ransomware_detection_file_operation</name>
+        <name>*dbprefix*ransomware_detection_file</name>
         <declaration>
             <field>
                 <name>id</name>

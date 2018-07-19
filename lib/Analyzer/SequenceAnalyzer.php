@@ -148,7 +148,7 @@ class SequenceAnalyzer
             $sequenceResult->setSizeDeleted($sizeOfDeletedFiles);
             $upperBound = sizeof($deletedFiles) + self::NUMBER_OF_INFO_FILES;
             if (sizeof($writtenFiles) <= $upperBound && sizeof($writtenFiles) >= sizeof($deletedFiles)) {
-                if ($this->sequenceSizeAnalyzer->analyze($sequence) == SequenceSizeAnalyzer::EQUAL_SIZE) {
+                if ($this->sequenceSizeAnalyzer->analyze($sequence) === SequenceSizeAnalyzer::EQUAL_SIZE) {
                     $sequenceResult->setQuantities(2);
                     $suspicionScore += 2;
                 } else {

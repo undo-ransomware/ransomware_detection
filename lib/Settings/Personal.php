@@ -69,7 +69,7 @@ class Personal implements ISettings
     {
         $colorMode = $this->config->getUserValue($this->userId, Application::APP_ID, 'colorMode', 0);
 
-        if ($colorMode == 0) {
+        if ($colorMode === 0) {
             $colorActive = ['code' => 0, 'name' => 'Normal'];
             $color = ['code' => 1, 'name' => 'Color blind'];
         } else {

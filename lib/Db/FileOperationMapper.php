@@ -32,7 +32,7 @@ class FileOperationMapper extends Mapper
     public function __construct(
         IDBConnection $db
     ) {
-        parent::__construct($db, 'ransomware_detection_file_operation');
+        parent::__construct($db, 'ransomware_detection_file');
     }
 
     /**
@@ -47,7 +47,7 @@ class FileOperationMapper extends Mapper
      */
     public function find($id, $userId)
     {
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` '.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file` '.
             'WHERE `id` = ? AND `user_id` = ?';
 
         return $this->findEntity($sql, [$id, $userId]);
@@ -65,7 +65,7 @@ class FileOperationMapper extends Mapper
      */
     public function findOneByFileName($name, $userId)
     {
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` '.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file` '.
             'WHERE `original_name` = ? AND `user_id` = ?';
 
         return $this->findEntity($sql, [$name, $userId]);
@@ -81,7 +81,7 @@ class FileOperationMapper extends Mapper
      */
     public function findOneWithHighestId($userId)
     {
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` WHERE `user_id` = ?'.
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file` WHERE `user_id` = ?'.
             'ORDER BY id DESC LIMIT 1';
 
         return $this->findEntity($sql, [$userId]);
@@ -97,7 +97,7 @@ class FileOperationMapper extends Mapper
      */
     public function findAll(array $params = [], $limit = null, $offset = null)
     {
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` WHERE `user_id` = ?';
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file` WHERE `user_id` = ?';
 
         return $this->findEntities($sql, $params, $limit, $offset);
     }
@@ -113,7 +113,7 @@ class FileOperationMapper extends Mapper
      */
     public function findSequenceById(array $params = [], $limit = null, $offset = null)
     {
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file_operation` WHERE `sequence` = ? AND `user_id` = ?';
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection_file` WHERE `sequence` = ? AND `user_id` = ?';
 
         return $this->findEntities($sql, $params, $limit, $offset);
     }
@@ -125,7 +125,7 @@ class FileOperationMapper extends Mapper
      */
     public function deleteById($id, $userId)
     {
-        $sql = 'DELETE FROM `*PREFIX*ransomware_detection_file_operation` WHERE `id` = ? AND `user_id` = ?';
+        $sql = 'DELETE FROM `*PREFIX*ransomware_detection_file` WHERE `id` = ? AND `user_id` = ?';
         $stmt = $this->execute($sql, [$id, $userId]);
         $stmt->closeCursor();
     }
@@ -137,7 +137,7 @@ class FileOperationMapper extends Mapper
      */
     public function deleteSequenceById($sequence, $userId)
     {
-        $sql = 'DELETE FROM `*PREFIX*ransomware_detection_file_operation` WHERE `sequence` = ? AND `user_id` = ?';
+        $sql = 'DELETE FROM `*PREFIX*ransomware_detection_file` WHERE `sequence` = ? AND `user_id` = ?';
         $stmt = $this->execute($sql, [$sequence, $userId]);
         $stmt->closeCursor();
     }
@@ -149,7 +149,7 @@ class FileOperationMapper extends Mapper
      */
     public function deleteFileOperationsBefore($timestamp)
     {
-        $sql = 'DELETE FROM `*PREFIX*ransomware_detection_file_operation` WHERE `timestamp` < ?';
+        $sql = 'DELETE FROM `*PREFIX*ransomware_detection_file` WHERE `timestamp` < ?';
         $stmt = $this->execute($sql, [$timestamp]);
         $stmt->closeCursor();
     }

@@ -7,7 +7,7 @@
     <description><![CDATA[This app monitors file operations to detect ransomware attacks by using generic indicators for a guided user-controlled recovery utilizing the integrated file versioning methods.]]></description>
     <licence>agpl</licence>
     <author mail="matthias.held@uni-konstanz.de">Matthias Held</author>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
     <namespace>RansomwareDetection</namespace>
     <category>files</category>
     <category>monitoring</category>
