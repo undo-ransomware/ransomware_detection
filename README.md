@@ -1,5 +1,6 @@
 # Nextcloud Ransomware Detection
 [![Build Status](https://travis-ci.com/ilovemilk/ransomware_detection.svg?branch=master)](https://travis-ci.com/ilovemilk/ransomware_detection)
+[![codecov](https://codecov.io/gh/ilovemilk/ransomware_detection/branch/master/graph/badge.svg)](https://codecov.io/gh/ilovemilk/ransomware_detection)
 
 **Ransomware detection with guided user-controlled recovery.**
 
