@@ -25,6 +25,7 @@ before_install:
   - cd ../server
   - ./occ check
   - ./occ status
+  - ./occ app:enable $APP
   - ./occ app:list
 
 script:
@@ -39,6 +40,13 @@ script:
 
   # Run phpunit tests
   - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+
+after_success:
+  # Create coverage report
+  - cd tests/
+  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then wget https://codecov.io/bash -O codecov.sh; fi"
+  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then bash codecov.sh; fi"
+  - cd ../
 
 matrix:
   include:
