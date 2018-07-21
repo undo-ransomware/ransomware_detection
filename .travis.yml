@@ -25,7 +25,7 @@ before_install:
   - cd ../server
   - ./occ check
   - ./occ status
-  - ./occ app:enable $APP
+  - ./occ app:enable $APP_NAME
   - ./occ app:list
 
 script:
