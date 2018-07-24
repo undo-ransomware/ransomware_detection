@@ -97,7 +97,6 @@ class EntropyAnalyzer
      * NORMAL
      *
      * @param File     $node
-     * @param IStorage $storage
      *
      * @return EntropyResult
      */

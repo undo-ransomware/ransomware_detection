@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Matthias Held <matthias.held@uni-konstanz.de>
+ * @copyright Copyright (c) 2018 Matthias Held <matthias.held@uni-konstanz.de>
  * @author Matthias Held <matthias.held@uni-konstanz.de>
  * @license GNU AGPL version 3 or any later version
  *
@@ -18,20 +18,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 script('ransomware_detection', 'app');
-script('ransomware_detection', 'filelist');
+script('ransomware_detection', 'scan');
 script('ransomware_detection', 'vendor/font-awesome/fontawesome-all');
 style('ransomware_detection', 'style');
 ?>
 <div id="app">
     <div id="app-navigation">
         <ul>
-            <li class="active">
+            <li>
                 <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('ransomware_detection.recover.index', [])); ?>">
                     <img alt="" src="<?php print_unescaped(\OC::$server->getURLGenerator()->imagePath('core', 'actions/history.svg')); ?>">
                     <span>Monitoring</span>
                 </a>
             </li>
-            <li>
+            <li class="active">
                 <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('ransomware_detection.recover.scan', [])); ?>">
                     <img alt="" src="<?php print_unescaped(\OC::$server->getURLGenerator()->imagePath('core', 'actions/search.svg')); ?>">
                     <span>Scan files</span>
@@ -40,8 +40,13 @@ style('ransomware_detection', 'style');
         </ul>
     </div>
     <div id="app-content">
-        <div id="app-content-ransomware-detection-filelist">
+        <div id="app-content-ransomware-detection-scan">
             <!-- Tables -->
+            <div class="section" id="section-loading">
+                <p class="text-center">
+    			    <div class="icon-loading-dark"></div>
+                </p>
+    		</div>
         </div>
     </div>
 </div>

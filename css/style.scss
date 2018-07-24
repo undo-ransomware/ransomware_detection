@@ -64,6 +64,10 @@
     color: #2A2A2A;
 }
 
+.scan-header span {
+    font-weight: bold;
+}
+
 .file-list {
     tr {
         &:hover {
@@ -259,7 +263,7 @@ table {
                 background-color: rgba(11, 85, 159, 1);
             }
             &.selected {
-                background-color: rgba(153, 153, 153, .1) !important; 
+                background-color: rgba(153, 153, 153, .1) !important;
             }
         }
     }
@@ -345,4 +349,10 @@ table {
 
 .suspicion-level-3 {
     background-color: #FF6347;
+}
+
+.disabled {
+    pointer-events: none;
+    cursor: default !important;
+    opacity: 0.6;
 }
