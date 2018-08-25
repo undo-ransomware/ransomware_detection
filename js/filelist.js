@@ -96,7 +96,9 @@
                     }
                     $.getJSON(self.url, function(data) {
                         console.log("Create app header.");
-                        self.$el.append(self._createAppHeader());
+                        if (self.debug === 1) {
+                            self.$el.append(self._createAppHeader());
+                        }
                         if (data.length === 0) {
                             console.log("No sequence found.");
                             self.$el.append(self._createNoSequenceFound());
@@ -245,19 +247,15 @@
 		},
 
         /**
-         * Create the App header.
+         * Creates the App header.
          */
         _createAppHeader: function() {
-            if (this.debug == 1) {
-                header = $('<div class="section"><div class="pull-right"><span><a class="action" href="/ocs/v2.php/apps/ransomware_detection/api/v1/export"><span class="icon icon-download"></span>' + t('ransomware_detection', 'Export data') + '</a></span></div></div>');
-            } else {
-                header = $('<div class="section"></div>')
-            }
+            header = $('<div class="section"><div class="pull-right"><span><a class="action" href="/ocs/v2.php/apps/ransomware_detection/api/v1/export"><span class="icon icon-download"></span>' + t('ransomware_detection', 'Export data') + '</a></span></div></div>');
             return header;
         },
 
         /**
-         * Create the no sequence found text.
+         * Creates the no sequence found text.
          */
         _createNoSequenceFound: function() {
             var text = $('<div class="section"><h2>' + t('ransomware_detection', 'No sequences found.') + '</h2></div>');
