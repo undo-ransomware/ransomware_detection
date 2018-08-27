@@ -28,6 +28,8 @@ use OCA\RansomwareDetection\Analyzer\SequenceAnalyzer;
 use OCA\RansomwareDetection\Analyzer\SequenceSizeAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileTypeFunnellingAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyFunnellingAnalyzer;
+use OCA\RansomwareDetection\Analyzer\FileNameAnalyzer;
+use OCA\RansomwareDetection\Entropy\Entropy;
 use OCA\RansomwareDetection\Notification\Notifier;
 use OCA\RansomwareDetection\StorageWrapper;
 use OCA\RansomwareDetection\Connector\Sabre\RequestPlugin;
@@ -77,6 +79,13 @@ class Application extends App
             );
         });
 
+        // entropy
+        $container->registerService('Entropy', function ($c) {
+            return new Entropy(
+                $c->query(ILogger::class)
+            );
+        });
+
         // analyzer
         $container->registerService('SequenceSizeAnalyzer', function ($c) {
             return new SequenceSizeAnalyzer();
@@ -89,6 +98,14 @@ class Application extends App
         $container->registerService('EntropyFunnellingAnalyzer', function ($c) {
             return new EntropyFunnellingAnalyzer(
                 $c->query(ILogger::class)
+            );
+        });
+
+        $container->registerService('FileNameAnalyzer', function ($c) {
+            return new FileNameAnalyzer(
+                $c->query(ILogger::class),
+                $c->query(Entropy::class)
+
             );
         });
 

@@ -40,15 +40,30 @@
          * @member {OCA.RansomwareDetection.FileList}
          */
         fileList: null,
+        /**
+         * Scan for the "Ransomware detection" section
+         *
+         * @member {OCA.RansomwareDetection.Scan}
+         */
+        scan: null,
 
         /**
          * Initializes the ransomware detection app
          */
         initialize: function() {
-            this.fileList = new OCA.RansomwareDetection.FileList(
-                $('#app-content-ransomware-detection'), {}
-            );
-            window.FileList = this.fileList;
+            if (typeof OCA.RansomwareDetection.FileList != 'undefined') {
+                this.fileList = new OCA.RansomwareDetection.FileList(
+                    $('#app-content-ransomware-detection-filelist'), {}
+                );
+                window.FileList = this.fileList;
+            }
+
+            if (typeof OCA.RansomwareDetection.Scan != 'undefined') {
+                this.scan = new OCA.RansomwareDetection.Scan(
+                    $('#app-content-ransomware-detection-scan'), {}
+                );
+                window.Scan = this.scan;
+            }
 
             OC.Plugins.attach('OCA.RansomwareDetection.App', this);
         },
@@ -57,8 +72,14 @@
          * Destroy the app
          */
         destroy: function() {
-            this.fileList.destroy();
-            this.fileList = null;
+            if (typeof OCA.RansomwareDetection.Scan != 'undefined') {
+                this.fileList.destroy();
+                this.fileList = null;
+            }
+            if (typeof OCA.RansomwareDetection.Scan != 'undefined') {
+                this.scan.destroy();
+                this.scan = null;
+            }
         }
     }
 })();
