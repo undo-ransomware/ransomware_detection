@@ -211,7 +211,7 @@ class ScanControllerTest extends TestCase
 
         $result = $controller->filesToScan();
         $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
+        $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }
 
     public function dataScanSequence()

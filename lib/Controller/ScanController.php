@@ -222,7 +222,7 @@ class ScanController extends OCSController
         $sequencesArray[] = $sequence;
         $end = time();
 
-        return new JSONResponse(['status' => 'success', 'sequences' => $sequencesArray, 'number_of_files' => $storageStructure->getNumberOfFiles(), 'scan_duration' => $end - $start], Http::STATUS_ACCEPTED);
+        return new JSONResponse(['status' => 'success', 'sequences' => $sequencesArray, 'number_of_files' => $storageStructure->getNumberOfFiles(), 'scan_duration' => $end - $start], Http::STATUS_OK);
     }
 
     /**
