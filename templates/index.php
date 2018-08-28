@@ -42,6 +42,11 @@ style('ransomware_detection', 'style');
     <div id="app-content">
         <div id="app-content-ransomware-detection-filelist">
             <!-- Tables -->
+            <div class="section" id="section-loading">
+                <p class="text-center">
+    			    <div class="icon-loading-dark"></div>
+                </p>
+    		</div>
         </div>
     </div>
 </div>

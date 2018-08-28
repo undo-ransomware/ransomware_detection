@@ -96,6 +96,7 @@
                     }
                     $.getJSON(self.url, function(data) {
                         console.log("Create app header.");
+                        $('#section-loading').remove();
                         if (self.debug === 1) {
                             self.$el.append(self._createAppHeader());
                         }
