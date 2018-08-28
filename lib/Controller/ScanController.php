@@ -247,7 +247,7 @@ class ScanController extends OCSController
             $sequenceResult = $this->sequenceAnalyzer->analyze(0, $sequenceForAnalyzer);
             return new JSONResponse(['status' => 'success', 'suspicion_score' => $sequenceResult->getSuspicionScore(), 'sequence' => $sequenceResults], Http::STATUS_OK);
         } else {
-            return new JSONResponse(['status' => 'error', 'message' => 'Sequence is to short.'], Http::STATUS_BAD_REQUEST);
+            return new JSONResponse(['status' => 'error', 'message' => 'Sequence is to short.'], Http::STATUS_OK);
         }
     }
 
