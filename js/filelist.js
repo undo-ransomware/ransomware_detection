@@ -347,6 +347,7 @@
             // file name
             filename = fileData.originalName;
             if (fileData.command === 2) {
+                // file was renamed use new name
                 filename = fileData.newName
             }
 
