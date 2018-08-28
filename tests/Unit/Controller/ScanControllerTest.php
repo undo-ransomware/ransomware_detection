@@ -237,7 +237,7 @@ class ScanControllerTest extends TestCase
         $sequenceResult = new SequenceResult(1, 0.0, 1.1, 2.2, 4.5, []);
 
         return [
-            ['sequence' => [], 'fileOperation' => new FileOperation(), 'sequenceResult' => $sequenceResult,'response' => Http::STATUS_BAD_REQUEST],
+            ['sequence' => [], 'fileOperation' => new FileOperation(), 'sequenceResult' => $sequenceResult,'response' => Http::STATUS_OK],
             ['sequence' => [['timestamp' => 123]], 'fileOperation' => $fileOperation1, 'sequenceResult' => $sequenceResult, 'response' => Http::STATUS_OK]
         ];
     }
