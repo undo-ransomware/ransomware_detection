@@ -181,6 +181,7 @@ class ScanController extends OCSController
      */
     public function filesToScan()
     {
+        $start = time();
         $storageStructure = $this->getStorageStructure($this->userFolder);
         $trashStorageStructure = $this->getTrashStorageStructure();
 
@@ -219,8 +220,9 @@ class ScanController extends OCSController
             $sequence[] = $allFiles[$i];
         }
         $sequencesArray[] = $sequence;
+        $end = time();
 
-        return new JSONResponse(['status' => 'success', 'sequences' => $sequencesArray, 'number_of_files' => $storageStructure->getNumberOfFiles()], Http::STATUS_ACCEPTED);
+        return new JSONResponse(['status' => 'success', 'sequences' => $sequencesArray, 'number_of_files' => $storageStructure->getNumberOfFiles(), 'scan_duration' => $end - $start], Http::STATUS_ACCEPTED);
     }
 
     /**

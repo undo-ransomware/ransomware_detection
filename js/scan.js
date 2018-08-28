@@ -90,6 +90,7 @@
                 $.getJSON(self.filesUrl, function(data) {
                     console.log("Create scan header.");
                     $('#section-loading').remove();
+                    console.log("Scanned " + data.number_of_files + " files in " + data.scan_duration + " seconds.");
                     self.$el.append(self._createScanHeader(data.sequences.length));
                     self.sequencesToScan = data.sequences;
                 });
