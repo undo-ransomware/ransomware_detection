@@ -240,7 +240,7 @@ class ScanController extends OCSController
 
                 $this->classifier->classifyFile($fileOperation);
                 $sequenceResults[] = ['userId' => $fileOperation->getUserId(), 'path' => $fileOperation->getPath(), 'originalName' => preg_replace('/.d[0-9]{10}/', '', $fileOperation->getOriginalName()),
-                    'type' => $fileOperation->getType(), 'mimeType' => $fileOperation->getMimeType(), 'size' => $fileOperation->getSize(), 'corrupted' => $fileOperation->getCorrupted(), 'timestamp' => 123, 'entropy' => $fileOperation->getEntropy(),
+                    'type' => $fileOperation->getType(), 'mimeType' => $fileOperation->getMimeType(), 'size' => $fileOperation->getSize(), 'corrupted' => $fileOperation->getCorrupted(), 'timestamp' => $fileOperation->getTimestamp(), 'entropy' => $fileOperation->getEntropy(),
                     'standardDeviation' => $fileOperation->getStandardDeviation(), 'command' => $fileOperation->getCommand(), 'fileNameEntropy' => $fileOperation->getFileNameEntropy(), 'fileClass' => $fileOperation->getFileClass(), 'fileNameClass' => $fileOperation->getFileNameClass(), 'suspicionClass' => $fileOperation->getSuspicionClass()];
                 $sequenceForAnalyzer[] = $fileOperation;
             }
