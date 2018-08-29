@@ -514,14 +514,17 @@
 				simpleSize = t('ransomware_detection', 'Pending');
 			}
 
-            td = $('<td></td>').attr({ "class": "selection"});
-            td.append('<input id="select-' +  this.id + '-' + fileData.id +
-					'" type="checkbox" class="selectCheckBox checkbox"/>' +
-                    '<label for="select-' +  this.id + '-' + fileData.id + '">' +
-                    '<div class="thumbnail" style="background-image:url(' + OC.MimeType.getIconUrl(fileData.type) + '); background-size: 32px;"></div>' +
-                    '<span class="hidden-visually">' + t('ransomware_detection', 'Select') + '</span>' +
-                    '</label>');
+            td = $('<td class="selection"></td>');
+            td.append(
+				'<input id="select-' + this.id + '-' + fileData.id +
+				'" type="checkbox" class="selectCheckBox checkbox"/><label for="select-' + this.id + '-' + fileData.id + '">' +
+				'<span class="hidden-visually">' + t('ransomware_detection', 'Select') + '</span>' +
+				'</label>'
+			);
             tr.append(td);
+
+            var nameWrapper = $('<div class="name-wrapper"></div>');
+            nameWrapper.append('<div class="thumbnail-wrapper"><div class="thumbnail" style="background-image:url(' + OC.MimeType.getIconUrl(fileData.type) + ');"></div></div>');
 
             // file name
             filename = fileData.originalName;
@@ -542,11 +545,13 @@
                nameSpan.append(innernameSpan);
            }
 
-            td = $('<td></td>').attr({ "class": "file-name"});
-            td.append(nameSpan);
-            tr.append(td);
+           nameWrapper.append(nameSpan);
 
-            if (fileData.command === 1) {
+           td = $('<td class="file-name"></td>');
+           td.append(nameWrapper);
+           tr.append(td);
+
+           if (fileData.command === 1) {
                 // delete
                 td = $('<td></td>').append($('<p></p>').attr({"title": "DELETE"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-trash-alt fa-fw"></span>'));
             } else if (fileData.command === 2) {
