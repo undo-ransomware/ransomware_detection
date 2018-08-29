@@ -147,12 +147,12 @@ class ScanControllerTest extends TestCase
     public function dataRecover()
     {
         return [
-            ['id' => 4, 'command' => Monitor::DELETE, 'path' => '/test.pdf', 'timestamp' => 12345, 'restored' => false, 'response' => Http::STATUS_BAD_REQUEST],
-            ['id' => 4, 'command' => Monitor::DELETE, 'path' => '/test.pdf', 'timestamp' => 12345, 'restored' => true, 'response' => Http::STATUS_OK],
-            ['id' => 4, 'command' => Monitor::WRITE, 'path' => '/test.pdf', 'timestamp' => 12345, 'restored' => true, 'response' => Http::STATUS_OK],
-            ['id' => 4, 'command' => Monitor::WRITE, 'path' => '/test.pdf', 'timestamp' => 12345, 'restored' => false, 'response' => Http::STATUS_BAD_REQUEST],
-            ['id' => 4, 'command' => Monitor::CREATE, 'path' => '/test.pdf', 'timestamp' => 12345, 'restored' => false, 'response' => Http::STATUS_BAD_REQUEST],
-            ['id' => 4, 'command' => Monitor::RENAME, 'path' => '/test.pdf', 'timestamp' => 12345, 'restored' => false, 'response' => Http::STATUS_BAD_REQUEST],
+            ['id' => 4, 'sequence' => 5, 'command' => Monitor::DELETE, 'path' => '/', 'name' => 'test.pdf', 'timestamp' => 12345, 'restored' => false, 'response' => Http::STATUS_OK],
+            ['id' => 4, 'sequence' => 5, 'command' => Monitor::DELETE, 'path' => '/', 'name' => 'test.pdf', 'timestamp' => 12345, 'restored' => true, 'response' => Http::STATUS_OK],
+            ['id' => 4, 'sequence' => 5, 'command' => Monitor::WRITE, 'path' => '/', 'name' => 'test.pdf', 'timestamp' => 12345, 'restored' => true, 'response' => Http::STATUS_OK],
+            ['id' => 4, 'sequence' => 5, 'command' => Monitor::WRITE, 'path' => '/', 'name' => 'test.pdf', 'timestamp' => 12345, 'restored' => false, 'response' => Http::STATUS_OK],
+            ['id' => 4, 'sequence' => 5, 'command' => Monitor::CREATE, 'path' => '/', 'name' => 'test.pdf', 'timestamp' => 12345, 'restored' => false, 'response' => Http::STATUS_BAD_REQUEST],
+            ['id' => 4, 'sequence' => 5, 'command' => Monitor::RENAME, 'path' => '/', 'name' => 'test.pdf', 'timestamp' => 12345, 'restored' => false, 'response' => Http::STATUS_BAD_REQUEST],
         ];
     }
 
@@ -160,13 +160,15 @@ class ScanControllerTest extends TestCase
      * @dataProvider dataRecover
      *
      * @param integer       $id
+     * @param integer       $sequence
      * @param integer       $command
      * @param string        $path
+     * @param string        $name
      * @param integer       $timestamp
      * @param boolean       $restored
      * @param HttpResponse  $response
      */
-    public function testRecover($id, $command, $path, $timestamp, $restored, $response)
+    public function testRecover($id, $sequence, $command, $path, $name, $timestamp, $restored, $response)
     {
         $controller = $this->getMockBuilder(ScanController::class)
             ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config, $this->classifier,
@@ -183,7 +185,7 @@ class ScanControllerTest extends TestCase
             ->method('restoreFromTrashbin')
             ->willReturn($restored);
 
-        $result = $controller->recover($id, $command, $path ,$timestamp);
+        $result = $controller->recover($id, $sequence, $command, $path ,$timestamp);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), $response);
     }

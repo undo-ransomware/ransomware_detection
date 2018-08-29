@@ -137,32 +137,29 @@ class ScanController extends OCSController
      *
      * @NoAdminRequired
      *
-     * @param  integer $id
      * @param  integer $command
      * @param  string  $path
      * @param  integer $timestamp
      *
      * @return JSONResponse
      */
-    public function recover($id, $command, $path ,$timestamp)
+    public function recover($id, $sequence, $command, $path, $name, $timestamp)
     {
         if ($command === Monitor::WRITE) {
             // Delete file
-            if ($this->deleteFromStorage($path)) {
-                return new JSONResponse(['status' => 'success', 'id' => $id], Http::STATUS_OK);
+            if ($this->deleteFromStorage($path . '/' . $name)) {
+                return new JSONResponse(['status' => 'success', 'id' => $id, 'sequence' => $sequence], Http::STATUS_OK);
             } else {
-                return new JSONResponse(['status' => 'error', 'message' => 'File cannot be deleted.'], Http::STATUS_BAD_REQUEST);
+                return new JSONResponse(['status' => 'error', 'message' => 'File cannot be deleted.'], Http::STATUS_OK);
             }
         } else if ($command === Monitor::DELETE) {
             // Restore file
-            $dir = '/';
-            $pathInfo = pathinfo($path);
-            $trashPath = $dir.'/'.$pathInfo['basename'];
-            if ($this->restoreFromTrashbin($trashPath, $pathInfo, $timestamp) !== false) {
-                return new JSONResponse(['status' => 'success', 'id' => $id], Http::STATUS_OK);
+            $trashPath = '/'.$name.'.d'.$timestamp;;
+            if ($this->restoreFromTrashbin($trashPath, $name, $timestamp) !== false) {
+                return new JSONResponse(['status' => 'success', 'id' => $id, 'sequence' => $sequence], Http::STATUS_OK);
             }
 
-            return new JSONResponse(['status' => 'error', 'message' => 'File does not exist.', 'path' => $trashPath, 'name' => $pathInfo['filename'], 'mtime' => $timestamp], Http::STATUS_BAD_REQUEST);
+            return new JSONResponse(['status' => 'error', 'message' => 'File does not exist.', 'path' => $trashPath, 'name' => $name, 'mtime' => $timestamp], Http::STATUS_OK);
         } else {
             // wubalubadubdub
             // Scan can only detect WRITE and DELETE this should never happen.
@@ -176,6 +173,7 @@ class ScanController extends OCSController
      * The files to scan.
      *
      * @NoAdminRequired
+     * @NoCSRFRequired
      *
      * @return JSONResponse
      */
@@ -212,7 +210,7 @@ class ScanController extends OCSController
             if ($i === 0) {
                 $sequence = array();
             } else {
-                if ($allFiles[$i]['timestamp'] - $allFiles[$i - 1]['timestamp'] > 180000) {
+                if ($allFiles[$i]['timestamp'] - $allFiles[$i - 1]['timestamp'] > 180) {
                     $sequencesArray[] = $sequence;
                     $sequence = array();
                 }
@@ -278,11 +276,15 @@ class ScanController extends OCSController
             $node = $this->userFolder->getParent()->get($file['path'] . '.d' . $file['timestamp']);
             $fileOperation->setCommand(Monitor::DELETE);
             $fileOperation->setTimestamp($file['timestamp']);
+            $pathInfo = pathinfo($node->getInternalPath());
+            $fileOperation->setPath($pathInfo['dirname']);
         } else {
             $node = $this->userFolder->getParent()->get($file['path']);
             $lastActivity = $this->getLastActivity($file['id']);
             $fileOperation->setCommand(Monitor::WRITE);
             $fileOperation->setTimestamp($lastActivity['timestamp']);
+            $pathInfo = pathinfo($node->getInternalPath());
+            $fileOperation->setPath(str_replace('files', '', $pathInfo['dirname']));
         }
         if (!($node instanceof File)) {
             throw new NotAFileException();
@@ -292,7 +294,6 @@ class ScanController extends OCSController
         $fileOperation->setMimeType($node->getMimeType());
         $fileOperation->setSize($node->getSize());
         $fileOperation->setTimestamp($file['timestamp']);
-        $fileOperation->setPath($node->getPath());
 
         // file name analysis
         $fileNameResult = $this->fileNameAnalyzer->analyze($node->getInternalPath());
@@ -430,8 +431,8 @@ class ScanController extends OCSController
      * @param  integer  $timestamp
      * @return boolean
      */
-    protected function restoreFromTrashbin($trashPath, $pathInfo, $timestamp)
+    protected function restoreFromTrashbin($trashPath, $name, $timestamp)
     {
-        return Trashbin::restore($trashPath, $pathInfo['filename'], $timestamp);
+        return Trashbin::restore($trashPath, $name, $timestamp);
     }
 }

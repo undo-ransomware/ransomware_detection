@@ -177,17 +177,18 @@
                             url: self.recoveryUrl,
                             type: 'POST',
                             contentType: 'application/json',
-                            data: JSON.stringify({command: parseInt(value.command), path: value.path, timestamp: value.timestamp})
+                            data: JSON.stringify({id: parseInt(index), sequence: sequence, command: parseInt(value.command), path: value.path, name: value.originalName, timestamp: value.timestamp})
                         }).done(function(response) {
                             console.log("Recovery was a success.");
-                            self.$el.find("tr[data-id='" + response['id'] + "']").remove();
+                            self.$el.find("tr[data-id='" + response['id'] + "'][data-sequence='" + response['sequence'] + "']").remove();
                             numberOfFiles = numberOfFiles - 1;
                             delete self._selectedFiles[index];
                             if (numberOfFiles === 0) {
                                 self.$section[sequence].remove();
                                 delete self.$section[sequence];
                                 if (Object.keys(self._selectedFiles).length === 0) {
-                                    self.$el.append(self._createAllFilesRecovered);
+                                    OC.dialogs.alert(t('ransomware_detection', 'All files successfully recovered.'), t('ransomware_detection', 'Success'));
+                                    //self.$el.append(self._createAllFilesRecovered());
                                 }
                             }
                             self.updateSelectionSummary(sequence);
@@ -235,6 +236,7 @@
                                 self.$fileList[index] = self.$table[index].find('tbody.file-list');
                                 self.files[index] = [];
                                 $.each(response.sequence, function(i, file) {
+                                    file.id = i;
                                     self.files[index][file.id] = file;
                                     self.$fileList[index].append(self._createFileRow(file, index));
                                     self.$el.find('#section-suspicious-files-text').remove();
