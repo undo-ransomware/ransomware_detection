@@ -342,20 +342,25 @@
 				simpleSize = t('ransomware_detection', 'Pending');
 			}
 
-            td = $('<td></td>').attr({ "class": "selection"});
-            td.append('<input id="select-' +  this.id + '-' + fileData.id +
-					'" type="checkbox" class="selectCheckBox checkbox"/>' +
-                    '<label for="select-' +  this.id + '-' + fileData.id + '">' +
-                    '<div class="thumbnail" style="background-image:url(' + OC.MimeType.getIconUrl(fileData.type) + '); background-size: 32px;"></div>' +
-                    '<span class="hidden-visually">' + t('ransomware_detection', 'Select') + '</span>' +
-                    '</label>');
-            tr.append(td);
+            td = $('<td class="selection"></td>');
+
+			td.append(
+				'<input id="select-' + this.id + '-' + fileData.id +
+				'" type="checkbox" class="selectCheckBox checkbox"/><label for="select-' + this.id + '-' + fileData.id + '">' +
+				'<span class="hidden-visually">' + t('ransomware_detection', 'Select') + '</span>' +
+				'</label>'
+			);
+
+			tr.append(td);
 
             // file name
             filename = fileData.originalName;
             if (fileData.command === 2) {
                 filename = fileData.newName
             }
+
+            var nameWrapper = $('<div class="name-wrapper"></div>');
+            nameWrapper.append('<div class="thumbnail-wrapper"><div class="thumbnail" style="background-image:url(' + OC.MimeType.getIconUrl(fileData.type) + ');"></div></div>');
 
             if (filename !== null) {
                 if (filename.indexOf('.') === 0) {
@@ -380,9 +385,10 @@
 
                nameSpan.append(innernameSpan);
            }
+           nameWrapper.append(nameSpan);
 
-            td = $('<td></td>').attr({ "class": "file-name"});
-            td.append(nameSpan);
+            td = $('<td class="file-name"></td>');
+            td.append(nameWrapper);
             tr.append(td);
 
             if (fileData.command === 1) {

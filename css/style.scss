@@ -68,7 +68,16 @@
     font-weight: bold;
 }
 
-.file-list {
+.icon {
+	display: inline-block;
+	vertical-align: middle;
+	background-size: 16px 16px;
+}
+
+table {
+    .select-all + label {
+    	padding: 16px;
+    }
     tr {
         &:hover {
             td.selection > .selectCheckBox + label:before {
@@ -85,41 +94,56 @@
                 opacity: 1;
             }
         }
-        td {
-            &.selection > .selectCheckBox + label:before {
-            	opacity: 0;
-            	position: absolute;
-            	bottom: 4px;
-            	right: 0;
-            	z-index: 10;
-            }
-            &.selection {
-            	position: relative;
-            	width: 51px;
-                vertical-align: top;
-            	padding-left: 0;
-            	padding-right:0;
-            	-webkit-transition:background-image 500ms; -moz-transition:background-image 500ms; -o-transition:background-image 500ms; transition:background-image 500ms;
-            }
-            &.selection > .selectCheckBox + label {
-                background-position: 30px 30px;
-            	height: 50px;
-            	position: absolute;
-            	width: 50px;
-            	z-index: 5;
-            }
-            &.selection > .selectCheckBox:checked + label:before {
-                opacity: 1;
-            }
-            &.selection > .selectCheckBox {
-                position: absolute;
-            	z-index: 10;
-            }
-            &.file-name {
-                width: 50%;
+    }
+    td {
+        padding: 0 15px;
+        font-style: normal;
+        background-position: 8px center;
+        background-repeat: no-repeat;
+        p {
+            text-align: center;
+        }
+        &.selection {
+            width: 32px;
+            padding: 0px;
+            text-align: center;
+        }
+        &.selection > .selectCheckBox + label, .select-all + label {
+	           padding: 16px;
+        }
+        &.file-name {
+            width: 70%;
+	        margin-top: 9px;
+	        margin-left: 48px;
+            padding-left: 0px;
+            padding-right: 0px;
+            .name-wrapper {
+                display: flex;
                 position: relative;
-                max-width: 0;
-        		.name-text {
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                height: 50px;
+                line-height: 50px;
+                padding: 0;
+                .thumbnail-wrapper {
+                    width: 0;
+    	            min-width: 50px;
+    	            max-width: 50px;
+    	            height: 50px;
+                    .thumbnail {
+                    	display: inline-block;
+                    	width: 32px;
+                    	height: 32px;
+                        background-size: 32px;
+                    	margin-left: 9px;
+                    	margin-top: 9px;
+                    	float: left;
+                    	position: absolute;
+                    	z-index: 4;
+                    }
+                }
+                .name-text {
+                    width: 0;
         			flex-grow: 1;
         			display: flex;
         			padding: 0;
@@ -128,13 +152,14 @@
         			text-overflow: ellipsis;
         			height: 100%;
         			z-index: 10;
-        		}
+        			padding-right: 20px;
+                }
                 span {
                     &.inner-name-text {
                         text-overflow: ellipsis;
-                	    overflow: hidden;
-                	    position: relative;
-                	    vertical-align: top;
+                        overflow: hidden;
+                        position: relative;
+                        vertical-align: top;
                     }
                     &.extension {
                         -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
@@ -150,68 +175,6 @@
                     }
                 }
             }
-        }
-    }
-}
-
-.select-all + label {
-	top: 0;
-    background-position: 30px 30px;
-	height: 50px;
-	position: absolute;
-	width: 50px;
-	z-index: 5;
-    &:before {
-    	position: absolute;
-    	top: 18px;
-    	left: 18px;
-    	z-index: 10;
-    }
-}
-
-.has-favorites {
-    .select-all {
-    	left: 68px;
-    }
-}
-
-.icon {
-	display: inline-block;
-	vertical-align: middle;
-	background-size: 16px 16px;
-}
-
-table {
-    td {
-        padding: 0 15px;
-        font-style: normal;
-        background-position: 8px center;
-        background-repeat: no-repeat;
-        &.selection {
-            .nametext {
-            	position: absolute;
-            	left: 55px;
-            	padding: 0;
-            	overflow: hidden;
-            	text-overflow: ellipsis;
-            	width: 70%;
-            	max-width: 800px;
-            	height: 100%;
-            }
-            .thumbnail {
-            	display: inline-block;
-            	width: 32px;
-            	height: 32px;
-            	margin-left: 8px;
-            	margin-top: 9px;
-            	cursor: pointer;
-            	float: left;
-            	position: absolute;
-            	z-index: 4;
-            }
-        }
-        p {
-            text-align: center;
         }
     }
     th {
@@ -231,6 +194,11 @@ table {
                         opacity: 0.7;
                     }
                 }
+            }
+            &.name {
+                padding-left: 5px;
+                padding-right: 80px;
+                margin-left: 50px;
             }
         }
         .bold {
