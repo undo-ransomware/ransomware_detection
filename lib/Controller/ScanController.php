@@ -136,7 +136,6 @@ class ScanController extends OCSController
      * Post scan recovery.
      *
      * @NoAdminRequired
-     * @NoCSRFRequired
      *
      * @param  integer $id
      * @param  integer $command
@@ -177,7 +176,6 @@ class ScanController extends OCSController
      * The files to scan.
      *
      * @NoAdminRequired
-     * @NoCSRFRequired
      *
      * @return JSONResponse
      */
@@ -231,7 +229,6 @@ class ScanController extends OCSController
      * Scan sequence.
      *
      * @NoAdminRequired
-     * @NoCSRFRequired
      *
      * @param string  $sequence
      * @return JSONResponse
