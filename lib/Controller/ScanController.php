@@ -29,8 +29,10 @@ use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileNameAnalyzer;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Db\FileOperation;
+use OCA\RansomwareDetection\Exception\NotAFileException;
 use OCA\RansomwareDetection\Service\FileOperationService;
 use OCA\RansomwareDetection\Scanner\StorageStructure;
+use OCP\Files\NotFoundException;
 use OCA\Files_Trashbin\Trashbin;
 use OCA\Files_Trashbin\Helper;
 use OCP\AppFramework\Http;
@@ -238,16 +240,28 @@ class ScanController extends OCSController
         if (sizeof($sequence) > $this->config->getAppValue(Application::APP_ID, 'minimum_sequence_length', 0)) {
             $sequenceResults = array();
             foreach ($sequence as $file) {
-                $fileOperation = $this->buildFileOperation($file);
+                try {
+                    $fileOperation = $this->buildFileOperation($file);
+                } catch (NotAFileException $exception) {
+                    $this->logger->debug('scanSequence: Path to file doesn\'t lead to file object.', array('app' => Application::APP_ID));
+                    continue;
+                } catch (NotFoundException $exception) {
+                    $this->logger->debug('scanSequence: Not found.', array('app' => Application::APP_ID));
+                    continue;
+                }
 
                 $this->classifier->classifyFile($fileOperation);
-                $sequenceResults[] = ['userId' => $fileOperation->getUserId(), 'path' => $fileOperation->getPath(), 'originalName' => preg_replace('/.d[0-9]{10}/', '', $fileOperation->getOriginalName()),
+                $jsonSequence[] = ['userId' => $fileOperation->getUserId(), 'path' => $fileOperation->getPath(), 'originalName' => preg_replace('/.d[0-9]{10}/', '', $fileOperation->getOriginalName()),
                     'type' => $fileOperation->getType(), 'mimeType' => $fileOperation->getMimeType(), 'size' => $fileOperation->getSize(), 'corrupted' => $fileOperation->getCorrupted(), 'timestamp' => $fileOperation->getTimestamp(), 'entropy' => $fileOperation->getEntropy(),
                     'standardDeviation' => $fileOperation->getStandardDeviation(), 'command' => $fileOperation->getCommand(), 'fileNameEntropy' => $fileOperation->getFileNameEntropy(), 'fileClass' => $fileOperation->getFileClass(), 'fileNameClass' => $fileOperation->getFileNameClass(), 'suspicionClass' => $fileOperation->getSuspicionClass()];
-                $sequenceForAnalyzer[] = $fileOperation;
+                $fileOperationSequence[] = $fileOperation;
             }
-            $sequenceResult = $this->sequenceAnalyzer->analyze(0, $sequenceForAnalyzer);
-            return new JSONResponse(['status' => 'success', 'suspicion_score' => $sequenceResult->getSuspicionScore(), 'sequence' => $sequenceResults], Http::STATUS_OK);
+            if (count($fileOperationSequence) > 0) {
+                $sequenceResult = $this->sequenceAnalyzer->analyze(0, $fileOperationSequence);
+                return new JSONResponse(['status' => 'success', 'suspicion_score' => $sequenceResult->getSuspicionScore(), 'sequence' => $jsonSequence], Http::STATUS_OK);
+            } else {
+                return new JSONResponse(['status' => 'error', 'message' => 'The file(s) requested do(es) not exist.']);
+            }
         } else {
             return new JSONResponse(['status' => 'error', 'message' => 'Sequence is to short.'], Http::STATUS_OK);
         }
@@ -272,6 +286,9 @@ class ScanController extends OCSController
             $lastActivity = $this->getLastActivity($file['id']);
             $fileOperation->setCommand(Monitor::WRITE);
             $fileOperation->setTimestamp($lastActivity['timestamp']);
+        }
+        if (!($node instanceof File)) {
+            throw new NotAFileException();
         }
         $fileOperation->setOriginalName($node->getName());
         $fileOperation->setType('file');
@@ -319,7 +336,12 @@ class ScanController extends OCSController
             $rows[] = $row;
         }
         $result->closeCursor();
-        return array_pop($rows);
+        if (is_array($rows)) {
+            return array_pop($rows);
+        } else {
+            $this->logger->debug('getLastActivity: No activity found.', array('app' => Application::APP_ID));
+            return 0;
+        }
     }
 
     /**

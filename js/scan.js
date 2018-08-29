@@ -229,19 +229,21 @@
                         }).done(function(response) {
                             count = count + 1;
                             $('#scanned').text(count);
-                            self.$section[index] = self._createSection(index);
-                            self.$table[index] = self._createTableSkeleton(index, response.suspicion_score);
-                            self.$fileList[index] = self.$table[index].find('tbody.file-list');
-                            self.files[index] = [];
-                            $.each(response.sequence, function(i, file) {
-                                self.files[index][file.id] = file;
-                                self.$fileList[index].append(self._createFileRow(file, index));
-                                self.$el.find('#section-suspicious-files-text').remove();
-                                self.$el.find('#scan-results').show();
-                            });
-                            self.$section[index].append(self.$table[index]);
-                            self.$el.append(self.$section[index]);
-                            self.updateSelectionSummary(index);
+                            if (response.status === "success") {
+                                self.$section[index] = self._createSection(index);
+                                self.$table[index] = self._createTableSkeleton(index, response.suspicion_score);
+                                self.$fileList[index] = self.$table[index].find('tbody.file-list');
+                                self.files[index] = [];
+                                $.each(response.sequence, function(i, file) {
+                                    self.files[index][file.id] = file;
+                                    self.$fileList[index].append(self._createFileRow(file, index));
+                                    self.$el.find('#section-suspicious-files-text').remove();
+                                    self.$el.find('#scan-results').show();
+                                });
+                                self.$section[index].append(self.$table[index]);
+                                self.$el.append(self.$section[index]);
+                                self.updateSelectionSummary(index);
+                            }
                         }).fail(function(response, code) {
                             console.log("Scan failed.");
                             count = count + 1;
