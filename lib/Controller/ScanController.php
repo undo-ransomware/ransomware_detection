@@ -173,7 +173,6 @@ class ScanController extends OCSController
      * The files to scan.
      *
      * @NoAdminRequired
-     * @NoCSRFRequired
      *
      * @return JSONResponse
      */
