@@ -185,7 +185,7 @@ class ScanControllerTest extends TestCase
             ->method('restoreFromTrashbin')
             ->willReturn($restored);
 
-        $result = $controller->recover($id, $sequence, $command, $path ,$timestamp);
+        $result = $controller->recover($id, $sequence, $command, $path, $name, $timestamp);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), $response);
     }

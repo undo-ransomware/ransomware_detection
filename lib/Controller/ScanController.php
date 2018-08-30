@@ -137,8 +137,11 @@ class ScanController extends OCSController
      *
      * @NoAdminRequired
      *
+     * @param  integer $id
+     * @param  integer $sequence
      * @param  integer $command
      * @param  string  $path
+     * @param  string  $name
      * @param  integer $timestamp
      *
      * @return JSONResponse
