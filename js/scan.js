@@ -167,8 +167,8 @@
         _onClickRecover: function(e) {
             var self = this;
 
-            var numberOfFiles = Object.keys(self._selectedFiles).length;
             var sequence = $(e.target).parent().data('sequence');
+            var numberOfFiles = Object.keys(self.files[sequence]).length;
 
             OC.dialogs.confirm(t('ransomware_detection', 'Are your sure you want to recover the selected files?'), t('ransomware_detection', 'Confirmation'), function (e) {
                 if (e === true) {
@@ -186,10 +186,9 @@
                             if (numberOfFiles === 0) {
                                 self.$section[sequence].remove();
                                 delete self.$section[sequence];
-                                if (Object.keys(self._selectedFiles).length === 0) {
-                                    OC.dialogs.alert(t('ransomware_detection', 'All files successfully recovered.'), t('ransomware_detection', 'Success'));
-                                    //self.$el.append(self._createAllFilesRecovered());
-                                }
+                            }
+                            if (Object.keys(self._selectedFiles).length === 0) {
+                                OC.dialogs.alert(t('ransomware_detection', 'All files successfully recovered.'), t('ransomware_detection', 'Success'));
                             }
                             self.updateSelectionSummary(sequence);
                         }).fail(function(response, code) {

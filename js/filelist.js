@@ -196,6 +196,7 @@
             var self = this;
             var sequence = $(e.target).parent().data('sequence');
             var numberOfFiles = Object.keys(this.files[sequence]).length;
+            var $tr = $(e.target).closest('tr');
 
             console.log("Recover files from sequence " + sequence + " with " + numberOfFiles + " files.");
 
@@ -213,6 +214,7 @@
                             console.log(response['id']);
                             self.$el.find("tr[data-id='" + response['id'] + "']").remove();
                             numberOfFiles = numberOfFiles - 1;
+                            delete self._selectedFiles[index];
                             if (numberOfFiles === 0) {
                                 self.$section[sequence].remove();
                                 delete self.$section[sequence];
@@ -221,6 +223,10 @@
                                     self.$el.append(self._createNoSequenceFound());
                                 }
                             }
+                            if (Object.keys(self._selectedFiles).length === 0) {
+                                OC.dialogs.alert(t('ransomware_detection', 'All files successfully recovered.'), t('ransomware_detection', 'Success'));
+                            }
+                			self.updateSelectionSummary();
                         }).fail(function(response, code) {
                             console.log("Recovery failed.");
                         });
