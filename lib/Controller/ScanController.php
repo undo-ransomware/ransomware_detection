@@ -410,7 +410,7 @@ class ScanController extends OCSController
     {
         try {
             $node = $this->userFolder->get($path);
-            if ($node->isDeletable()) {
+            if ($node instanceof File && $node->isDeletable()) {
                 $node->delete();
             } else {
                 return false;
