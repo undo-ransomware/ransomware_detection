@@ -3,17 +3,18 @@
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>ransomware_detection</id>
     <name>Ransomware detection</name>
-    <summary><![CDATA[This app monitors file operations to detect ransomware attacks for a guided user-controlled recovery.]]></summary>
-    <description><![CDATA[This app monitors file operations to detect ransomware attacks by using generic indicators for a guided user-controlled recovery utilizing the integrated file versioning methods.]]></description>
+    <summary><![CDATA[This app offers synchronization monitoring and a file storage scanner for a guided user-controlled one-step ransomare recovery.]]></summary>
+    <description><![CDATA[This app monitors file operations during the synchronization to detect ransomware attacks and also offers a post infection file storage scanner, which works even if it happend that you didn't have this app installed during an attack. This is done by using generic indicators for a guided user-controlled one-step recovery utilizing the integrated file versioning methods.]]></description>
     <licence>agpl</licence>
     <author mail="matthias.held@uni-konstanz.de">Matthias Held</author>
-    <version>0.2.4</version>
+    <version>0.3.0</version>
     <namespace>RansomwareDetection</namespace>
     <category>files</category>
     <category>monitoring</category>
     <category>security</category>
-	<screenshot>https://github.com/ilovemilk/ransomware_detection/raw/master/screenshots/goldeneye-0.2.2.png</screenshot>
-	<screenshot>https://github.com/ilovemilk/ransomware_detection/raw/master/screenshots/recovery-0.2.2.png</screenshot>
+    <category>tools</category>
+	<screenshot>https://github.com/ilovemilk/ransomware_detection/raw/master/screenshots/monitoring-0.3.0.png</screenshot>
+	<screenshot>https://github.com/ilovemilk/ransomware_detection/raw/master/screenshots/scan-files-0.3.0.png</screenshot>
     <bugs>https://github.com/ilovemilk/ransomware_detection/issues</bugs>
     <dependencies>
         <nextcloud min-version="13" max-version="13"/>
