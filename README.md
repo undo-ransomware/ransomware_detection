@@ -4,7 +4,7 @@
 
 **Ransomware detection with a guided user-controlled one-step recovery.**
 
-![](screenshots/scan-files-0.3.0)
+![](screenshots/scan-files-0.3.0.png)
 
 This app monitors file operations during the synchronization to detect ransomware attacks and also offers a post infection file storage scanner, which works even if it happend that you didn't have this app installed during an attack. This is done by using generic indicators for a guided user-controlled one-step recovery utilizing the integrated file versioning methods.
 
