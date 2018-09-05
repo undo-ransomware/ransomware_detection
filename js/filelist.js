@@ -226,7 +226,7 @@
                             if (Object.keys(self._selectedFiles).length === 0) {
                                 OC.dialogs.alert(t('ransomware_detection', 'All files successfully recovered.'), t('ransomware_detection', 'Success'));
                             }
-                			self.updateSelectionSummary();
+                			self.updateSelectionSummary(sequence);
                         }).fail(function(response, code) {
                             console.log("Recovery failed.");
                         });
