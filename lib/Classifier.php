@@ -21,7 +21,7 @@
 
 namespace OCA\RansomwareDetection;
 
-use OCA\RansomwareDetection\Analyzer\FileNameResult;
+use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
 use OCA\RansomwareDetection\Service\FileOperationService;
@@ -36,6 +36,7 @@ class Classifier
      */
     const HIGH_LEVEL_OF_SUSPICION = 1;
     const MIDDLE_LEVEL_OF_SUSPICION = 2;
+    // deprecated will be removed
     const LOW_LEVEL_OF_SUSPICION = 3;
     const NOT_SUSPICIOUS = 4;
     const NO_INFORMATION = 5;
@@ -80,17 +81,17 @@ class Classifier
             $file->getCommand() === Monitor::CREATE
         ) {
             if ($file->getFileClass() === EntropyResult::ENCRYPTED) {
-                if ($file->getFileNameClass() === FileNameResult::SUSPICIOUS) {
+                if ($file->getFileExtensionClass() === FileExtensionResult::SUSPICIOUS) {
                     $file->setSuspicionClass(self::HIGH_LEVEL_OF_SUSPICION);
-                } elseif ($file->getFileNameClass() > FileNameResult::NORMAL) {
+                } elseif ($file->getFileExtensionClass() > FileExtensionResult::NOT_SUSPICIOUS) {
                     $file->setSuspicionClass(self::MIDDLE_LEVEL_OF_SUSPICION);
                 } else {
                     $file->setSuspicionClass(self::NOT_SUSPICIOUS);
                 }
             } elseif ($file->getFileClass() === EntropyResult::COMPRESSED) {
-                if ($file->getFileNameClass() === FileNameResult::SUSPICIOUS) {
+                if ($file->getFileExtensionClass() === FileExtensionResult::SUSPICIOUS) {
                     $file->setSuspicionClass(self::MIDDLE_LEVEL_OF_SUSPICION);
-                } elseif ($file->getFileNameClass() > FileNameResult::NORMAL) {
+                } elseif ($file->getFileExtensionClass() > FileExtensionResult::NOT_SUSPICIOUS) {
                     $file->setSuspicionClass(self::LOW_LEVEL_OF_SUSPICION);
                 } else {
                     $file->setSuspicionClass(self::NOT_SUSPICIOUS);

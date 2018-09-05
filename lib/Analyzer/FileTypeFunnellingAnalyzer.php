@@ -120,7 +120,7 @@ class FileTypeFunnellingAnalyzer
      */
     private function countKnownFileExtensions($file)
     {
-        if (intval($file->getFileNameClass()) === FileNameResult::NORMAL || intval($file->getFileNameClass()) === FileNameResult::SUSPICIOUS_FILE_NAME) {
+        if (intval($file->getFileExtensionClass()) === FileExtensionResult::NOT_SUSPICIOUS) {
             return 1;
         }
     }

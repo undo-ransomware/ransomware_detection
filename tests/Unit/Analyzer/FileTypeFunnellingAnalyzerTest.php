@@ -23,7 +23,7 @@ namespace OCA\RansomwareDetection\tests\Unit\Analyzer;
 
 use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\Analyzer\FileTypeFunnellingAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileNameResult;
+use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
 use OCA\RansomwareDetection\Db\FileOperation;
 use Test\TestCase;
 
@@ -44,91 +44,91 @@ class FileTypeFunnellingAnalyzerTest extends TestCase
         $fileOperation1 = new FileOperation();
         $fileOperation1->setCommand(Monitor::WRITE);
         $fileOperation1->setOriginalName('file.unknown');
-        $fileOperation1->setFileNameClass(FileNameResult::SUSPICIOUS);
+        $fileOperation1->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
         $fileOperation1->setCorrupted(false);
         $fileOperation1->setType('file');
 
         $fileOperation11 = new FileOperation();
         $fileOperation11->setCommand(Monitor::WRITE);
         $fileOperation11->setOriginalName('file.unknown1');
-        $fileOperation11->setFileNameClass(FileNameResult::SUSPICIOUS);
+        $fileOperation11->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
         $fileOperation11->setCorrupted(false);
         $fileOperation11->setType('file');
 
         $fileOperation12 = new FileOperation();
         $fileOperation12->setCommand(Monitor::WRITE);
         $fileOperation12->setOriginalName('file.unknown2');
-        $fileOperation12->setFileNameClass(FileNameResult::SUSPICIOUS);
+        $fileOperation12->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
         $fileOperation12->setCorrupted(false);
         $fileOperation12->setType('file');
 
         $fileOperation13 = new FileOperation();
         $fileOperation13->setCommand(Monitor::WRITE);
         $fileOperation13->setOriginalName('file.unknown3');
-        $fileOperation13->setFileNameClass(FileNameResult::SUSPICIOUS);
+        $fileOperation13->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
         $fileOperation13->setCorrupted(false);
         $fileOperation13->setType('file');
 
         $fileOperation14 = new FileOperation();
         $fileOperation14->setCommand(Monitor::WRITE);
         $fileOperation14->setOriginalName('file.unknown4');
-        $fileOperation14->setFileNameClass(FileNameResult::SUSPICIOUS);
+        $fileOperation14->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
         $fileOperation14->setCorrupted(false);
         $fileOperation14->setType('file');
 
         $fileOperation15 = new FileOperation();
         $fileOperation15->setCommand(Monitor::WRITE);
         $fileOperation15->setOriginalName('file.unknown5');
-        $fileOperation15->setFileNameClass(FileNameResult::SUSPICIOUS);
+        $fileOperation15->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
         $fileOperation15->setCorrupted(false);
         $fileOperation15->setType('file');
 
         $fileOperation16 = new FileOperation();
         $fileOperation16->setCommand(Monitor::WRITE);
         $fileOperation16->setOriginalName('file.unknown6');
-        $fileOperation16->setFileNameClass(FileNameResult::SUSPICIOUS);
+        $fileOperation16->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
         $fileOperation16->setCorrupted(false);
         $fileOperation16->setType('file');
 
         $fileOperation2 = new FileOperation();
         $fileOperation2->setCommand(Monitor::WRITE);
         $fileOperation2->setOriginalName('file.csv');
-        $fileOperation2->setFileNameClass(FileNameResult::NORMAL);
+        $fileOperation2->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
         $fileOperation2->setCorrupted(false);
         $fileOperation2->setType('file');
 
         $fileOperation3 = new FileOperation();
         $fileOperation3->setCommand(Monitor::WRITE);
         $fileOperation3->setOriginalName('file.csv');
-        $fileOperation3->setFileNameClass(FileNameResult::NORMAL);
+        $fileOperation3->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
         $fileOperation3->setCorrupted(true);
         $fileOperation3->setType('file');
 
         $fileOperation4 = new FileOperation();
         $fileOperation4->setCommand(Monitor::RENAME);
         $fileOperation4->setOriginalName('file.csv');
-        $fileOperation4->setFileNameClass(FileNameResult::NORMAL);
+        $fileOperation4->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
         $fileOperation4->setCorrupted(true);
         $fileOperation4->setType('file');
 
         $fileOperation5 = new FileOperation();
         $fileOperation5->setCommand(Monitor::DELETE);
         $fileOperation5->setOriginalName('file.csv');
-        $fileOperation5->setFileNameClass(FileNameResult::NORMAL);
+        $fileOperation5->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
         $fileOperation5->setCorrupted(true);
         $fileOperation5->setType('file');
 
         $fileOperation6 = new FileOperation();
         $fileOperation6->setCommand(100);
         $fileOperation6->setOriginalName('file.csv');
-        $fileOperation6->setFileNameClass(FileNameResult::NORMAL);
+        $fileOperation6->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
         $fileOperation6->setCorrupted(true);
         $fileOperation6->setType('file');
 
         $fileOperation7 = new FileOperation();
         $fileOperation7->setCommand(Monitor::READ);
         $fileOperation7->setOriginalName('file.unknown');
-        $fileOperation7->setFileNameClass(FileNameResult::SUSPICIOUS);
+        $fileOperation7->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
         $fileOperation7->setCorrupted(false);
         $fileOperation7->setType('file');
         // not a sequence

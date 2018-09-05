@@ -25,8 +25,8 @@ use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Analyzer\EntropyAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
 use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileNameAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileNameResult;
+use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
+use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
 use OCP\App\IAppManager;
@@ -76,8 +76,8 @@ class Monitor
     /** @var FileOperationMapper */
     protected $mapper;
 
-    /** @var FileNameAnalyzer */
-    protected $fileNameAnalyzer;
+    /** @var FileExtensionAnalyzer */
+    protected $fileExtensionAnalyzer;
 
     /** @var FileCorruptionAnalyzer */
     protected $fileCorruptionAnalyzer;
@@ -97,7 +97,7 @@ class Monitor
      * @param IRootFolder          $rootFolder
      * @param EntropyAnalyzer      $entropyAnalyzer
      * @param FileOperationMapper  $mapper
-     * @param FileNameAnalyzer     $fileNameAnalyzer
+     * @param FileExtensionAnalyzer     $fileExtensionAnalyzer
      * @param FileCorruptionAnalyzer $fileCorruptionAnalyzer
      * @param string               $userId
      */
@@ -110,7 +110,7 @@ class Monitor
         IRootFolder $rootFolder,
         EntropyAnalyzer $entropyAnalyzer,
         FileOperationMapper $mapper,
-        FileNameAnalyzer $fileNameAnalyzer,
+        FileExtensionAnalyzer $fileExtensionAnalyzer,
         FileCorruptionAnalyzer $fileCorruptionAnalyzer,
         $userId
     ) {
@@ -122,7 +122,7 @@ class Monitor
         $this->rootFolder = $rootFolder;
         $this->entropyAnalyzer = $entropyAnalyzer;
         $this->mapper = $mapper;
-        $this->fileNameAnalyzer = $fileNameAnalyzer;
+        $this->fileExtensionAnalyzer = $fileExtensionAnalyzer;
         $this->fileCorruptionAnalyzer = $fileCorruptionAnalyzer;
         $this->userId = $userId;
     }
@@ -264,9 +264,8 @@ class Monitor
                 $fileOperation->setStandardDeviation(0.0);
                 $fileOperation->setFileClass(EntropyResult::NORMAL);
 
-                // file name analysis
-                $fileOperation->setFileNameClass(FileNameResult::NORMAL);
-                $fileOperation->setFileNameEntropy(0.0);
+                // file extension analysis
+                $fileOperation->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
 
                 $this->mapper->insert($fileOperation);
                 $this->nestingLevel--;
@@ -406,9 +405,8 @@ class Monitor
         $fileOperation->setStandardDeviation(0.0);
         $fileOperation->setFileClass(EntropyResult::NORMAL);
 
-        // file name analysis
-        $fileOperation->setFileNameClass(FileNameResult::NORMAL);
-        $fileOperation->setFileNameEntropy(0.0);
+        // file extension analysis
+        $fileOperation->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
 
         $this->mapper->insert($fileOperation);
     }
@@ -437,10 +435,9 @@ class Monitor
         $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
         $fileOperation->setSequence($sequenceId);
 
-        // file name analysis
-        $fileNameResult = $this->fileNameAnalyzer->analyze($node->getInternalPath());
-        $fileOperation->setFileNameClass($fileNameResult->getFileNameClass());
-        $fileOperation->setFileNameEntropy($fileNameResult->getEntropyOfFileName());
+        // file extension analysis
+        $fileExtensionResult = $this->fileExtensionAnalyzer->analyze($node->getInternalPath());
+        $fileOperation->setFileExtensionClass($fileExtensionResult->getFileExtensionClass());
 
         $fileCorruptionResult = $this->fileCorruptionAnalyzer->analyze($node);
         $fileOperation->setCorrupted($fileCorruptionResult->isCorrupted());

@@ -64,14 +64,11 @@ class FileOperation extends Entity
     /** @var float */
     public $standardDeviation;
 
-    /** @var float */
-    public $fileNameEntropy;
-
     /** @var string */
     public $fileClass;
 
     /** @var string */
-    public $fileNameClass;
+    public $fileExtensionClass;
 
     /** @var int */
     public $suspicionClass;
@@ -85,7 +82,6 @@ class FileOperation extends Entity
         $this->addType('sequence', 'integer');
         $this->addType('entropy', 'float');
         $this->addType('standardDeviation', 'float');
-        $this->addType('fileNameEntropy', 'float');
         $this->addType('suspicionClass', 'integer');
     }
 }

@@ -44,9 +44,8 @@ class FileOperationFixture extends FileOperation
             'sequence' => 1,
             'entropy' => 7.9123595,
             'standardDeviation' => 0.04,
-            'fileNameEntropy' => 4.1,
             'fileClass' => 2,
-            'fileNameClass' => 3,
+            'fileExtensionClass' => 1,
         ], $defaults);
         $this->fillDefaults($defaults);
     }

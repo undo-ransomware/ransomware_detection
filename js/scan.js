@@ -441,16 +441,10 @@
             }
             tr.append(td);
 
-            if (fileData.fileNameClass === 0) {
-                // normal
-                td = $('<td></td>').append($('<p></p>').attr({"title": "NORMAL"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-check-circle fa-fw"></span>'));
-            } else if (fileData.fileNameClass === 1) {
-                // suspicious
-                td = $('<td></td>').append($('<p></p>').attr({"title": "SUSPICIOUS FILE EXTENSION"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-exclamation-triangle fa-fw"></span>'));
-            } else if (fileData.fileNameClass === 2) {
-                // suspicious
-                td = $('<td></td>').append($('<p></p>').attr({"title": "SUSPICIOUS FILE NAME"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-exclamation-triangle fa-fw"></span>'));
-            } else if (fileData.fileNameClass === 3) {
+            if (fileData.fileExtensionClass === 0) {
+                // not suspicious
+                td = $('<td></td>').append($('<p></p>').attr({"title": "NOT_SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-check-circle fa-fw"></span>'));
+            } else if (fileData.fileExtensionClass === 3) {
                 // suspicious
                 td = $('<td></td>').append($('<p></p>').attr({"title": "SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-exclamation-triangle fa-fw"></span>'));
             } else {

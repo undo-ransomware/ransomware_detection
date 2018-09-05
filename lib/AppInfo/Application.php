@@ -28,7 +28,7 @@ use OCA\RansomwareDetection\Analyzer\SequenceAnalyzer;
 use OCA\RansomwareDetection\Analyzer\SequenceSizeAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileTypeFunnellingAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyFunnellingAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileNameAnalyzer;
+use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
 use OCA\RansomwareDetection\Entropy\Entropy;
 use OCA\RansomwareDetection\Notification\Notifier;
 use OCA\RansomwareDetection\StorageWrapper;
@@ -101,8 +101,8 @@ class Application extends App
             );
         });
 
-        $container->registerService('FileNameAnalyzer', function ($c) {
-            return new FileNameAnalyzer(
+        $container->registerService('FileExtensionAnalyzer', function ($c) {
+            return new FileExtensionAnalyzer(
                 $c->query(ILogger::class),
                 $c->query(Entropy::class)
 

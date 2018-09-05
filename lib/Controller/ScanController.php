@@ -26,7 +26,7 @@ use OCA\RansomwareDetection\Classifier;
 use OCA\RansomwareDetection\Analyzer\SequenceAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileNameAnalyzer;
+use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Exception\NotAFileException;
@@ -75,8 +75,8 @@ class ScanController extends OCSController
     /** @var FileCorruptionAnalyzer */
     protected $fileCorruptionAnalyzer;
 
-    /** @var FileNameAnalyzer */
-    protected $fileNameAnalyzer;
+    /** @var FileExtensionAnalyzer */
+    protected $fileExtensionAnalyzer;
 
     /** @var IDBConnection */
 	protected $connection;
@@ -96,7 +96,7 @@ class ScanController extends OCSController
      * @param SequenceAnalyzer     $sequenceAnalyzer
      * @param EntropyAnalyzer      $entropyAnalyzer
      * @param FileCorruptionAnalyzer $fileCorruptionAnalyzer
-     * @param FileNameAnalyzer     $fileNameAnalyzer
+     * @param FileExtensionAnalyzer     $fileExtensionAnalyzer
      * @param IDBConnection        $connection
      * @param string               $userId
      */
@@ -112,7 +112,7 @@ class ScanController extends OCSController
         SequenceAnalyzer $sequenceAnalyzer,
         EntropyAnalyzer $entropyAnalyzer,
         FileCorruptionAnalyzer $fileCorruptionAnalyzer,
-        FileNameAnalyzer $fileNameAnalyzer,
+        FileExtensionAnalyzer $fileExtensionAnalyzer,
         IDBConnection $connection,
         $userId
     ) {
@@ -127,7 +127,7 @@ class ScanController extends OCSController
         $this->sequenceAnalyzer = $sequenceAnalyzer;
         $this->entropyAnalyzer = $entropyAnalyzer;
         $this->fileCorruptionAnalyzer = $fileCorruptionAnalyzer;
-        $this->fileNameAnalyzer = $fileNameAnalyzer;
+        $this->fileExtensionAnalyzer = $fileExtensionAnalyzer;
         $this->connection = $connection;
         $this->userId = $userId;
     }
@@ -250,7 +250,7 @@ class ScanController extends OCSController
                 $this->classifier->classifyFile($fileOperation);
                 $jsonSequence[] = ['userId' => $fileOperation->getUserId(), 'path' => $fileOperation->getPath(), 'originalName' => preg_replace('/.d[0-9]{10}/', '', $fileOperation->getOriginalName()),
                     'type' => $fileOperation->getType(), 'mimeType' => $fileOperation->getMimeType(), 'size' => $fileOperation->getSize(), 'corrupted' => $fileOperation->getCorrupted(), 'timestamp' => $fileOperation->getTimestamp(), 'entropy' => $fileOperation->getEntropy(),
-                    'standardDeviation' => $fileOperation->getStandardDeviation(), 'command' => $fileOperation->getCommand(), 'fileNameEntropy' => $fileOperation->getFileNameEntropy(), 'fileClass' => $fileOperation->getFileClass(), 'fileNameClass' => $fileOperation->getFileNameClass(), 'suspicionClass' => $fileOperation->getSuspicionClass()];
+                    'standardDeviation' => $fileOperation->getStandardDeviation(), 'command' => $fileOperation->getCommand(), 'fileClass' => $fileOperation->getFileClass(), 'fileExtensionClass' => $fileOperation->getFileExtensionClass(), 'suspicionClass' => $fileOperation->getSuspicionClass()];
                 $fileOperationSequence[] = $fileOperation;
             }
             if (count($fileOperationSequence) > 0) {
@@ -297,10 +297,9 @@ class ScanController extends OCSController
         $fileOperation->setSize($node->getSize());
         $fileOperation->setTimestamp($file['timestamp']);
 
-        // file name analysis
-        $fileNameResult = $this->fileNameAnalyzer->analyze($node->getInternalPath());
-        $fileOperation->setFileNameClass($fileNameResult->getFileNameClass());
-        $fileOperation->setFileNameEntropy($fileNameResult->getEntropyOfFileName());
+        // file extension analysis
+        $fileExtensionResult = $this->fileExtensionAnalyzer->analyze($node->getInternalPath());
+        $fileOperation->setFileExtensionClass($fileExtensionResult->getFileExtensionClass());
 
         $fileCorruptionResult = $this->fileCorruptionAnalyzer->analyze($node);
         $fileOperation->setCorrupted($fileCorruptionResult->isCorrupted());

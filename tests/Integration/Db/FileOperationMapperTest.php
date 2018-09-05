@@ -101,9 +101,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.04,
-                'fileNameEntropy' => 4.1,
                 'fileClass' => 2,
-                'fileNameClass' => 3,
+                'fileExtensionClass' => 1,
             ],
             [
                 'userId' => 'john',
@@ -119,9 +118,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.05,
-                'fileNameEntropy' => 3.1,
                 'fileClass' => 2,
-                'fileNameClass' => 1,
+                'fileExtensionClass' => 1,
             ],
         ];
         $this->loadFixtures($fileOperations);
@@ -155,9 +153,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.04,
-                'fileNameEntropy' => 4.1,
                 'fileClass' => 2,
-                'fileNameClass' => 3,
+                'fileExtensionClass' => 1,
             ],
             [
                 'userId' => 'john',
@@ -173,9 +170,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.05,
-                'fileNameEntropy' => 3.1,
                 'fileClass' => 2,
-                'fileNameClass' => 1,
+                'fileExtensionClass' => 1,
             ],
         ];
         $this->loadFixtures($fileOperations);
@@ -202,9 +198,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.04,
-                'fileNameEntropy' => 4.1,
                 'fileClass' => 2,
-                'fileNameClass' => 3,
+                'fileExtensionClass' => 1,
             ],
             [
                 'userId' => 'john',
@@ -220,9 +215,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.05,
-                'fileNameEntropy' => 3.1,
                 'fileClass' => 2,
-                'fileNameClass' => 1,
+                'fileExtensionClass' => 1,
             ],
         ];
         $this->loadFixtures($fileOperations);
@@ -255,9 +249,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.04,
-                'fileNameEntropy' => 4.1,
                 'fileClass' => 2,
-                'fileNameClass' => 3,
+                'fileExtensionClass' => 1,
             ],
             [
                 'userId' => 'john',
@@ -273,9 +266,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.05,
-                'fileNameEntropy' => 3.1,
                 'fileClass' => 2,
-                'fileNameClass' => 1,
+                'fileExtensionClass' => 1,
             ],
         ];
         $this->loadFixtures($fileOperations);
@@ -314,9 +306,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.04,
-                'fileNameEntropy' => 4.1,
                 'fileClass' => 2,
-                'fileNameClass' => 3,
+                'fileExtensionClass' => 1,
             ],
             [
                 'userId' => 'john',
@@ -332,9 +323,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.05,
-                'fileNameEntropy' => 3.1,
                 'fileClass' => 2,
-                'fileNameClass' => 1,
+                'fileExtensionClass' => 1,
             ],
         ];
         $this->loadFixtures($fileOperations);
@@ -359,9 +349,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 1,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.04,
-                'fileNameEntropy' => 4.1,
                 'fileClass' => 2,
-                'fileNameClass' => 3,
+                'fileExtensionClass' => 1,
             ],
             [
                 'userId' => 'john',
@@ -377,9 +366,8 @@ class FileOperationMapperTest extends AppTest
                 'sequence' => 2,
                 'entropy' => 7.9123595,
                 'standardDeviation' => 0.05,
-                'fileNameEntropy' => 3.1,
                 'fileClass' => 2,
-                'fileNameClass' => 1,
+                'fileExtensionClass' => 1,
             ],
         ];
         $this->loadFixtures($fileOperations);

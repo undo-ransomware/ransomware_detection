@@ -23,7 +23,7 @@ namespace OCA\RansomwareDetection\tests\Unit\Db;
 
 use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
-use OCA\RansomwareDetection\Analyzer\FileNameResult;
+use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
 use OCA\RansomwareDetection\Classifier;
 use OCA\RansomwareDetection\Db\FileOperation;
 use Test\TestCase;
@@ -59,14 +59,11 @@ class FileOperationTest extends TestCase
             ['field' => 'sequence', 'value' => 1],
             ['field' => 'entropy', 'value' => 7.99],
             ['field' => 'standardDeviation', 'value' => 0.004],
-            ['field' => 'fileNameEntropy', 'value' => 4.0],
             ['field' => 'fileClass', 'value' => EntropyResult::NORMAL],
             ['field' => 'fileClass', 'value' => EntropyResult::ENCRYPTED],
             ['field' => 'fileClass', 'value' => EntropyResult::COMPRESSED],
-            ['field' => 'fileNameClass', 'value' => FileNameResult::NORMAL],
-            ['field' => 'fileNameClass', 'value' => FileNameResult::SUSPICIOUS_FILE_EXTENSION],
-            ['field' => 'fileNameClass', 'value' => FileNameResult::SUSPICIOUS_FILE_NAME],
-            ['field' => 'fileNameClass', 'value' => FileNameResult::SUSPICIOUS],
+            ['field' => 'fileExtensionClass', 'value' => FileExtensionResult::NOT_SUSPICIOUS],
+            ['field' => 'fileExtensionClass', 'value' => FileExtensionResult::SUSPICIOUS],
             ['field' => 'suspicionClass', 'value' => Classifier::NO_INFORMATION],
             ['field' => 'suspicionClass', 'value' => Classifier::NOT_SUSPICIOUS],
             ['field' => 'suspicionClass', 'value' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],

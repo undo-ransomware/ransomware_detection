@@ -31,8 +31,8 @@ use OCA\RansomwareDetection\Analyzer\EntropyFunnellingAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
 use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileNameAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileNameResult;
+use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
+use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Controller\ScanController;
 use OCA\RansomwareDetection\Db\FileOperation;
@@ -86,8 +86,8 @@ class ScanControllerTest extends TestCase
     /** @var FileCorruptionAnalyzer|\PHPUnit_Framework_MockObject_MockObject */
     protected $fileCorruptionAnalyzer;
 
-    /** @var FileNameAnalyzer|\PHPUnit_Framework_MockObject_MockObject */
-    protected $fileNameAnalyzer;
+    /** @var FileExtensionAnalyzer|\PHPUnit_Framework_MockObject_MockObject */
+    protected $fileExtensionAnalyzer;
 
     /** @var IDBConnection|\PHPUnit_Framework_MockObject_MockObject */
 	protected $connection;
@@ -139,7 +139,7 @@ class ScanControllerTest extends TestCase
         $this->fileCorruptionAnalyzer = $this->getMockBuilder('OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer')
             ->setConstructorArgs([$this->logger, $rootFolder, $this->userId])
             ->getMock();
-        $this->fileNameAnalyzer = $this->getMockBuilder('OCA\RansomwareDetection\Analyzer\FileNameAnalyzer')
+        $this->fileExtensionAnalyzer = $this->getMockBuilder('OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer')
             ->setConstructorArgs([$this->logger, $entropy])
             ->getMock();
     }
@@ -173,7 +173,7 @@ class ScanControllerTest extends TestCase
         $controller = $this->getMockBuilder(ScanController::class)
             ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config, $this->classifier,
             $this->logger, $this->folder, $this->service, $this->sequenceAnalyzer, $this->entropyAnalyzer,
-            $this->fileCorruptionAnalyzer, $this->fileNameAnalyzer, $this->connection, $this->userId])
+            $this->fileCorruptionAnalyzer, $this->fileExtensionAnalyzer, $this->connection, $this->userId])
             ->setMethods(['deleteFromStorage', 'restoreFromTrashbin'])
             ->getMock();
 
@@ -195,7 +195,7 @@ class ScanControllerTest extends TestCase
         $controller = $this->getMockBuilder(ScanController::class)
             ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config, $this->classifier,
             $this->logger, $this->folder, $this->service, $this->sequenceAnalyzer, $this->entropyAnalyzer,
-            $this->fileCorruptionAnalyzer, $this->fileNameAnalyzer, $this->connection, $this->userId])
+            $this->fileCorruptionAnalyzer, $this->fileExtensionAnalyzer, $this->connection, $this->userId])
             ->setMethods(['getStorageStructure', 'getTrashStorageStructure', 'getLastActivity'])
             ->getMock();
 
@@ -231,9 +231,8 @@ class ScanControllerTest extends TestCase
         $fileOperation1->setSequence(1);
         $fileOperation1->setEntropy(7.9);
         $fileOperation1->setStandardDeviation(0.1);
-        $fileOperation1->setFileNameEntropy(4.0);
         $fileOperation1->setFileClass(EntropyResult::NORMAL);
-        $fileOperation1->setFileNameClass(FileNameResult::NORMAL);
+        $fileOperation1->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
         $fileOperation1->setSuspicionClass(Classifier::HIGH_LEVEL_OF_SUSPICION);
 
         $sequenceResult = new SequenceResult(1, 0.0, 1.1, 2.2, 4.5, []);
@@ -257,7 +256,7 @@ class ScanControllerTest extends TestCase
         $controller = $this->getMockBuilder(ScanController::class)
             ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config, $this->classifier,
             $this->logger, $this->folder, $this->service, $this->sequenceAnalyzer, $this->entropyAnalyzer,
-            $this->fileCorruptionAnalyzer, $this->fileNameAnalyzer, $this->connection, $this->userId])
+            $this->fileCorruptionAnalyzer, $this->fileExtensionAnalyzer, $this->connection, $this->userId])
             ->setMethods(['getLastActivity', 'buildFileOperation'])
             ->getMock();
 

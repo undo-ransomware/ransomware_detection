@@ -23,7 +23,7 @@ namespace OCA\RansomwareDetection\tests\Unit;
 
 use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
-use OCA\RansomwareDetection\Analyzer\FileNameResult;
+use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
 use OCA\RansomwareDetection\Classifier;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
 use OCA\RansomwareDetection\Service\FileOperationService;
@@ -59,54 +59,52 @@ class ClassifierTest extends TestCase
     public function dataClassifyFile()
     {
         return [
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::LOW_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::LOW_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::READ, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::LOW_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::LOW_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::ENCRYPTED, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::LOW_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::LOW_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::COMPRESSED, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::NORMAL, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_EXTENSION, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS_FILE_NAME, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
-            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::NORMAL, 'fileNameClass' => FileNameResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::WRITE, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::READ, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NO_INFORMATION],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::DELETE, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::ENCRYPTED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::COMPRESSED, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::NOT_SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
+            ['command' => Monitor::RENAME, 'fileClass' => EntropyResult::NORMAL, 'fileExtensionClass' => FileExtensionResult::SUSPICIOUS, 'suspicionClass' => Classifier::NOT_SUSPICIOUS],
         ];
     }
 
@@ -115,15 +113,15 @@ class ClassifierTest extends TestCase
      *
      * @param int $command
      * @param int $fileClass
-     * @param int $fileNameClass
+     * @param int $fileExtensionClass
      * @param int $suspicionClass
      */
-    public function testClassifyFile($command, $fileClass, $fileNameClass, $suspicionClass)
+    public function testClassifyFile($command, $fileClass, $fileExtensionClass, $suspicionClass)
     {
         $fileOperation = new FileOperation();
         $fileOperation->setCommand($command);
         $fileOperation->setFileClass($fileClass);
-        $fileOperation->setFileNameClass($fileNameClass);
+        $fileOperation->setFileExtensionClass($fileExtensionClass);
 
         $result = $this->classifier->classifyFile($fileOperation);
         $this->assertEquals($result->getSuspicionClass(), $suspicionClass);
