@@ -89,7 +89,7 @@ class FileCorruptionAnalyzer
                 }
             }
 
-            return new FileCorruptionResult(true);
+            return new FileCorruptionResult(false);
         } catch (\OCP\Files\NotPermittedException $exception) {
             $this->logger->debug('isCorrupted: Not permitted.', array('app' => Application::APP_ID));
 
