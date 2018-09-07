@@ -639,13 +639,11 @@
             tr.append(td);
 
             // Color row according to suspicion level
-            if (fileData.suspicionClass === 1) {
+            if (fileData.suspicionClass === 3) {
                 tr.attr({ 'class': self.colors.red});
             } else if (fileData.suspicionClass === 2) {
-                tr.attr({ 'class': self.colors.orange});
-            } else if (fileData.suspicionClass === 3) {
                 tr.attr({ 'class': self.colors.yellow});
-            } else if (fileData.suspicionClass === 4) {
+            } else if (fileData.suspicionClass === 1) {
                 tr.attr({ 'class': self.colors.green});
             }
 
