@@ -23,7 +23,7 @@ namespace OCA\RansomwareDetection\tests\Unit\Analyzer;
 
 use OCA\RansomwareDetection\Entropy\Entropy;
 use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
-use OCA\RansomwareDetection\FileSignatureList;
+use OCA\RansomwareDetection\FileSignatures;
 use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
 use OCP\ILogger;
 use Test\TestCase;
@@ -70,10 +70,10 @@ class FileExtensionAnalyzerTest extends TestCase
 
     public function dataIsFileExtensionKnown()
     {
-        $signatures = FileSignatureList::getSignatures();
+        $signatures = FileSignatures::getSignatures();
         $extensions = [];
         foreach ($signatures as $signature) {
-            foreach ($signature['extension'] as $extension) {
+            foreach ($signature['extensions'] as $extension) {
                 $extensions[] = $extension;
             }
         }

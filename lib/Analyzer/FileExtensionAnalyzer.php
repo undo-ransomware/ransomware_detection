@@ -21,7 +21,7 @@
 
 namespace OCA\RansomwareDetection\Analyzer;
 
-use OCA\RansomwareDetection\FileSignatureList;
+use OCA\RansomwareDetection\FileSignatures;
 use OCA\RansomwareDetection\Entropy\Entropy;
 use OCP\ILogger;
 
@@ -70,9 +70,9 @@ class FileExtensionAnalyzer
      */
     private function isFileExtensionKnown($extension)
     {
-        $signatures = FileSignatureList::getSignatures();
+        $signatures = FileSignatures::getSignatures();
         foreach ($signatures as $signature) {
-            if (in_array(strtolower($extension), $signature['extension'])) {
+            if (in_array(strtolower($extension), $signature['extensions'])) {
                 return true;
             }
         }
