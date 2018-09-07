@@ -66,9 +66,9 @@ class FileOperationTest extends TestCase
             ['field' => 'fileExtensionClass', 'value' => FileExtensionResult::SUSPICIOUS],
             ['field' => 'suspicionClass', 'value' => Classifier::NO_INFORMATION],
             ['field' => 'suspicionClass', 'value' => Classifier::NOT_SUSPICIOUS],
-            ['field' => 'suspicionClass', 'value' => Classifier::MIDDLE_LEVEL_OF_SUSPICION],
-            ['field' => 'suspicionClass', 'value' => Classifier::LOW_LEVEL_OF_SUSPICION],
-            ['field' => 'suspicionClass', 'value' => Classifier::HIGH_LEVEL_OF_SUSPICION],
+            ['field' => 'suspicionClass', 'value' => Classifier::MAYBE_SUSPICIOUS],
+            ['field' => 'suspicionClass', 'value' => Classifier::MAYBE_SUSPICIOUS],
+            ['field' => 'suspicionClass', 'value' => Classifier::SUSPICIOUS],
         ];
 
         return $data;

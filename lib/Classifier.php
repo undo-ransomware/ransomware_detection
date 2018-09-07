@@ -34,10 +34,8 @@ class Classifier
      *
      * @var int
      */
-    const HIGH_LEVEL_OF_SUSPICION = 1;
-    const MIDDLE_LEVEL_OF_SUSPICION = 2;
-    // deprecated will be removed
-    const LOW_LEVEL_OF_SUSPICION = 3;
+    const SUSPICIOUS = 1;
+    const MAYBE_SUSPICIOUS = 2;
     const NOT_SUSPICIOUS = 4;
     const NO_INFORMATION = 5;
 
@@ -82,17 +80,13 @@ class Classifier
         ) {
             if ($file->getFileClass() === EntropyResult::ENCRYPTED) {
                 if ($file->getFileExtensionClass() === FileExtensionResult::SUSPICIOUS) {
-                    $file->setSuspicionClass(self::HIGH_LEVEL_OF_SUSPICION);
-                } elseif ($file->getFileExtensionClass() > FileExtensionResult::NOT_SUSPICIOUS) {
-                    $file->setSuspicionClass(self::MIDDLE_LEVEL_OF_SUSPICION);
+                    $file->setSuspicionClass(self::SUSPICIOUS);
                 } else {
-                    $file->setSuspicionClass(self::NOT_SUSPICIOUS);
+                    $file->setSuspicionClass(self::MAYBE_SUSPICIOUS);
                 }
             } elseif ($file->getFileClass() === EntropyResult::COMPRESSED) {
                 if ($file->getFileExtensionClass() === FileExtensionResult::SUSPICIOUS) {
-                    $file->setSuspicionClass(self::MIDDLE_LEVEL_OF_SUSPICION);
-                } elseif ($file->getFileExtensionClass() > FileExtensionResult::NOT_SUSPICIOUS) {
-                    $file->setSuspicionClass(self::LOW_LEVEL_OF_SUSPICION);
+                    $file->setSuspicionClass(self::MAYBE_SUSPICIOUS);
                 } else {
                     $file->setSuspicionClass(self::NOT_SUSPICIOUS);
                 }

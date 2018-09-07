@@ -62,28 +62,28 @@ class SequenceAnalyzerTest extends TestCase
         $fileOperation1->setOriginalName('test.csv');
         $fileOperation1->setSize(123000);
         $fileOperation1->setType('file');
-        $fileOperation1->setSuspicionClass(Classifier::HIGH_LEVEL_OF_SUSPICION);
+        $fileOperation1->setSuspicionClass(Classifier::SUSPICIOUS);
 
         $fileOperation2 = new FileOperation();
         $fileOperation2->setCommand(Monitor::DELETE);
         $fileOperation2->setOriginalName('test.csv');
         $fileOperation2->setSize(123000);
         $fileOperation2->setType('file');
-        $fileOperation2->setSuspicionClass(Classifier::HIGH_LEVEL_OF_SUSPICION);
+        $fileOperation2->setSuspicionClass(Classifier::SUSPICIOUS);
 
         $fileOperation3 = new FileOperation();
         $fileOperation3->setCommand(Monitor::WRITE);
         $fileOperation3->setOriginalName('test.csv');
         $fileOperation3->setSize(123000);
         $fileOperation3->setType('file');
-        $fileOperation3->setSuspicionClass(Classifier::MIDDLE_LEVEL_OF_SUSPICION);
+        $fileOperation3->setSuspicionClass(Classifier::MAYBE_SUSPICIOUS);
 
         $fileOperation4 = new FileOperation();
         $fileOperation4->setCommand(Monitor::WRITE);
         $fileOperation4->setOriginalName('test.csv');
         $fileOperation4->setSize(123000);
         $fileOperation4->setType('file');
-        $fileOperation4->setSuspicionClass(Classifier::LOW_LEVEL_OF_SUSPICION);
+        $fileOperation4->setSuspicionClass(Classifier::NOT_SUSPICIOUS);
 
         $fileOperation5 = new FileOperation();
         $fileOperation5->setCommand(Monitor::WRITE);
@@ -123,7 +123,7 @@ class SequenceAnalyzerTest extends TestCase
             ['sequence' => [$fileOperationRename], 'suspicionScore' => 0],
             ['sequence' => [$fileOperationUnknown], 'suspicionScore' => 0],
             ['sequence' => [$fileOperation3], 'suspicionScore' => 0.75],
-            ['sequence' => [$fileOperation4], 'suspicionScore' => 0.5],
+            ['sequence' => [$fileOperation4], 'suspicionScore' => 0],
             ['sequence' => [$fileOperation5], 'suspicionScore' => 0],
             ['sequence' => [$fileOperation6], 'suspicionScore' => 0],
         ];

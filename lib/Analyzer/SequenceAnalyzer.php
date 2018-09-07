@@ -122,14 +122,11 @@ class SequenceAnalyzer
                         break;
                 }
                 switch ($file->getSuspicionClass()) {
-                    case Classifier::HIGH_LEVEL_OF_SUSPICION:
+                    case Classifier::SUSPICIOUS:
                         $highSuspicionFiles[] = $file;
                         break;
-                    case Classifier::MIDDLE_LEVEL_OF_SUSPICION:
+                    case Classifier::MAYBE_SUSPICIOUS:
                         $middleSuspicionFiles[] = $file;
-                        break;
-                    case Classifier::LOW_LEVEL_OF_SUSPICION:
-                        $lowSuspicionFiles[] = $file;
                         break;
                     case Classifier::NOT_SUSPICIOUS:
                         $noSuspicionFiles[] = $file;

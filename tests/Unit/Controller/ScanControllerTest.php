@@ -233,7 +233,7 @@ class ScanControllerTest extends TestCase
         $fileOperation1->setStandardDeviation(0.1);
         $fileOperation1->setFileClass(EntropyResult::NORMAL);
         $fileOperation1->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
-        $fileOperation1->setSuspicionClass(Classifier::HIGH_LEVEL_OF_SUSPICION);
+        $fileOperation1->setSuspicionClass(Classifier::SUSPICIOUS);
 
         $sequenceResult = new SequenceResult(1, 0.0, 1.1, 2.2, 4.5, []);
 
