@@ -96,9 +96,11 @@ class FileCorruptionAnalyzerTest extends TestCase
     public function dataIsCorrupted()
     {
         return [
-            ['data' => 'ffff', 'extension' => 'unknown', 'result' => true],
-            ['data' => 'ffd8ffffffff', 'extension' => 'csv', 'result' => true],
-            ['data' => 'ffd8ffffffff', 'extension' => 'jpg', 'result' => false],
+            ['data' => 'ffff', 'extension' => 'unknown', 'result' => false],
+            ['data' => 'ffd8ffffffff', 'extension' => 'csv', 'result' => false],
+            ['data' => 'ffd8ffe000104a46494600ffffffd9', 'extension' => 'jpg', 'result' => false],
+            ['data' => 'ffd8ffe000104a46494600ffff', 'extension' => 'jpg', 'result' => true],
+            ['data' => 'ffff', 'extension' => 'jpg', 'result' => true],
         ];
     }
 

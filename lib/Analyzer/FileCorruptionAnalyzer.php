@@ -22,7 +22,7 @@
 namespace OCA\RansomwareDetection\Analyzer;
 
 use OCA\RansomwareDetection\AppInfo\Application;
-use OCA\RansomwareDetection\FileSignatureList;
+use OCA\RansomwareDetection\FileSignatures;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\File;
@@ -74,18 +74,34 @@ class FileCorruptionAnalyzer
      */
     protected function isCorrupted(File $node)
     {
-        $signatures = FileSignatureList::getSignatures();
+        $signatures = FileSignatures::getSignatures();
 
         try {
             $data = $node->getContent();
+            $pathInfo = pathinfo($node->getPath());
             foreach ($signatures as $signature) {
-                if (strtolower($signature['byteSequence']) === strtolower(bin2hex(substr($data, $signature['offset'], strlen($signature['byteSequence']) / 2)))) {
-                    $pathInfo = pathinfo($node->getPath());
-                    if (in_array(strtolower($pathInfo['extension']), $signature['extension'])) {
-                        return new FileCorruptionResult(false, $signature['file_class']);
+                $isSignatureMatching = true;
+                if (in_array(strtolower($pathInfo['extension']), $signature['extensions'])) {
+                    // starting byte sequence
+                    if (array_key_exists('starting', $signature['signature'])) {
+						foreach ($signature['signature']['starting']['bytes'] as $bytes) {
+							if (strtolower($bytes) ===
+								strtolower(bin2hex(substr($data, $signature['signature']['starting']['offset'], strlen($bytes) / 2)))) {
+									$isSignatureMatching = false;
+								}
+						}
                     }
-
-                    return new FileCorruptionResult(true);
+                    // trailing byte sequence
+                    if (array_key_exists('trailing', $signature['signature'])) {
+						foreach ($signature['signature']['trailing']['bytes'] as $bytes) {
+							$trailingOffset = strlen($data) - $signature['signature']['trailing']['offset'] - strlen($bytes) / 2;
+							if (strtolower($bytes) !==
+								strtolower(bin2hex(substr($data, $trailingOffset, strlen($bytes) / 2)))) {
+									$isSignatureMatching = true;
+								}
+						}
+                    }
+                    return new FileCorruptionResult($isSignatureMatching);
                 }
             }
 
