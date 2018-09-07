@@ -99,7 +99,9 @@ class FileCorruptionAnalyzerTest extends TestCase
             ['data' => 'ffff', 'extension' => 'unknown', 'result' => false],
             ['data' => 'ffd8ffffffff', 'extension' => 'csv', 'result' => false],
             ['data' => 'ffd8ffe000104a46494600ffffffd9', 'extension' => 'jpg', 'result' => false],
+            ['data' => 'FFD8FFE136B5457869660000ffffffd9', 'extension' => 'jpg', 'result' => false],
             ['data' => 'ffd8ffe000104a46494600ffff', 'extension' => 'jpg', 'result' => true],
+            ['data' => '25504446ff0d2525454f460d', 'extension' => 'pdf', 'result' => false],
             ['data' => 'ffff', 'extension' => 'jpg', 'result' => true],
         ];
     }

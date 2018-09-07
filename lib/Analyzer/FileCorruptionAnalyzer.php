@@ -80,28 +80,29 @@ class FileCorruptionAnalyzer
             $data = $node->getContent();
             $pathInfo = pathinfo($node->getPath());
             foreach ($signatures as $signature) {
-                $isSignatureMatching = true;
+                $isFileCorrupted = true;
                 if (in_array(strtolower($pathInfo['extension']), $signature['extensions'])) {
                     // starting byte sequence
                     if (array_key_exists('starting', $signature['signature'])) {
 						foreach ($signature['signature']['starting']['bytes'] as $bytes) {
-							if (strtolower($bytes) ===
-								strtolower(bin2hex(substr($data, $signature['signature']['starting']['offset'], strlen($bytes) / 2)))) {
-									$isSignatureMatching = false;
-								}
+							if (preg_match($bytes, strtolower(bin2hex(substr($data, $signature['signature']['starting']['offset'], strlen($bytes) / 2))))) {
+									$isFileCorrupted = false;
+							}
 						}
                     }
                     // trailing byte sequence
                     if (array_key_exists('trailing', $signature['signature'])) {
+                        $trailingIsNotMatching = true;
 						foreach ($signature['signature']['trailing']['bytes'] as $bytes) {
 							$trailingOffset = strlen($data) - $signature['signature']['trailing']['offset'] - strlen($bytes) / 2;
-							if (strtolower($bytes) !==
-								strtolower(bin2hex(substr($data, $trailingOffset, strlen($bytes) / 2)))) {
-									$isSignatureMatching = true;
-								}
+							if (preg_match($bytes, strtolower(bin2hex(substr($data, $trailingOffset, strlen($bytes) / 2))))) {
+									$trailingIsNotMatching = false;
+							}
 						}
+						$isFileCorrupted = $isFileCorrupted || $trailingIsNotMatching;
+                        return new FileCorruptionResult($isFileCorrupted);
                     }
-                    return new FileCorruptionResult($isSignatureMatching);
+                    return new FileCorruptionResult($isFileCorrupted);
                 }
             }
 

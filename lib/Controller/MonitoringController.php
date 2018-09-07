@@ -234,7 +234,7 @@ class MonitoringController extends OCSController
 
                 return new JSONResponse(['status' => 'success', 'id' => $id], Http::STATUS_OK);
             } elseif ($file->getCommand() === Monitor::CREATE) {
-                // Recover new created files by deleting them
+                // Recover new created folders
                 $filePath = $file->getPath().'/'.$file->getOriginalName();
                 if ($this->deleteFromStorage($filePath)) {
                     $this->service->deleteById($id);
