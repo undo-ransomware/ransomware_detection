@@ -90,18 +90,13 @@
                 <notnull>false</notnull>
             </field>
             <field>
-                <name>file_name_entropy</name>
-                <type>float</type>
-                <notnull>false</notnull>
-            </field>
-            <field>
                 <name>file_class</name>
                 <type>text</type>
                 <notnull>false</notnull>
                 <length>64</length>
             </field>
             <field>
-                <name>file_name_class</name>
+                <name>file_extension_class</name>
                 <type>text</type>
                 <notnull>false</notnull>
                 <length>64</length>
