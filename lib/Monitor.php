@@ -440,7 +440,11 @@ class Monitor
         $fileOperation->setFileExtensionClass($fileExtensionResult->getFileExtensionClass());
 
         $fileCorruptionResult = $this->fileCorruptionAnalyzer->analyze($node);
-        $fileOperation->setCorrupted($fileCorruptionResult->isCorrupted());
+        $isCorrupted = $fileCorruptionResult->isCorrupted();
+        $fileOperation->setCorrupted($isCorrupted);
+        if ($isCorrupted) {
+            $fileOperation->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
+        }
 
         // entropy analysis
         $entropyResult = $this->entropyAnalyzer->analyze($node);

@@ -27,6 +27,7 @@ use OCA\RansomwareDetection\Analyzer\SequenceAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
+use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Exception\NotAFileException;
@@ -302,19 +303,17 @@ class ScanController extends OCSController
         $fileOperation->setFileExtensionClass($fileExtensionResult->getFileExtensionClass());
 
         $fileCorruptionResult = $this->fileCorruptionAnalyzer->analyze($node);
-        $fileOperation->setCorrupted($fileCorruptionResult->isCorrupted());
+        $isCorrupted = $fileCorruptionResult->isCorrupted();
+        $fileOperation->setCorrupted($isCorrupted);
+        if ($isCorrupted) {
+            $fileOperation->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
+        }
 
         // entropy analysis
         $entropyResult = $this->entropyAnalyzer->analyze($node);
         $fileOperation->setEntropy($entropyResult->getEntropy());
         $fileOperation->setStandardDeviation($entropyResult->getStandardDeviation());
-        if ($fileCorruptionResult->isCorrupted()) {
-            $fileOperation->setFileClass($entropyResult->getFileClass());
-        } else {
-            if ($fileCorruptionResult->getFileClass() !== -1) {
-                $fileOperation->setFileClass($fileCorruptionResult->getFileClass());
-            }
-        }
+        $fileOperation->setFileClass($entropyResult->getFileClass());
 
         return $fileOperation;
     }
