@@ -441,7 +441,7 @@
 
             if (fileData.fileExtensionClass === 0) {
                 // normal
-                td = $('<td></td>').append($('<p></p>').attr({"title": "NOT_SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-check-circle fa-fw"></span>'));
+                td = $('<td></td>').append($('<p></p>').attr({"title": "NOT SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-check-circle fa-fw"></span>'));
             } else if (fileData.fileExtensionClass === 1) {
                 // suspicious
                 td = $('<td></td>').append($('<p></p>').attr({"title": "SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-exclamation-triangle fa-fw"></span>'));
@@ -480,13 +480,11 @@
             tr.append(td);
 
             // Color row according to suspicion level
-            if (fileData.suspicionClass === 1) {
+            if (fileData.suspicionClass === 3) {
                 tr.attr({ 'class': self.colors.red});
             } else if (fileData.suspicionClass === 2) {
-                tr.attr({ 'class': self.colors.orange});
-            } else if (fileData.suspicionClass === 3) {
                 tr.attr({ 'class': self.colors.yellow});
-            } else if (fileData.suspicionClass === 4) {
+            } else if (fileData.suspicionClass === 1) {
                 tr.attr({ 'class': self.colors.green});
             }
 

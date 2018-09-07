@@ -34,10 +34,10 @@ class Classifier
      *
      * @var int
      */
-    const SUSPICIOUS = 1;
+    const SUSPICIOUS = 3;
     const MAYBE_SUSPICIOUS = 2;
-    const NOT_SUSPICIOUS = 4;
-    const NO_INFORMATION = 5;
+    const NOT_SUSPICIOUS = 1;
+    const NO_INFORMATION = 0;
 
     /** @var ILogger */
     private $logger;
