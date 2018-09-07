@@ -446,13 +446,8 @@ class Monitor
         $entropyResult = $this->entropyAnalyzer->analyze($node);
         $fileOperation->setEntropy($entropyResult->getEntropy());
         $fileOperation->setStandardDeviation($entropyResult->getStandardDeviation());
-        if ($fileCorruptionResult->isCorrupted()) {
-            $fileOperation->setFileClass($entropyResult->getFileClass());
-        } else {
-            if ($fileCorruptionResult->getFileClass() !== -1) {
-                $fileOperation->setFileClass($fileCorruptionResult->getFileClass());
-            }
-        }
+        $fileOperation->setFileClass($entropyResult->getFileClass());
+
 
         $entity = $this->mapper->insert($fileOperation);
     }

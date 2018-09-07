@@ -26,19 +26,13 @@ class FileCorruptionResult
     /** @var bool */
     private $isCorrupted;
 
-    /** @var int */
-    private $fileClass;
-
     /**
      * @param bool $isCorrupted
-     * @param int  $fileClass
      */
     public function __construct(
-        $isCorrupted,
-        $fileClass = -1
+        $isCorrupted
     ) {
         $this->isCorrupted = $isCorrupted;
-        $this->fileClass = $fileClass;
     }
 
     /**
@@ -55,21 +49,5 @@ class FileCorruptionResult
     public function isCorrupted()
     {
         return $this->isCorrupted;
-    }
-
-    /**
-     * @param int $fileClass
-     */
-    public function setFileClass($fileClass)
-    {
-        $this->fileClass = $fileClass;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFileClass()
-    {
-        return $this->fileClass;
     }
 }
