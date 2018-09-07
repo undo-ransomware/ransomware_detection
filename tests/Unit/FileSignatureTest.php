@@ -21,11 +21,11 @@
 
 namespace OCA\RansomwareDetection\tests\Unit;
 
-use OCA\RansomwareDetection\FileSignatureList;
+use OCA\RansomwareDetection\FileSignatures;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
 use Test\TestCase;
 
-class FileSignatureListTest extends TestCase
+class FileSignaturesTest extends TestCase
 {
     public function setUp()
     {
@@ -36,11 +36,11 @@ class FileSignatureListTest extends TestCase
     {
         $tests = [];
 
-        foreach (FileSignatureList::getSignatures() as $signature) {
+        foreach (FileSignatures::getSignatures() as $signature) {
             $tests[] = [$signature, true];
         }
 
-        $tests[] = [['byteSequence' => 'aaa', 'offset' => 0, 'extension' => ['test'], 'mimeType' => [], 'file_class' => EntropyResult::COMPRESSED], false];
+        $tests[] = ['signature' => ['mimeType' => '', 'extensions' => ['test'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['00', '00']]]], 'return' => false];
 
         return $tests;
     }
@@ -53,6 +53,6 @@ class FileSignatureListTest extends TestCase
      */
     public function testIsSignatureKown($signature, $return)
     {
-        $this->assertEquals(in_array($signature, FileSignatureList::getSignatures()), $return);
+        $this->assertEquals(in_array($signature, FileSignatures::getSignatures()), $return);
     }
 }
