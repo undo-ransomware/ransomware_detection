@@ -83,5 +83,7 @@ class FileOperation extends Entity
         $this->addType('entropy', 'float');
         $this->addType('standardDeviation', 'float');
         $this->addType('suspicionClass', 'integer');
+        $this->addType('fileExtensionClass', 'integer');
+        $this->addType('fileClass', 'integer');
     }
 }

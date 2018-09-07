@@ -424,13 +424,13 @@
 			}).text(simpleSize));
             tr.append(td);
 
-            if (fileData.fileClass === '1') {
+            if (fileData.fileClass === 1) {
                 // encrypted
                 td = $('<td></td>').append($('<p></p>').attr({"title": "ENCRYPTED"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-lock fa-fw"></span>'));
-            } else if (fileData.fileClass === '2') {
+            } else if (fileData.fileClass === 2) {
                 // compressed
                     td = $('<td></td>').append($('<p></p>').attr({"title": "COMPRESSED"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-file-archive fa-fw"></span>'));
-            } else if (fileData.fileClass === '3') {
+            } else if (fileData.fileClass === 3) {
                 // normal
                 td = $('<td></td>').append($('<p></p>').attr({"title": "NORMAL"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-file fa-fw"></span>'));
             } else {
@@ -439,10 +439,10 @@
             }
             tr.append(td);
 
-            if (fileData.fileExtensionClass === '0') {
+            if (fileData.fileExtensionClass === 0) {
                 // normal
                 td = $('<td></td>').append($('<p></p>').attr({"title": "NOT_SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-check-circle fa-fw"></span>'));
-            } else if (fileData.fileExtensionClass === '1') {
+            } else if (fileData.fileExtensionClass === 1) {
                 // suspicious
                 td = $('<td></td>').append($('<p></p>').attr({"title": "SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-exclamation-triangle fa-fw"></span>'));
             } else {
@@ -585,13 +585,13 @@
 			}).text(simpleSize));
             tr.append(td);
 
-            if (fileData.fileClass === '1') {
+            if (fileData.fileClass === 1) {
                 // encrypted
                 td = $('<td></td>').append($('<p></p>').attr({"title": "ENCRYPTED"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-lock fa-fw"></span>'));
-            } else if (fileData.fileClass === '2') {
+            } else if (fileData.fileClass === 2) {
                 // compressed
                     td = $('<td></td>').append($('<p></p>').attr({"title": "COMPRESSED"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-file-archive fa-fw"></span>'));
-            } else if (fileData.fileClass === '3') {
+            } else if (fileData.fileClass === 3) {
                 // normal
                 td = $('<td></td>').append($('<p></p>').attr({"title": "NORMAL"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-file fa-fw"></span>'));
             } else {
@@ -600,10 +600,10 @@
             }
             tr.append(td);
 
-            if (fileData.fileExtensionClass === '0') {
+            if (fileData.fileExtensionClass === 0) {
                 // not suspicious
                 td = $('<td></td>').append($('<p></p>').attr({"title": "NOT_SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-check-circle fa-fw"></span>'));
-            } else if (fileData.fileExtensionClass === '1') {
+            } else if (fileData.fileExtensionClass === 1) {
                 // suspicious
                 td = $('<td></td>').append($('<p></p>').attr({"title": "SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-exclamation-triangle fa-fw"></span>'));
             } else {

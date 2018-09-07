@@ -444,7 +444,7 @@
             if (fileData.fileExtensionClass === 0) {
                 // not suspicious
                 td = $('<td></td>').append($('<p></p>').attr({"title": "NOT_SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-check-circle fa-fw"></span>'));
-            } else if (fileData.fileExtensionClass === 3) {
+            } else if (fileData.fileExtensionClass === 1) {
                 // suspicious
                 td = $('<td></td>').append($('<p></p>').attr({"title": "SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-exclamation-triangle fa-fw"></span>'));
             } else {
