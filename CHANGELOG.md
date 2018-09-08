@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.2
+
+### Changed
+
+- Removed file name analyzer.
+- Reworked file extension and file corruption analyzer.
+- Simplify file classification and color coding.
+
+### Fixed
+
+- Variable types in the database.
+
 ## 0.3.0
 
 ### Added
