@@ -6,7 +6,7 @@ php:
 
 env:
   global:
-    - CORE_BRANCH=master
+    - CORE_BRANCH=stable14
     - APP_NAME=ransomware_detection
   matrix:
     - DB=sqlite
@@ -32,20 +32,22 @@ script:
   - cd apps/$APP_NAME/
 
   # Test the app
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
+  - sh -c "if [ '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
   - cd ../../
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
+  - sh -c "if [ '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
+  - sh -c "if [ '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
   - cd apps/$APP_NAME/
 
   # Run phpunit tests
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+  - cd tests
+  - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+  - cd ..
 
 after_success:
   # Create coverage report
-  - cd tests/
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then wget https://codecov.io/bash -O codecov.sh; fi"
-  - sh -c "if [ '$JSTESTS' != '1' -a '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then bash codecov.sh; fi"
+  - cd tests
+  - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then wget https://codecov.io/bash -O codecov.sh; fi"
+  - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then bash codecov.sh; fi"
   - cd ../
 
 matrix:
