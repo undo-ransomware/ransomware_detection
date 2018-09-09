@@ -67,6 +67,9 @@ class FileOperationServiceTest extends MapperTestUtility
         $this->assertEquals($this->fileOperations[0], $result);
     }
 
+    /**
+     * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+     */
     public function testFindNotFound()
     {
         $userId = 'john';
@@ -75,12 +78,12 @@ class FileOperationServiceTest extends MapperTestUtility
             'WHERE `id` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$id, $userId]);
-        $this->setExpectedException(
-            '\OCP\AppFramework\Db\DoesNotExistException'
-        );
         $this->service->find($id);
     }
 
+    /**
+     * @expectedException \OCP\AppFramework\Db\MultipleObjectsReturnedException
+     */
     public function testFindMoreThanOneResultFound()
     {
         $userId = 'john';
@@ -90,9 +93,6 @@ class FileOperationServiceTest extends MapperTestUtility
             'WHERE `id` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$id, $userId], $rows);
-        $this->setExpectedException(
-            '\OCP\AppFramework\Db\MultipleObjectsReturnedException'
-        );
         $this->service->find($id);
     }
 
@@ -110,6 +110,9 @@ class FileOperationServiceTest extends MapperTestUtility
         $this->assertEquals($this->fileOperations[0], $result);
     }
 
+    /**
+     * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+     */
     public function testFindOneByFileNameNotFound()
     {
         $userId = 'john';
@@ -118,12 +121,12 @@ class FileOperationServiceTest extends MapperTestUtility
             'WHERE `original_name` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$name, $userId]);
-        $this->setExpectedException(
-            '\OCP\AppFramework\Db\DoesNotExistException'
-        );
         $this->service->findOneByFileName($name);
     }
 
+    /**
+     * @expectedException \OCP\AppFramework\Db\MultipleObjectsReturnedException
+     */
     public function testFindOneByFileNameMoreThanOneResultFound()
     {
         $userId = 'john';
@@ -133,9 +136,6 @@ class FileOperationServiceTest extends MapperTestUtility
             'WHERE `original_name` = ? AND `user_id` = ?';
 
         $this->setMapperResult($sql, [$name, $userId], $rows);
-        $this->setExpectedException(
-            '\OCP\AppFramework\Db\MultipleObjectsReturnedException'
-        );
         $this->service->findOneByFileName($name);
     }
 
@@ -152,6 +152,9 @@ class FileOperationServiceTest extends MapperTestUtility
         $this->assertEquals($this->fileOperations[0], $result);
     }
 
+    /**
+     * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+     */
     public function testFindOneWithHighestIdNotFound()
     {
         $userId = 'john';
@@ -159,12 +162,12 @@ class FileOperationServiceTest extends MapperTestUtility
             'ORDER BY id DESC LIMIT 1';
 
         $this->setMapperResult($sql, [$userId]);
-        $this->setExpectedException(
-            '\OCP\AppFramework\Db\DoesNotExistException'
-        );
         $this->service->findOneWithHighestId();
     }
 
+    /**
+     * @expectedException \OCP\AppFramework\Db\MultipleObjectsReturnedException
+     */
     public function testFindOneWithHighestIdMoreThanOneResultFound()
     {
         $userId = 'john';
@@ -173,9 +176,6 @@ class FileOperationServiceTest extends MapperTestUtility
             'ORDER BY id DESC LIMIT 1';
 
         $this->setMapperResult($sql, [$userId], $rows);
-        $this->setExpectedException(
-            '\OCP\AppFramework\Db\MultipleObjectsReturnedException'
-        );
         $this->service->findOneWithHighestId();
     }
 
