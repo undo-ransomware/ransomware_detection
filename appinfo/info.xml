@@ -9,6 +9,9 @@
     <licence>agpl</licence>
     <author mail="matthias.held@uni-konstanz.de">Matthias Held</author>
     <namespace>RansomwareDetection</namespace>
+    <types>
+        <logging/>
+    </types>
     <category>files</category>
     <category>monitoring</category>
     <category>security</category>
@@ -20,16 +23,9 @@
         <nextcloud min-version="13" max-version="14"/>
     </dependencies>
 
-    <navigations>
-        <navigation>
-            <name>Ransomware recovery</name>
-            <route>ransomware_detection.recover.index</route>
-        </navigation>
-    </navigations>
-
-    <types>
-		<logging/>
-	</types>
+    <background-jobs>
+        <job>OCA\RansomwareDetection\BackgroundJob\CleanUpJob</job>
+    </background-jobs>
 
     <settings>
         <admin>OCA\RansomwareDetection\Settings\Admin</admin>
@@ -38,7 +34,10 @@
         <personal-section>OCA\RansomwareDetection\Settings\PersonalSection</personal-section>
     </settings>
 
-    <background-jobs>
-        <job>OCA\RansomwareDetection\BackgroundJob\CleanUpJob</job>
-    </background-jobs>
+    <navigations>
+        <navigation>
+            <name>Ransomware recovery</name>
+            <route>ransomware_detection.recover.index</route>
+        </navigation>
+    </navigations>
 </info>
