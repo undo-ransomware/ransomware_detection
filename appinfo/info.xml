@@ -17,7 +17,7 @@
 	<screenshot>https://github.com/ilovemilk/ransomware_detection/raw/master/screenshots/scan-files-0.3.0.png</screenshot>
     <bugs>https://github.com/ilovemilk/ransomware_detection/issues</bugs>
     <dependencies>
-        <nextcloud min-version="13" max-version="13"/>
+        <nextcloud min-version="13" max-version="14"/>
     </dependencies>
 
     <navigations>
