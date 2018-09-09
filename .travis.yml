@@ -6,7 +6,7 @@ php:
 
 env:
   global:
-    - CORE_BRANCH=stable13
+    - CORE_BRANCH=stable14
     - APP_NAME=ransomware_detection
   matrix:
     - DB=sqlite
@@ -15,7 +15,7 @@ branches:
   only:
     - master
     - develop
-    - /^feature.*$/ 
+    - /^feature.*$/
 
 before_install:
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
