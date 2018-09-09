@@ -22,31 +22,27 @@ script('ransomware_detection', 'scan');
 script('ransomware_detection', 'vendor/font-awesome/fontawesome-all');
 style('ransomware_detection', 'style');
 ?>
-<div id="app">
-    <div id="app-navigation">
-        <ul>
-            <li>
-                <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('ransomware_detection.recover.index', [])); ?>">
-                    <img alt="" src="<?php print_unescaped(\OC::$server->getURLGenerator()->imagePath('core', 'actions/history.svg')); ?>">
-                    <span>Monitoring</span>
-                </a>
-            </li>
-            <li class="active">
-                <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('ransomware_detection.recover.scan', [])); ?>">
-                    <img alt="" src="<?php print_unescaped(\OC::$server->getURLGenerator()->imagePath('core', 'actions/search.svg')); ?>">
-                    <span>Scan files</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div id="app-content">
-        <div id="app-content-ransomware-detection-scan">
-            <!-- Tables -->
-            <div class="section" id="section-loading">
-                <p class="text-center">
-    			    <div class="icon-loading-dark"></div>
-                </p>
-    		</div>
-        </div>
+<div id="app-navigation">
+    <ul>
+        <li>
+            <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('ransomware_detection.recover.index', [])); ?>">
+                <img alt="" src="<?php print_unescaped(\OC::$server->getURLGenerator()->imagePath('core', 'actions/history.svg')); ?>">
+                <span>Monitoring</span>
+            </a>
+        </li>
+        <li class="active">
+            <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('ransomware_detection.recover.scan', [])); ?>">
+                <img alt="" src="<?php print_unescaped(\OC::$server->getURLGenerator()->imagePath('core', 'actions/search.svg')); ?>">
+                <span>Scan files</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="app-content">
+    <div id="app-content-ransomware-detection-scan">
+        <!-- Tables -->
+        <div class="section" id="section-loading">
+    	       <div class="icon-loading-dark"></div>
+    	</div>
     </div>
 </div>
