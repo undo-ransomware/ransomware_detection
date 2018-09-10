@@ -227,7 +227,7 @@
                                 $.each(response.sequence, function(i, file) {
                                     file.id = i;
                                     self.files[index][file.id] = file;
-                                    self.$fileList[index].append(Utils._createeRow(file, index));
+                                    self.$fileList[index].append(Utils._createRow(file, index));
                                     self.$el.find('#section-suspicious-files-text').remove();
                                     self.$el.find('#scan-results').show();
                                 });
