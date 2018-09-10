@@ -122,7 +122,7 @@ class SequenceAnalyzerTest extends TestCase
             ['sequence' => [$fileOperationRead], 'suspicionScore' => 0],
             ['sequence' => [$fileOperationRename], 'suspicionScore' => 0],
             ['sequence' => [$fileOperationUnknown], 'suspicionScore' => 0],
-            ['sequence' => [$fileOperation3], 'suspicionScore' => 0.75],
+            ['sequence' => [$fileOperation3], 'suspicionScore' => 0.5],
             ['sequence' => [$fileOperation4], 'suspicionScore' => 0],
             ['sequence' => [$fileOperation5], 'suspicionScore' => 0],
             ['sequence' => [$fileOperation6], 'suspicionScore' => 0],

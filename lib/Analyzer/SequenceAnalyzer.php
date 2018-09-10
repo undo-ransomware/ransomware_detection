@@ -69,10 +69,9 @@ class SequenceAnalyzer
      *
      * The next part is the analysis of the suspicion levels of the files written.
      * Therefor the suspicions levels are weighted:
-     * High - 1
-     * Middle - 0.75
-     * Low - 0.5
-     * None - 0.25
+     * Suspicious - 1
+     * Maybe suspicious - 0.5
+     * Not suspicious - 0.25
      *
      * summed up and divided by the sum of all written files. The higher the result,
      * the higher is the suspicion of the hole sequence.
@@ -91,30 +90,23 @@ class SequenceAnalyzer
             return $sequenceResult;
         }
 
-        $highSuspicionFiles = [];
-        $middleSuspicionFiles = [];
-        $lowSuspicionFiles = [];
-        $noSuspicionFiles = [];
-        $writtenFiles = [];
-        $sizeOfWrittenFiles = 0;
-        $deletedFiles = [];
-        $sizeOfDeletedFiles = 0;
+        $files = ['written' => [], 'size_written' => 0, 'deleted' => [], 'size_deleted' => 0, 'suspicious' => [], 'maybe_suspicious' => [], 'not_suspicious' => []];
         $suspicionScore = 0;
 
         foreach ($sequence as $file) {
             if ($file->getType() === 'file') {
                 switch ($file->getCommand()) {
                     case Monitor::WRITE:
-                        $writtenFiles[] = $file;
-                        $sizeOfWrittenFiles = $sizeOfWrittenFiles + $file->getSize();
+                        $files['written'][] = $file;
+                        $files['size_written'] = $files['size_written'] + $file->getSize();
                         break;
                     case Monitor::READ:
                         break;
                     case Monitor::RENAME:
                         break;
                     case Monitor::DELETE:
-                        $deletedFiles[] = $file;
-                        $sizeOfDeletedFiles = $sizeOfDeletedFiles + $file->getSize();
+                        $files['deleted'][] = $file;
+                        $files['size_deleted'] = $files['size_deleted'] + $file->getSize();
                         break;
                     case Monitor::CREATE:
                         break;
@@ -123,13 +115,13 @@ class SequenceAnalyzer
                 }
                 switch ($file->getSuspicionClass()) {
                     case Classifier::SUSPICIOUS:
-                        $highSuspicionFiles[] = $file;
+                        $files['suspicious'][] = $file;
                         break;
                     case Classifier::MAYBE_SUSPICIOUS:
-                        $middleSuspicionFiles[] = $file;
+                        $files['maybe_suspicious'][] = $file;
                         break;
                     case Classifier::NOT_SUSPICIOUS:
-                        $noSuspicionFiles[] = $file;
+                        $files['not_suspicious'][] = $file;
                         break;
                     case Classifier::NO_INFORMATION:
                         break;
@@ -140,11 +132,11 @@ class SequenceAnalyzer
         }
 
         // compare files written and files deleted
-        if (sizeof($writtenFiles) > 0 && sizeof($deletedFiles) > 0) {
-            $sequenceResult->setSizeWritten($sizeOfWrittenFiles);
-            $sequenceResult->setSizeDeleted($sizeOfDeletedFiles);
-            $upperBound = sizeof($deletedFiles) + self::NUMBER_OF_INFO_FILES;
-            if (sizeof($writtenFiles) <= $upperBound && sizeof($writtenFiles) >= sizeof($deletedFiles)) {
+        if (sizeof($files['written']) > 0 && sizeof($files['deleted']) > 0) {
+            $sequenceResult->setSizeWritten($files['size_written']);
+            $sequenceResult->setSizeDeleted($files['size_deleted']);
+            $upperBound = sizeof($files['deleted']) + self::NUMBER_OF_INFO_FILES;
+            if (sizeof($writtenFiles) <= $upperBound && sizeof($files['written']) >= sizeof($files['deleted'])) {
                 if ($this->sequenceSizeAnalyzer->analyze($sequence) === SequenceSizeAnalyzer::EQUAL_SIZE) {
                     $sequenceResult->setQuantities(2);
                     $suspicionScore += 2;
@@ -155,18 +147,16 @@ class SequenceAnalyzer
             }
         }
 
-        $numberOfWrittenFiles = sizeof($highSuspicionFiles) + sizeof($middleSuspicionFiles)
-                                + sizeof($lowSuspicionFiles) + sizeof($noSuspicionFiles);
+        $numberOfWrittenFiles = sizeof($files['suspicious']) + sizeof($files['maybe_suspicious']) + sizeof($files['not_suspicious']);
 
         // remove info files from the weight
         $numberOfInfoFiles = self::NUMBER_OF_INFO_FILES;
-        if (sizeof($noSuspicionFiles) < self::NUMBER_OF_INFO_FILES) {
-            $numberOfInfoFiles = sizeof($noSuspicionFiles);
+        if (sizeof($files['not_suspicious']) < self::NUMBER_OF_INFO_FILES) {
+            $numberOfInfoFiles = sizeof($files['not_suspicious']);
         }
 
         // weight the suspicion levels.
-        $suspicionSum = (sizeof($highSuspicionFiles) * 1) + (sizeof($middleSuspicionFiles) * 0.75)
-                            + (sizeof($lowSuspicionFiles) * 0.5) + ((sizeof($noSuspicionFiles) - $numberOfInfoFiles) * 0.25);
+        $suspicionSum = (sizeof($files['suspicious']) * 1) + (sizeof($files['maybe_suspicious']) * 0.5) + ((sizeof($files['not_suspicious']) - $numberOfInfoFiles) * 0.25);
 
         // check for division by zero.
         if (($numberOfWrittenFiles - $numberOfInfoFiles) > 0) {
@@ -175,7 +165,7 @@ class SequenceAnalyzer
         }
 
         // entropy funnelling
-        $entropyFunnelling = $this->entropyFunnellingAnalyzer->analyze($deletedFiles, $writtenFiles);
+        $entropyFunnelling = $this->entropyFunnellingAnalyzer->analyze($files['deleted'], $files['written']);
         $sequenceResult->setEntropyFunnelling($entropyFunnelling);
         $suspicionScore += $entropyFunnelling->getEntropyFunnelling();
 

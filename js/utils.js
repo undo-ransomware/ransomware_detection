@@ -42,7 +42,7 @@
              var self = this;
              var td, tr = $('<tr data-id="' + fileData.id + '" data-sequence="' + fileData.sequence + '"></tr>'),
                  mtime = parseInt(fileData.timestamp, 10) * 1000,
-                 basename, extension, simpleSize, sizeColor, filename;
+                 basename, extension, simpleSize, filename;
 
              if (isNaN(mtime)) {
      			mtime = new Date().getTime();
