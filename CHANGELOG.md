@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.3
+
+### Added
+
+- Compatibility with Nextcloud 14.
+
+### Changed
+
+- Included Nextcloud 14 into testing.
+
+### Fixed
+
+- Fixed tests for PHPUnit 6.
+
 ## 0.3.2
 
 ### Changed
