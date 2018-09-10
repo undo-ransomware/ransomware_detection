@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 script('ransomware_detection', 'app');
+script('ransomware_detection', 'utils');
 script('ransomware_detection', 'filelist');
 script('ransomware_detection', 'vendor/font-awesome/fontawesome-all');
 style('ransomware_detection', 'style');

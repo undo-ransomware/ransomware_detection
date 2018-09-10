@@ -41,8 +41,6 @@
         debug: 0,
         filesToScan: {},
         sequencesToScan: {},
-        colors: {red: 'red', orange: 'orange', yellow: 'yellow', green: 'green'},
-        colorsText: {red: 'red-text', orange: 'orange-text', yellow: 'yellow-text', green: 'green-text'},
 
         /**
 		 * Map of file id to file data
@@ -84,11 +82,9 @@
 
             $.getJSON(self.getDebugModeUrl, function(debug) {
                 if (debug.debug_mode == 1) {
-                    console.log('Debug mode active.');
                     self.debug = 1;
                 }
                 $.getJSON(self.filesUrl, function(data) {
-                    console.log("Create scan header.");
                     $('#section-loading').remove();
                     console.log("Scanned " + data.number_of_files + " files in " + data.scan_duration + " seconds.");
                     self.$el.append(self._createScanHeader(data.sequences.length));
@@ -116,14 +112,11 @@
             var self = this;
 
 			var checked = $(e.target).prop('checked');
-            console.log("Sequence: " + $(e.target).data('sequence'));
 			this.$fileList[$(e.target).data('sequence')].find('td.selection>.selectCheckBox').prop('checked', checked)
 				.closest('tr').toggleClass('selected', checked);
 			this._selectedFiles = {};
 			if (checked) {
-                console.log("Target is checked.");
                 Object.keys(this.files[$(e.target).data('sequence')]).forEach(function(key) {
-                    console.log("Add " + key + " to selected files.");
                     var fileData = self.files[$(e.target).data('sequence')][key];
 					self._selectedFiles[fileData.id] = fileData;
                 });
@@ -135,7 +128,6 @@
 		 * Event handler for when clicking on a file's checkbox
 		 */
 		_onClickFileCheckbox: function(e) {
-            console.log('File selected.');
             var $tr = $(e.target).closest('tr');
             var state = !$tr.hasClass('selected');
             var fileData = this.files[$tr.data('sequence')][$tr.data('id')];
@@ -179,7 +171,6 @@
                             contentType: 'application/json',
                             data: JSON.stringify({id: parseInt(index), sequence: sequence, command: parseInt(value.command), path: value.path, name: value.originalName, timestamp: value.timestamp})
                         }).done(function(response) {
-                            console.log("Recovery was a success.");
                             self.$el.find("tr[data-id='" + response['id'] + "'][data-sequence='" + response['sequence'] + "']").remove();
                             numberOfFiles = numberOfFiles - 1;
                             delete self._selectedFiles[index];
@@ -216,9 +207,8 @@
                 var count = 0;
                 $.getJSON(self.getColorModeUrl, function(schema) {
                     if (schema.color_mode == 1) {
-                        console.log('Color blind mode active.');
-                        self.colors = {red: 'color-blind-red', orange: 'color-blind-orange', yellow: 'color-blind-yellow', green: 'color-blind-green'};
-                        self.colorsText = {red: 'color-blind-red-text', orange: 'color-blind-orange', yellow: 'color-blind-yellow-text', green: 'color-blind-green-text'};
+                        Utils.colors = {red: 'color-blind-red', orange: 'color-blind-orange', yellow: 'color-blind-yellow', green: 'color-blind-green'};
+                        Utils.colorsText = {red: 'color-blind-red-text', orange: 'color-blind-orange', yellow: 'color-blind-yellow-text', green: 'color-blind-green-text'};
                     }
                     $.each(self.sequencesToScan, function(index, sequence) {
                         $.ajax({
@@ -231,13 +221,13 @@
                             $('#scanned').text(count);
                             if (response.status === "success") {
                                 self.$section[index] = self._createSection(index);
-                                self.$table[index] = self._createTableSkeleton(index, response.suspicion_score);
+                                self.$table[index] = Utils._createTableSkeleton(index, response.suspicion_score);
                                 self.$fileList[index] = self.$table[index].find('tbody.file-list');
                                 self.files[index] = [];
                                 $.each(response.sequence, function(i, file) {
                                     file.id = i;
                                     self.files[index][file.id] = file;
-                                    self.$fileList[index].append(self._createFileRow(file, index));
+                                    self.$fileList[index].append(Utils._createeRow(file, index));
                                     self.$el.find('#section-suspicious-files-text').remove();
                                     self.$el.find('#scan-results').show();
                                 });
@@ -256,8 +246,6 @@
                         });
                     });
                 });
-            } else {
-                console.log("No files to scan.");
             }
         },
 
@@ -266,14 +254,6 @@
          */
         _createSection: function() {
             var section = $('<div class="section group" id="section-results"></div>');
-            return section;
-        },
-
-        /**
-         * Creates the section.
-         */
-        _createSection: function(sequence) {
-            var section = $('<div class="section group" data-sequence="' + sequence + '"></div>');
             return section;
         },
 
@@ -294,218 +274,16 @@
         },
 
         /**
-         * Creates a new table skeleton.
-         */
-        _createTableSkeleton: function(sequence, suspicionScore) {
-            var color = this.colors.green;
-            if (suspicionScore >= 6) {
-                color = this.colors.red;
-            } else if (suspicionScore >= 5) {
-                color = this.colors.orange;
-            } else if (suspicionScore >= 3) {
-                color = this.colors.yellow;
-            }
-            var table =
-                $('<div class="row">' +
-                    '<div class="sequence-color"><div class="color-box ' + color + '"></div></div>' +
-                    '<div class="sequence-table"><table class="ransomware-files" data-sequence="' + sequence + '"><thead>' +
-                    '<th><input type="checkbox" data-sequence="' + sequence + '" id="select_all_files_' + sequence + '" class="select-all checkbox"/>' +
-                    '<label for="select_all_files_' + sequence + '"><span class="hidden-visually">' + t('ransomware_detection', 'Select all') + '</span></label></th>' +
-                    '<th><a class="column-title name">' + t('ransomware_detection', 'Name') + '</a></th>' +
-                    '<th><a class="column-title hide-selected"><p>' + t('ransomware_detection', 'Operation') + '</p></a></th>' +
-                    '<th><a class="column-title hide-selected"><p>' + t('ransomware_detection', 'Size') + '</p></a></th>' +
-                    '<th><a class="column-title hide-selected"><p>' + t('ransomware_detection', 'File class') + '</p></a></th>' +
-                    '<th><a class="column-title hide-selected"><p>' + t('ransomware_detection', 'File name class') + '</p></a></th>' +
-                    '<th class="controls"><a class="column-title detected">' + t('ransomware_detection', 'Time') + '</a><span class="column-title selected-actions"><a class="recover-selected" data-sequence="' + sequence + '"><span class="icon icon-history"></span><span>' + t('ransomware_detection', 'Recover') + '</span></a></span></th> ' +
-                    '</thead><tbody class="file-list"></tbody><tfoot></tfoot></table></div>' +
-                '</div>');
-            return table;
-        },
-
-        /**
-         * Creates a new row in the table.
-         */
-        _createFileRow: function(fileData, sequence) {
-            var self = this;
-            var td, tr = $('<tr data-id="' + fileData.id + '" data-sequence="' + sequence + '"></tr>'),
-                mtime = parseInt(fileData.timestamp, 10) * 1000,
-                basename, extension, simpleSize, sizeColor;
-
-            if (isNaN(mtime)) {
-    			mtime = new Date().getTime();
-    		}
-
-            // size
-            if (typeof(fileData.size) !== 'undefined' && fileData.size >= 0) {
-				simpleSize = humanFileSize(parseInt(fileData.size, 10), true);
-				sizeColor = Math.round(160-Math.pow((fileData.size/(1024*1024)),2));
-			} else {
-				simpleSize = t('ransomware_detection', 'Pending');
-			}
-
-            td = $('<td class="selection"></td>');
-
-			td.append(
-				'<input id="select-' + this.id + '-' + fileData.id +
-				'" type="checkbox" class="selectCheckBox checkbox"/><label for="select-' + this.id + '-' + fileData.id + '">' +
-				'<span class="hidden-visually">' + t('ransomware_detection', 'Select') + '</span>' +
-				'</label>'
-			);
-
-			tr.append(td);
-
-            // file name
-            filename = fileData.originalName;
-            if (fileData.command === 2) {
-                filename = fileData.newName
-            }
-
-            var nameWrapper = $('<div class="name-wrapper"></div>');
-            nameWrapper.append('<div class="thumbnail-wrapper"><div class="thumbnail" style="background-image:url(' + OC.MimeType.getIconUrl(fileData.type) + ');"></div></div>');
-
-            if (filename !== null) {
-                if (filename.indexOf('.') === 0) {
-    				basename = '';
-    				extension = name;
-                } else {
-                    basename = filename.substr(0, filename.lastIndexOf('.'));
-    				extension = filename.substr(filename.lastIndexOf('.'));
-                }
-
-                var nameSpan = $('<span></span>').addClass('name-text');
-    			var innernameSpan = $('<span></span>').addClass('inner-name-text').text(basename);
-
-                nameSpan.append(innernameSpan);
-
-                if (extension) {
-    				nameSpan.append($('<span></span>').addClass('extension').text(extension));
-    			}
-            } else {
-               nameSpan = $('<span></span>').addClass('name-text');
-               innernameSpan = $('<span></span>').addClass('inner-name-text').text(t('ransomware_detection', 'Not found.'));
-
-               nameSpan.append(innernameSpan);
-           }
-           nameWrapper.append(nameSpan);
-
-            td = $('<td class="file-name"></td>');
-            td.append(nameWrapper);
-            tr.append(td);
-
-            if (fileData.command === 1) {
-                // delete
-                td = $('<td></td>').append($('<p></p>').attr({"title": "DELETE"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-trash-alt fa-fw"></span>'));
-            } else if (fileData.command === 2) {
-                // rename
-                    td = $('<td></td>').append($('<p></p>').attr({"title": "RENAME"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-font fa-fw"></span>'));
-            } else if (fileData.command === 3) {
-                // write
-                td = $('<td></td>').append($('<p></p>').attr({"title": "WRITE"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-pencil-alt fa-fw"></span>'));
-            } else if (fileData.command === 4) {
-                // read
-                td = $('<td></td>').append($('<p></p>').attr({"title": "READ"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-book fa-fw"></span>'));
-            } else if (fileData.command === 5) {
-                // create
-                td = $('<td></td>').append($('<p></p>').attr({"title": "CREATE"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-pencil-alt fa-fw"></span>'));
-            } else {
-                // error
-                td = $('<td></td>').append($('<p></p>').attr({"title": "ERROR"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-times fa-fw"></span>'));
-            }
-            tr.append(td);
-
-            // size
-            if (typeof(fileData.size) !== 'undefined' && fileData.size >= 0) {
-                simpleSize = humanFileSize(parseInt(fileData.size, 10), true);
-                sizeColor = Math.round(120-Math.pow((fileData.size/(1024*1024)),2));
-            } else {
-                simpleSize = t('ransomware_detection', 'Pending');
-            }
-
-            td = $('<td></td>').append($('<p></p>').attr({
-				"class": "filesize"
-			}).text(simpleSize));
-            tr.append(td);
-
-            if (fileData.fileClass === 1) {
-                // encrypted
-                td = $('<td></td>').append($('<p></p>').attr({"title": "ENCRYPTED"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-lock fa-fw"></span>'));
-            } else if (fileData.fileClass === 2) {
-                // compressed
-                    td = $('<td></td>').append($('<p></p>').attr({"title": "COMPRESSED"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-file-archive fa-fw"></span>'));
-            } else if (fileData.fileClass === 3) {
-                // normal
-                td = $('<td></td>').append($('<p></p>').attr({"title": "NORMAL"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-file fa-fw"></span>'));
-            } else {
-                // error
-                td = $('<td></td>').append($('<p></p>').attr({"title": "ERROR"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-times fa-fw"></span>'));
-            }
-            tr.append(td);
-
-            if (fileData.fileExtensionClass === 0) {
-                // not suspicious
-                td = $('<td></td>').append($('<p></p>').attr({"title": "NOT SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-check-circle fa-fw"></span>'));
-            } else if (fileData.fileExtensionClass === 1) {
-                // suspicious
-                td = $('<td></td>').append($('<p></p>').attr({"title": "SUSPICIOUS"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-exclamation-triangle fa-fw"></span>'));
-            } else {
-                // error
-                td = $('<td></td>').append($('<p></p>').attr({"title": "ERROR"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-times fa-fw"></span>'));
-            }
-            tr.append(td);
-
-            // date column (1000 milliseconds to seconds, 60 seconds, 60 minutes, 24 hours)
-			// difference in days multiplied by 5 - brightest shade for files older than 32 days (160/5)
-			var modifiedColor = Math.round(((new Date()).getTime() - mtime )/1000/60/60/24*5 );
-			// ensure that the brightest color is still readable
-			if (modifiedColor >= '160') {
-				modifiedColor = 160;
-			}
-            var formatted;
-			var text;
-			if (mtime > 0) {
-				formatted = OC.Util.formatDate(mtime);
-				text = OC.Util.relativeModifiedDate(mtime);
-			} else {
-				formatted = t('ransomware_detection', 'Unable to determine date');
-				text = '?';
-			}
-
-            td = $('<td></td>').attr({ "class": "date" });
-            td.append($('<span></span>').attr({
-				"class": "modified live-relative-timestamp",
-				"title": formatted,
-				"data-timestamp": mtime,
-				"style": 'color:rgb('+modifiedColor+','+modifiedColor+','+modifiedColor+')'
-			}).text(text)
-			  .tooltip({placement: 'top'})
-			);
-            tr.append(td);
-
-            // Color row according to suspicion level
-            if (fileData.suspicionClass === 3) {
-                tr.attr({ 'class': self.colors.red});
-            } else if (fileData.suspicionClass === 2) {
-                tr.attr({ 'class': self.colors.yellow});
-            } else if (fileData.suspicionClass === 1) {
-                tr.attr({ 'class': self.colors.green});
-            }
-
-            return tr;
-        },
-
-        /**
          * Update UI based on the current selection
          */
         updateSelectionSummary: function(sequence) {
         	if (Object.keys(this._selectedFiles).length === 0) {
-                console.log("No files selected.");
         		this.$el.find('.selected-actions').css('display', 'none');
                 this.$el.find('.detected').css('display', 'block');
                 this.$el.find('.name').text(t('ransomware_detection', 'Name')).removeClass('bold');
                 this.$el.find('.hide-selected').css('color', '#999');
         	}
         	else {
-                console.log(Object.keys(this._selectedFiles).length + " files selected.");
         		this.$table[sequence].find('.selected-actions').css('display', 'block');
                 this.$table[sequence].find('.detected').css('display', 'none');
                 if (Object.keys(this._selectedFiles).length > 1) {

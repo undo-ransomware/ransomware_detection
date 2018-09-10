@@ -34,6 +34,7 @@
      * @namespace OCA.RansomwareDetection.App
      */
     OCA.RansomwareDetection.App = {
+        utils: null,
         /**
          * File list for the "Ransomware detection" section
          *
@@ -51,6 +52,10 @@
          * Initializes the ransomware detection app
          */
         initialize: function() {
+            if (typeof OCA.RansomwareDetection.Utils != 'undefined') {
+                this.utils = new OCA.RansomwareDetection.Utils();
+                window.Utils = this.utils;
+            }
             if (typeof OCA.RansomwareDetection.FileList != 'undefined') {
                 this.fileList = new OCA.RansomwareDetection.FileList(
                     $('#app-content-ransomware-detection-filelist'), {}
@@ -72,6 +77,10 @@
          * Destroy the app
          */
         destroy: function() {
+            if (typeof OCA.RansomwareDetection.Utils != 'undefined') {
+                this.utils.destroy();
+                this.utils = null;
+            }
             if (typeof OCA.RansomwareDetection.Scan != 'undefined') {
                 this.fileList.destroy();
                 this.fileList = null;
