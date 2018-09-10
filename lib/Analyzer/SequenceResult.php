@@ -21,7 +21,7 @@
 
 namespace OCA\RansomwareDetection\Analyzer;
 
-class SequenceResult
+class SequenceResult implements \JsonSerializable
 {
     /** @var int */
     protected $sequenceId;
@@ -164,15 +164,8 @@ class SequenceResult
         $this->sequence = $sequence;
     }
 
-    public function toArray()
+    public function jsonSerialize()
     {
-        $var = get_object_vars($this);
-        foreach ($var as &$value) {
-            if (is_object($value) && method_exists($value, 'toArray')) {
-                $value = $value->toArray();
-            }
-        }
-
-        return $var;
+        return get_object_vars($this);
     }
 }

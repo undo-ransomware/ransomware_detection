@@ -166,7 +166,7 @@ class MonitoringController extends OCSController
 
         foreach ($sequences as $sequenceId => $sequence) {
             if (sizeof($sequence) >= $this->config->getAppValue(Application::APP_ID, 'minimum_sequence_length', 0)) {
-                $result[] = $this->sequenceAnalyzer->analyze($sequenceId, $sequence)->toArray();
+                $result[] = $this->sequenceAnalyzer->analyze($sequenceId, $sequence);
             }
         }
 

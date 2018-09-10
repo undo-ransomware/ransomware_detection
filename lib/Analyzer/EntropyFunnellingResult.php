@@ -21,7 +21,7 @@
 
 namespace OCA\RansomwareDetection\Analyzer;
 
-class EntropyFunnellingResult
+class EntropyFunnellingResult implements \JsonSerializable
 {
     /** @var float */
     protected $medianWritten;
@@ -141,15 +141,8 @@ class EntropyFunnellingResult
         $this->entropyFunnelling = $entropyFunnelling;
     }
 
-    public function toArray()
+    public function jsonSerialize()
     {
-        $var = get_object_vars($this);
-        foreach ($var as &$value) {
-            if (is_object($value) && method_exists($value, 'toArray')) {
-                $value = $value->toArray();
-            }
-        }
-
-        return $var;
+        return get_object_vars($this);
     }
 }
