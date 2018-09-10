@@ -37,7 +37,7 @@ class FileTypeFunnellingAnalyzer
      * Class 3: All file extensions are unknown.
      * Class 4: All file extensions are known, but all files are corrupted.
      *
-     * @param int $sequence
+     * @param array $sequence
      *
      * @return int Class of file type funneling
      */

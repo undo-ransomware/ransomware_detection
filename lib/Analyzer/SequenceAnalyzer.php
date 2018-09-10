@@ -82,7 +82,7 @@ class SequenceAnalyzer
      * @param int   $sequenceId
      * @param array $sequence
      *
-     * @return int The level of suspicion, if a sequence is malicious or not.
+     * @return SequenceResult
      */
     public function analyze($sequenceId, $sequence)
     {
