@@ -19,6 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/** global: OC */
  (function() {
 
      /**
@@ -41,19 +42,11 @@
              var self = this;
              var td, tr = $('<tr data-id="' + fileData.id + '" data-sequence="' + fileData.sequence + '"></tr>'),
                  mtime = parseInt(fileData.timestamp, 10) * 1000,
-                 basename, extension, simpleSize, sizeColor;
+                 basename, extension, simpleSize, sizeColor, filename;
 
              if (isNaN(mtime)) {
      			mtime = new Date().getTime();
      		}
-
-             // size
-             if (typeof(fileData.size) !== 'undefined' && fileData.size >= 0) {
- 				simpleSize = humanFileSize(parseInt(fileData.size, 10), true);
- 				sizeColor = Math.round(160-Math.pow((fileData.size/(1024*1024)),2));
- 			} else {
- 				simpleSize = t('ransomware_detection', 'Pending');
- 			}
 
              td = $('<td class="selection"></td>');
              td.append(
@@ -74,18 +67,20 @@
                  filename = fileData.newName
              }
 
+             var nameSpan, innernameSpan;
+
              if (filename !== null) {
                  if (fileData.type === 'file') {
                      if (filename.indexOf('.') === 0) {
          				 basename = '';
-         				 extension = name;
+         				 extension = filename;
                      } else {
                          basename = filename.substr(0, filename.lastIndexOf('.'));
          				 extension = filename.substr(filename.lastIndexOf('.'));
                      }
 
-                     var nameSpan = $('<span></span>').addClass('name-text');
-         			 var innernameSpan = $('<span></span>').addClass('inner-name-text').text(basename);
+                     nameSpan = $('<span></span>').addClass('name-text');
+         			 innernameSpan = $('<span></span>').addClass('inner-name-text').text(basename);
 
                      nameSpan.append(innernameSpan);
 
@@ -93,8 +88,8 @@
          				nameSpan.append($('<span></span>').addClass('extension').text(extension));
          			}
                 } else {
-                    var nameSpan = $('<span></span>').addClass('name-text');
-                    var innernameSpan = $('<span></span>').addClass('inner-name-text').text(filename);
+                    nameSpan = $('<span></span>').addClass('name-text');
+                    innernameSpan = $('<span></span>').addClass('inner-name-text').text(filename);
 
                     nameSpan.append(innernameSpan);
                 }
