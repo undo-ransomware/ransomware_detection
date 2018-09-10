@@ -130,7 +130,6 @@
              // size
              if (typeof(fileData.size) !== 'undefined' && fileData.size >= 0) {
                  simpleSize = humanFileSize(parseInt(fileData.size, 10), true);
-                 sizeColor = Math.round(120-Math.pow((fileData.size/(1024*1024)),2));
              } else {
                  simpleSize = t('ransomware_detection', 'Pending');
              }
