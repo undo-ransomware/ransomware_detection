@@ -67,7 +67,7 @@ class Personal implements ISettings
      */
     public function getForm()
     {
-        $colorMode = $this->config->getUserValue($this->userId, Application::APP_ID, 'colorMode', 0);
+        $colorMode = $this->config->getUserValue($this->userId, Application::APP_ID, 'color_mode', 0);
 
         if ($colorMode === 0) {
             $colorActive = ['code' => 0, 'name' => 'Normal'];

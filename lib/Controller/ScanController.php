@@ -223,7 +223,7 @@ class ScanController extends OCSController
         $sequencesArray[] = $sequence;
         $end = time();
 
-        return new JSONResponse(['status' => 'success', 'sequences' => $sequencesArray, 'number_of_files' => $storageStructure->getNumberOfFiles(), 'scan_duration' => $end - $start], Http::STATUS_OK);
+        return new JSONResponse(['status' => 'success', 'sequences' => $sequencesArray, 'numberOfFiles' => $storageStructure->getNumberOfFiles(), 'scanDuration' => $end - $start], Http::STATUS_OK);
     }
 
     /**
@@ -256,7 +256,7 @@ class ScanController extends OCSController
             }
             if (count($fileOperationSequence) > 0) {
                 $sequenceResult = $this->sequenceAnalyzer->analyze(0, $fileOperationSequence);
-                return new JSONResponse(['status' => 'success', 'suspicion_score' => $sequenceResult->getSuspicionScore(), 'sequence' => $jsonSequence], Http::STATUS_OK);
+                return new JSONResponse(['status' => 'success', 'suspicionScore' => $sequenceResult->getSuspicionScore(), 'sequence' => $jsonSequence], Http::STATUS_OK);
             } else {
                 return new JSONResponse(['status' => 'error', 'message' => 'The file(s) requested do(es) not exist.']);
             }

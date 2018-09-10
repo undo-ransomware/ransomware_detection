@@ -90,7 +90,7 @@ class SequenceAnalyzer
             return $sequenceResult;
         }
 
-        $files = ['written' => [], 'size_written' => 0, 'deleted' => [], 'size_deleted' => 0, 'suspicious' => [], 'maybe_suspicious' => [], 'not_suspicious' => []];
+        $files = ['written' => [], 'sizeWritten' => 0, 'deleted' => [], 'sizeDeleted' => 0, 'suspicious' => [], 'maybeSuspicious' => [], 'notSuspicious' => []];
         $suspicionScore = 0;
 
         foreach ($sequence as $file) {
@@ -98,7 +98,7 @@ class SequenceAnalyzer
                 switch ($file->getCommand()) {
                     case Monitor::WRITE:
                         $files['written'][] = $file;
-                        $files['size_written'] = $files['size_written'] + $file->getSize();
+                        $files['sizeWritten'] = $files['sizeWritten'] + $file->getSize();
                         break;
                     case Monitor::READ:
                         break;
@@ -106,7 +106,7 @@ class SequenceAnalyzer
                         break;
                     case Monitor::DELETE:
                         $files['deleted'][] = $file;
-                        $files['size_deleted'] = $files['size_deleted'] + $file->getSize();
+                        $files['sizeDeleted'] = $files['sizeDeleted'] + $file->getSize();
                         break;
                     case Monitor::CREATE:
                         break;
@@ -118,10 +118,10 @@ class SequenceAnalyzer
                         $files['suspicious'][] = $file;
                         break;
                     case Classifier::MAYBE_SUSPICIOUS:
-                        $files['maybe_suspicious'][] = $file;
+                        $files['maybeSuspicious'][] = $file;
                         break;
                     case Classifier::NOT_SUSPICIOUS:
-                        $files['not_suspicious'][] = $file;
+                        $files['notSuspicious'][] = $file;
                         break;
                     case Classifier::NO_INFORMATION:
                         break;
@@ -133,10 +133,10 @@ class SequenceAnalyzer
 
         // compare files written and files deleted
         if (sizeof($files['written']) > 0 && sizeof($files['deleted']) > 0) {
-            $sequenceResult->setSizeWritten($files['size_written']);
-            $sequenceResult->setSizeDeleted($files['size_deleted']);
+            $sequenceResult->setSizeWritten($files['sizeWritten']);
+            $sequenceResult->setSizeDeleted($files['sizeDeleted']);
             $upperBound = sizeof($files['deleted']) + self::NUMBER_OF_INFO_FILES;
-            if (sizeof($writtenFiles) <= $upperBound && sizeof($files['written']) >= sizeof($files['deleted'])) {
+            if (sizeof($files['written']) <= $upperBound && sizeof($files['written']) >= sizeof($files['deleted'])) {
                 if ($this->sequenceSizeAnalyzer->analyze($sequence) === SequenceSizeAnalyzer::EQUAL_SIZE) {
                     $sequenceResult->setQuantities(2);
                     $suspicionScore += 2;
@@ -147,16 +147,16 @@ class SequenceAnalyzer
             }
         }
 
-        $numberOfWrittenFiles = sizeof($files['suspicious']) + sizeof($files['maybe_suspicious']) + sizeof($files['not_suspicious']);
+        $numberOfWrittenFiles = sizeof($files['suspicious']) + sizeof($files['maybeSuspicious']) + sizeof($files['notSuspicious']);
 
         // remove info files from the weight
         $numberOfInfoFiles = self::NUMBER_OF_INFO_FILES;
-        if (sizeof($files['not_suspicious']) < self::NUMBER_OF_INFO_FILES) {
-            $numberOfInfoFiles = sizeof($files['not_suspicious']);
+        if (sizeof($files['notSuspicious']) < self::NUMBER_OF_INFO_FILES) {
+            $numberOfInfoFiles = sizeof($files['notSuspicious']);
         }
 
         // weight the suspicion levels.
-        $suspicionSum = (sizeof($files['suspicious']) * 1) + (sizeof($files['maybe_suspicious']) * 0.5) + ((sizeof($files['not_suspicious']) - $numberOfInfoFiles) * 0.25);
+        $suspicionSum = (sizeof($files['suspicious']) * 1) + (sizeof($files['maybeSuspicious']) * 0.5) + ((sizeof($files['notSuspicious']) - $numberOfInfoFiles) * 0.25);
 
         // check for division by zero.
         if (($numberOfWrittenFiles - $numberOfInfoFiles) > 0) {

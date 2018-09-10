@@ -72,7 +72,7 @@ class BasicController extends OCSController
     {
         $debugMode = $this->config->getAppValue(Application::APP_ID, 'debug', 0);
 
-        return new JSONResponse(['status' => 'success', 'message' => 'Get debug mode.', 'debug_mode' => $debugMode], Http::STATUS_ACCEPTED);
+        return new JSONResponse(['status' => 'success', 'message' => 'Get debug mode.', 'debugMode' => $debugMode], Http::STATUS_ACCEPTED);
     }
 
     /**
@@ -84,9 +84,9 @@ class BasicController extends OCSController
      */
     public function getColorMode()
     {
-        $colorMode = $this->config->getUserValue($this->userId, Application::APP_ID, 'colorMode', 0);
+        $colorMode = $this->config->getUserValue($this->userId, Application::APP_ID, 'color_mode', 0);
 
-        return new JSONResponse(['status' => 'success', 'message' => 'Get color mode.', 'color_mode' => $colorMode], Http::STATUS_ACCEPTED);
+        return new JSONResponse(['status' => 'success', 'message' => 'Get color mode.', 'colorMode' => $colorMode], Http::STATUS_ACCEPTED);
     }
 
     /**
@@ -100,7 +100,7 @@ class BasicController extends OCSController
      */
     public function changeColorMode($colorMode)
     {
-        $this->config->setUserValue($this->userId, Application::APP_ID, 'colorMode', $colorMode);
+        $this->config->setUserValue($this->userId, Application::APP_ID, 'color_mode', $colorMode);
 
         return new JSONResponse(['status' => 'success', 'message' => 'Color mode changed.'], Http::STATUS_ACCEPTED);
     }

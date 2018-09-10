@@ -82,7 +82,7 @@
             this.$fileList = {};
 
             $.getJSON(self.getDebugModeUrl, function(debug) {
-                if (debug.debug_mode == 1) {
+                if (debug.debugMode == 1) {
                     self.debug = 1;
                 }
                 $.getJSON(self.filesUrl, function(data) {
@@ -207,7 +207,7 @@
             if (self.sequencesToScan.length > 0) {
                 var count = 0;
                 $.getJSON(self.getColorModeUrl, function(schema) {
-                    if (schema.color_mode == 1) {
+                    if (schema.colorMode == 1) {
                         Utils.colors = {red: 'color-blind-red', orange: 'color-blind-orange', yellow: 'color-blind-yellow', green: 'color-blind-green'};
                         Utils.colorsText = {red: 'color-blind-red-text', orange: 'color-blind-orange', yellow: 'color-blind-yellow-text', green: 'color-blind-green-text'};
                     }
@@ -222,7 +222,7 @@
                             $('#scanned').text(count);
                             if (response.status === "success") {
                                 self.$section[index] = self._createSection(index);
-                                self.$table[index] = Utils._createTableSkeleton(index, response.suspicion_score);
+                                self.$table[index] = Utils._createTableSkeleton(index, response.suspicionScore);
                                 self.$fileList[index] = self.$table[index].find('tbody.file-list');
                                 self.files[index] = [];
                                 $.each(response.sequence, function(i, file) {
