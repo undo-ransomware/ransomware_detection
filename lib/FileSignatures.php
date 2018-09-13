@@ -64,6 +64,7 @@ class FileSignatures
         ['mimeType' => '', 'extensions' => ['zip', 'jar', 'kmz', 'kwd', 'odt', 'odp', 'ott', 'sxc', 'sxd', 'sxi', 'sxw', 'sxc', 'wmz', 'xpi', 'xps', 'xpt'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/504b030414000100630000000000/']]]],
         ['mimeType' => '', 'extensions' => ['epub'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/504b03040a000200/']]]],
         ['mimeType' => '', 'extensions' => ['docx', 'pptx', 'xlsx'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/504b030414000600/']], 'trailing' => ['offset' => 18, 'bytes' => ['/504b0506/']]]],
+        ['mimeType' => '', 'extensions' => ['png'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/89504e470d0a1a0a/']]]],
     ];
 
     /**
