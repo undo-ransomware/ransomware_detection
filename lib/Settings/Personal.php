@@ -24,39 +24,25 @@ namespace OCA\RansomwareDetection\Settings;
 use OCP\Settings\ISettings;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IConfig;
-use OCP\IL10N;
 
 class Personal implements ISettings
 {
     /** @var IConfig */
     protected $config;
 
-    /** @var ITimeFactory */
-    protected $time;
-
-    /** @var IL10N */
-    protected $l10n;
-
     /** @var string */
     protected $userId;
 
     /**
      * @param IConfig      $config
-     * @param ITimeFactory $time
-     * @param IL10N        $l10n
      * @param string       $userId
      */
     public function __construct(
         IConfig $config,
-        ITimeFactory $time,
-        IL10N $l10n,
         $userId
     ) {
         $this->config = $config;
-        $this->time = $time;
-        $this->l10n = $l10n;
         $this->userId = $userId;
     }
 
