@@ -50,14 +50,11 @@ class Admin implements ISettings
         $suspicionLevel = $this->config->getAppValue(Application::APP_ID, 'suspicionLevel', 3);
 
         if ($suspicionLevel === 1) {
-            $activeSuspicionLevel = ['code' => 1, 'name' => 'Low'];
-            $suspicionLevels = [['code' => 2, 'name' => 'Middle'], ['code' => 3, 'name' => 'High']];
+            $activeSuspicionLevel = ['code' => 1, 'name' => 'Maybe suspicious'];
+            $suspicionLevels = [['code' => 2, 'name' => 'Suspicious']];
         } elseif ($suspicionLevel === 2) {
-            $activeSuspicionLevel = ['code' => 2, 'name' => 'Middle'];
-            $suspicionLevels = [['code' => 1, 'name' => 'Low'], ['code' => 3, 'name' => 'High']];
-        } elseif ($suspicionLevel === 3) {
-            $activeSuspicionLevel = ['code' => 3, 'name' => 'High'];
-            $suspicionLevels = [['code' => 2, 'name' => 'Middle'], ['code' => 1, 'name' => 'Low']];
+            $activeSuspicionLevel = ['code' => 2, 'name' => 'Suspicious'];
+            $suspicionLevels = [['code' => 1, 'name' => 'Maybe suspicious']];
         } else {
             $activeSuspicionLevel = [];
             $suspicionLevels = [];

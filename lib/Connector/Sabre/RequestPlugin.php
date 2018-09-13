@@ -176,11 +176,9 @@ class RequestPlugin extends ServerPlugin
 
         // sequence suspicion level
         if ($sequenceSuspicionLevel === 1) {
-            $level = 3;
+            $level = 2;
         } elseif ($sequenceSuspicionLevel === 2) {
-            $level = 5;
-        } elseif ($sequenceSuspicionLevel === 3) {
-            $level = 6;
+            $level = 4;
         }
 
         // sequence id is irrelevant so we use 0
