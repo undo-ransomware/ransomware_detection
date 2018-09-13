@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @copyright Copyright (c) 2018 Matthias Held <matthias.held@uni-konstanz.de>
+ * @author Matthias Held <matthias.held@uni-konstanz.de>
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+namespace OCA\RansomwareDetection\tests\Unit\Settings;
+
+use OCA\RansomwareDetection\AppInfo\Application;
+use OCA\RansomwareDetection\Settings\Admin;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\IConfig;
+use Test\TestCase;
+
+class AdminTest extends TestCase {
+
+	/** @var Admin */
+	private $admin;
+
+    /** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
+    protected $config;
+
+	public function setUp() {
+		parent::setUp();
+
+        $this->config = $this->getMockForAbstractClass( IConfig::class, array(), '', FALSE, TRUE, TRUE, array( 'getAppValue' ) );
+
+		$this->admin = new Admin($this->config);
+	}
+
+	public function testGetForm() {
+
+        $this->config->expects($this->any())
+            ->method('getAppValue')
+            ->withConsecutive([Application::APP_ID, 'suspicion_level', $this->anything()], [Application::APP_ID, 'minimum_sequence_length', $this->anything()], [Application::APP_ID, 'expire_days', $this->anything()])
+            ->willReturnOnConsecutiveCalls(2, 5, 7);
+
+		$expected = new TemplateResponse(Application::APP_ID, 'admin',
+                            ['minimum_sequence_length' => 5, 'active_suspicion_level' => ['code' => 2, 'name' => 'Suspicious'], 'suspicion_levels' => [['code' => 1, 'name' => 'Maybe suspicious']], 'expire_days' => 7], '');
+
+        $this->assertEquals($expected, $this->admin->getForm());
+	}
+
+	public function testGetSection() {
+		$this->assertSame(Application::APP_ID, $this->admin->getSection());
+	}
+
+	public function testGetPriority() {
+		$this->assertSame(1, $this->admin->getPriority());
+	}
+}
