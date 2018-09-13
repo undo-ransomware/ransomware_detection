@@ -88,8 +88,8 @@
                 }
                 $.getJSON(self.getColorModeUrl, function(schema) {
                     if (schema.colorMode == 1) {
-                        Utils.colors = {red: 'color-blind-red', orange: 'color-blind-orange', yellow: 'color-blind-yellow', green: 'color-blind-green'};
-                        Utils.colorsText = {red: 'color-blind-red-text', orange: 'color-blind-orange', yellow: 'color-blind-yellow-text', green: 'color-blind-green-text'};
+                        Utils.colors = {red: 'color-blind-red', yellow: 'color-blind-yellow', green: 'color-blind-green'};
+                        Utils.colorsText = {red: 'color-blind-red-text', yellow: 'color-blind-yellow-text', green: 'color-blind-green-text'};
                     }
                     $.getJSON(self.url, function(data) {
                         $('#section-loading').remove();

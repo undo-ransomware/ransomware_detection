@@ -32,8 +32,8 @@
       * @memberof OCA.RansomwareDetection
       */
      Utils.prototype = {
-         colors: {red: 'red', orange: 'orange', yellow: 'yellow', green: 'green'},
-         colorsText: {red: 'red-text', orange: 'orange-text', yellow: 'yellow-text', green: 'green-text'},
+         colors: {red: 'red', yellow: 'yellow', green: 'green'},
+         colorsText: {red: 'red-text', yellow: 'yellow-text', green: 'green-text'},
 
          /**
           * Creates a new row in the table.
@@ -211,11 +211,9 @@
           */
          _createTableSkeleton: function(sequence, suspicionScore) {
              var color = this.colors.green;
-             if (suspicionScore >= 6) {
+             if (suspicionScore > 4) {
                  color = this.colors.red;
-             } else if (suspicionScore >= 5) {
-                 color = this.colors.orange;
-             } else if (suspicionScore >= 3) {
+             } else if (suspicionScore > 2) {
                  color = this.colors.yellow;
              }
              var table =

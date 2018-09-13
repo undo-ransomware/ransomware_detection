@@ -71,7 +71,7 @@ class SequenceAnalyzer
      * Therefor the suspicions levels are weighted:
      * Suspicious - 1
      * Maybe suspicious - 0.5
-     * Not suspicious - 0.25
+     * Not suspicious - 0
      *
      * summed up and divided by the sum of all written files. The higher the result,
      * the higher is the suspicion of the hole sequence.
@@ -139,10 +139,10 @@ class SequenceAnalyzer
             if (sizeof($files['written']) <= $upperBound && sizeof($files['written']) >= sizeof($files['deleted'])) {
                 if ($this->sequenceSizeAnalyzer->analyze($sequence) === SequenceSizeAnalyzer::EQUAL_SIZE) {
                     $sequenceResult->setQuantities(2);
-                    $suspicionScore += 2;
+                    $suspicionScore += 1;
                 } else {
                     $sequenceResult->setQuantities(1);
-                    $suspicionScore += 1;
+                    $suspicionScore += 0;
                 }
             }
         }
@@ -156,7 +156,7 @@ class SequenceAnalyzer
         }
 
         // weight the suspicion levels.
-        $suspicionSum = (sizeof($files['suspicious']) * 1) + (sizeof($files['maybeSuspicious']) * 0.5) + ((sizeof($files['notSuspicious']) - $numberOfInfoFiles) * 0.25);
+        $suspicionSum = (sizeof($files['suspicious']) * 1) + (sizeof($files['maybeSuspicious']) * 0.5);
 
         // check for division by zero.
         if (($numberOfWrittenFiles - $numberOfInfoFiles) > 0) {
