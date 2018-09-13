@@ -103,7 +103,7 @@ class FileCorruptionAnalyzerTest extends TestCase
             ['data' => 'ffd8ffe000104a46494600ffff', 'extension' => 'jpg', 'result' => true],
             ['data' => '25504446ff0d2525454f460d', 'extension' => 'pdf', 'result' => false],
             ['data' => 'ffff', 'extension' => 'jpg', 'result' => true],
-            ['data' => 'iamgroot', 'extension' => 'txt', 'result' => false],
+            ['data' => '69616d67726f6f74', 'extension' => 'txt', 'result' => false],
         ];
     }
 

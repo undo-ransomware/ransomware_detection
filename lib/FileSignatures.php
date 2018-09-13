@@ -76,7 +76,7 @@ class FileSignatures
         ['mimeType' => '', 'extensions' => ['rtf'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/7b5c72746631/']]]],
         ['mimeType' => '', 'extensions' => ['mpg', 'mpeg'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/000001ba/', '/47/', '/000001b3/']]]],
         ['mimeType' => '', 'extensions' => ['mp4'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/00000018667479706d703432/']]]],
-        ['mimeType' => '', 'extensions' => ['txt'], 'signature' => ['exists' => false]]],
+        ['mimeType' => '', 'extensions' => ['txt'], 'signature' => ['exists' => false]],
     ];
 
     /**
