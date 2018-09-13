@@ -168,7 +168,7 @@ class RequestPlugin extends ServerPlugin
      */
     private function classifySequence($sequence)
     {
-        $sequenceSuspicionLevel = $this->config->getAppValue(Application::APP_ID, 'suspicionLevel', 3);
+        $sequenceSuspicionLevel = $this->config->getAppValue(Application::APP_ID, 'suspicion_level', 2);
 
         foreach ($sequence as $file) {
             $this->classifier->classifyFile($file);
@@ -177,7 +177,7 @@ class RequestPlugin extends ServerPlugin
         // sequence suspicion level
         if ($sequenceSuspicionLevel === 1) {
             $level = 2;
-        } elseif ($sequenceSuspicionLevel === 2) {
+        } else {
             $level = 4;
         }
 

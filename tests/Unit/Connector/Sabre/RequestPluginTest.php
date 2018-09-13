@@ -107,7 +107,7 @@ class RequestPluginTest extends TestCase
 
         $this->config->expects($this->any())
             ->method('getAppValue')
-            ->willReturn(3);
+            ->willReturn(2);
 
         $this->requestPlugin = new RequestPlugin($this->logger, $this->config, $this->userSession, $this->session, $this->service, $this->notifications, $this->classifier, $this->sequenceAnalyzer);
     }
