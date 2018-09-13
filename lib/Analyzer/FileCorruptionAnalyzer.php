@@ -82,6 +82,12 @@ class FileCorruptionAnalyzer
             foreach ($signatures as $signature) {
                 $isFileCorrupted = true;
                 if (in_array(strtolower($pathInfo['extension']), $signature['extensions'])) {
+                    // txt file extension has no signature, but is not corrupted
+                    if (array_key_exists('exists', $signature['signature'])) {
+                        if ($signature['signature']['exists'] === false) {
+                            return new FileCorruptionResult(false);
+                        }
+                    }
                     // starting byte sequence
                     if (array_key_exists('starting', $signature['signature'])) {
 						foreach ($signature['signature']['starting']['bytes'] as $bytes) {
