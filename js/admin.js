@@ -54,6 +54,6 @@ $(document).ready(function() {
 
         $('#sequence-suspicion-level').attr('class', 'suspicion-level-' + $field.val());
 
-        OCP.AppConfig.setValue('ransomware_detection', 'suspicionLevel', $field.val());
+        OCP.AppConfig.setValue('ransomware_detection', 'suspicion_level', $field.val());
     });
 });

@@ -29,8 +29,8 @@ script('ransomware_detection', 'personal');
             <?php p($l->t('Current color mode')); ?>
         </h3>
         <select id="color-scheme" name="color-scheme" data-placeholder="<?php p($l->t('Color mode'));?>">
-            <option value="<?php p($_['colorActive']['code']); ?>">
-				<?php p($_['colorActive']['name']); ?>
+            <option value="<?php p($_['color_active']['code']); ?>">
+				<?php p($_['color_active']['name']); ?>
 			</option>
             <option value="<?php p($_['color']['code']); ?>">
 				<?php p($_['color']['name']); ?>

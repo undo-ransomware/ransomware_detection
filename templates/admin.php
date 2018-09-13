@@ -26,13 +26,13 @@ script('ransomware_detection', 'admin');
         <h3>
             <?php p($l->t('Number of days until a sequence will be deleted')); ?>
         </h3>
-        <input id="expire_days" type="text" name="expire_days" value="<?php p($_['expireDays']); ?>"/>
+        <input id="expire_days" type="text" name="expire_days" value="<?php p($_['expire_days']); ?>"/>
     </div>
     <div class="ransomware_detection_sequence">
         <h3>
             <?php p($l->t('Minimum number of file operations contained by a sequence, that it will be shown in recovery')); ?>
         </h3>
-        <input id="minimum_sequence_length" type="text" name="minimum_sequence_length" value="<?php p($_['minimumSequenceLength']); ?>"/>
+        <input id="minimum_sequence_length" type="text" name="minimum_sequence_length" value="<?php p($_['minimum_sequence_length']); ?>"/>
     </div>
 </div>
 <div id="ransomware_detection_notification" class="section">
@@ -41,11 +41,11 @@ script('ransomware_detection', 'admin');
         <h3>
             <?php p($l->t('Suspicion threshold for notifications')); ?>
         </h3>
-        <select id="sequence-suspicion-level" name="sequence-suspicion-level" class="suspicion-level-<?php p($_['activeSuspicionLevel']['code']); ?>" data-placeholder="<?php p($l->t('Sequence suspicion level'));?>">
-            <option class="suspicion-level-<?php p($_['activeSuspicionLevel']['code']); ?>" value="<?php p($_['activeSuspicionLevel']['code']); ?>">
-				<?php p($_['activeSuspicionLevel']['name']); ?>
+        <select id="sequence-suspicion-level" name="sequence-suspicion-level" class="suspicion-level-<?php p($_['active_suspicion_level']['code']); ?>" data-placeholder="<?php p($l->t('Sequence suspicion level'));?>">
+            <option class="suspicion-level-<?php p($_['active_suspicion_level']['code']); ?>" value="<?php p($_['active_suspicion_level']['code']); ?>">
+				<?php p($_['active_suspicion_level']['name']); ?>
 			</option>
-            <?php foreach ($_['suspicionLevels'] as $suspicionLevel): ?>
+            <?php foreach ($_['suspicion_levels'] as $suspicionLevel): ?>
 				<option class="suspicion-level-<?php p($suspicionLevel['code']); ?>" value="<?php p($suspicionLevel['code']); ?>">
 					<?php p($suspicionLevel['name']);?>
 				</option>

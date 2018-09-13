@@ -69,7 +69,7 @@ class Personal implements ISettings
     {
         $colorMode = $this->config->getUserValue($this->userId, Application::APP_ID, 'color_mode', 0);
 
-        if ($colorMode === 0) {
+        if (intval($colorMode) === 0) {
             $colorActive = ['code' => 0, 'name' => 'Normal'];
             $color = ['code' => 1, 'name' => 'Color blind'];
         } else {
@@ -78,7 +78,7 @@ class Personal implements ISettings
         }
 
         return new TemplateResponse(Application::APP_ID, 'personal', [
-            'colorActive' => $colorActive,
+            'color_active' => $colorActive,
             'color' => $color,
         ], '');
     }
