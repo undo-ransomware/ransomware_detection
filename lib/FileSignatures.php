@@ -39,7 +39,6 @@ class FileSignatures
         ['mimeType' => '', 'extensions' => ['m4v'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/00000018667479706d703432/']]]],
         ['mimeType' => '', 'extensions' => ['mp4'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/0000001c667479704d534e56012900464d534e566d703432/']]]],
         ['mimeType' => '', 'extensions' => ['m4a'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/00000020667479704d344120/']]]],
-        ['mimeType' => '', 'extensions' => ['txt'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/0000feff/']]]],
         ['mimeType' => '', 'extensions' => ['ttf'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/0001000000/']]]],
         ['mimeType' => '', 'extensions' => ['ppt'], 'signature' => ['starting' => ['offset' => 512, 'bytes' => ['/006E1EF0/', '/0F00E803/']]]],
         ['mimeType' => '', 'extensions' => ['drw'], 'signature' => ['starting' => ['offset' => 0, 'bytes' => ['/07/']]]],

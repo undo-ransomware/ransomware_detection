@@ -20,6 +20,7 @@
  */
 
 /* global OC */
+/* global Utils */
 (function() {
 
     /**
