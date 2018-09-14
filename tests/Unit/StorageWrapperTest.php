@@ -92,6 +92,10 @@ class StorageWrapperTest extends TestCase
         $tests[] = ['file_get_contents', 'path2', Monitor::READ, false];
         $tests[] = ['unlink', 'path1', Monitor::DELETE, true];
         $tests[] = ['unlink', 'path2', Monitor::DELETE, false];
+		$tests[] = ['mkdir', 'path1', Monitor::CREATE, true];
+        $tests[] = ['mkdir', 'path2', Monitor::CREATE, false];
+		$tests[] = ['rmdir', 'path1', Monitor::DELETE, true];
+        $tests[] = ['rmdir', 'path2', Monitor::DELETE, false];
 
         return $tests;
     }
