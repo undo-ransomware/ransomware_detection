@@ -122,7 +122,7 @@ class MonitorTest extends TestCase
                 $this->appManager, $this->logger, $this->rootFolder,
                 $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
                 $this->fileCorruptionAnalyzer, $this->userId])
-            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'classifySequence', 'resetProfindCount', 'triggerAsyncAnalysis'])
+            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'classifySequence', 'resetProfindCount'])
             ->getMock();
 
         $storage = $this->createMock(IStorage::class);
@@ -141,9 +141,6 @@ class MonitorTest extends TestCase
 
         $monitor->expects($this->any())
             ->method('resetProfindCount');
-
-        $monitor->expects($this->any())
-            ->method('triggerAsyncAnalysis');
 
         $entropyResult = new EntropyResult(EntropyResult::COMPRESSED, 7.99, 0.004);
 
@@ -205,7 +202,7 @@ class MonitorTest extends TestCase
                 $this->appManager, $this->logger, $this->rootFolder,
                 $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
                 $this->fileCorruptionAnalyzer, $this->userId])
-            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'triggerAsyncAnalysis', 'resetProfindCount'])
+            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'resetProfindCount'])
             ->getMock();
 
         $storage = $this->createMock(IStorage::class);
@@ -224,9 +221,6 @@ class MonitorTest extends TestCase
 
         $monitor->expects($this->any())
             ->method('resetProfindCount');
-
-        $monitor->expects($this->any())
-            ->method('triggerAsyncAnalysis');
 
         $node = $this->createMock(Folder::class);
         $node->method('getInternalPath')

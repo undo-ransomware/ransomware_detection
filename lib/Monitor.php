@@ -279,6 +279,39 @@ class Monitor
     }
 
     /**
+     * Check if we are in the LoginController and if so, ignore the firewall.
+     *
+     * @return bool
+     */
+    protected function isCreatingSkeletonFiles()
+    {
+        $exception = new \Exception();
+        $trace = $exception->getTrace();
+        foreach ($trace as $step) {
+            if (isset($step['class'], $step['function']) &&
+                $step['class'] === 'OC\Core\Controller\LoginController' &&
+                $step['function'] === 'tryLogin') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Reset PROPFIND_COUNT.
+     */
+    protected function resetProfindCount()
+    {
+        $userKeys = $this->config->getUserKeys($this->userId, Application::APP_ID);
+        foreach ($userKeys as $key) {
+            if (strpos($key, 'propfind_count') !== false) {
+                $this->config->deleteUserValue($this->userId, Application::APP_ID, $key);
+            }
+        }
+    }
+
+    /**
      * Return file size of a path.
      *
      * @param string $path
@@ -340,39 +373,6 @@ class Monitor
             'thumbnails',
             'files_versions',
         ], true);
-    }
-
-    /**
-     * Check if we are in the LoginController and if so, ignore the firewall.
-     *
-     * @return bool
-     */
-    protected function isCreatingSkeletonFiles()
-    {
-        $exception = new \Exception();
-        $trace = $exception->getTrace();
-        foreach ($trace as $step) {
-            if (isset($step['class'], $step['function']) &&
-                $step['class'] === 'OC\Core\Controller\LoginController' &&
-                $step['function'] === 'tryLogin') {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Reset PROPFIND_COUNT.
-     */
-    protected function resetProfindCount()
-    {
-        $userKeys = $this->config->getUserKeys($this->userId, Application::APP_ID);
-        foreach ($userKeys as $key) {
-            if (strpos($key, 'propfind_count') !== false) {
-                $this->config->deleteUserValue($this->userId, Application::APP_ID, $key);
-            }
-        }
     }
 
     /**
