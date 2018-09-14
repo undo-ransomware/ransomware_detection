@@ -131,6 +131,13 @@ class FileTypeFunnellingAnalyzerTest extends TestCase
         $fileOperation7->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
         $fileOperation7->setCorrupted(false);
         $fileOperation7->setType('file');
+
+		$fileOperation8 = new FileOperation();
+        $fileOperation8->setCommand(Monitor::CREATE);
+        $fileOperation8->setOriginalName('file.unknown');
+        $fileOperation8->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
+        $fileOperation8->setCorrupted(false);
+        $fileOperation8->setType('file');
         // not a sequence
         $sequence1 = [$fileOperation1];
         $sequence2 = [$fileOperation1, $fileOperation1];
@@ -155,7 +162,7 @@ class FileTypeFunnellingAnalyzerTest extends TestCase
         // all written files have known extensions but are corrupted
         $sequence13 = [$fileOperation3, $fileOperation3, $fileOperation3, $fileOperation3, $fileOperation3, $fileOperation3, $fileOperation3];
         // only read access
-        $sequence14 = [$fileOperation7, $fileOperation7, $fileOperation7, $fileOperation7, $fileOperation7, $fileOperation7, $fileOperation7];
+        $sequence14 = [$fileOperation7, $fileOperation7, $fileOperation7, $fileOperation7, $fileOperation7, $fileOperation7, $fileOperation7, $fileOperation8];
 
         return [
             ['sequence' => [], 'fileTypeFunnelingClass' => 0],
