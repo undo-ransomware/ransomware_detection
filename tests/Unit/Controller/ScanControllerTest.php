@@ -223,6 +223,10 @@ class ScanControllerTest extends TestCase
             ->method('getLastActivity')
             ->willReturn(123);
 
+        $this->folder->expects($this->any())
+            ->method('getDirectoryListing')
+            ->willReturn(array());
+
         $result = $controller->filesToScan();
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_OK);
