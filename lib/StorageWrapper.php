@@ -44,18 +44,6 @@ class StorageWrapper extends Wrapper
     }
 
     /**
-     * Makes it easier to test.
-     *
-     * @param IStorage $storage
-     * @param string   $path
-     * @param int      $mode
-     */
-    protected function analyze(IStorage $storage, $path, $mode)
-    {
-        return $this->monitor->analyze($storage, $path, $mode);
-    }
-
-    /**
      * see http://php.net/manual/en/function.mkdir.php.
      *
      * @param string $path
@@ -255,5 +243,17 @@ class StorageWrapper extends Wrapper
         $this->analyze($this, [$targetInternalPath], Monitor::WRITE);
 
         return $this->storage->moveFromStorage($sourceStorage, $sourceInternalPath, $targetInternalPath);
+    }
+
+    /**
+     * Makes it easier to test.
+     *
+     * @param IStorage $storage
+     * @param string   $path
+     * @param int      $mode
+     */
+    protected function analyze(IStorage $storage, $path, $mode)
+    {
+        return $this->monitor->analyze($storage, $path, $mode);
     }
 }
