@@ -31,6 +31,7 @@ use OCA\RansomwareDetection\Analyzer\EntropyFunnellingAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
 use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
+use OCA\RansomwareDetection\Analyzer\FileCorruptionResult;
 use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
 use OCA\RansomwareDetection\AppInfo\Application;
@@ -185,6 +186,21 @@ class ScanControllerTest extends TestCase
             ->method('restoreFromTrashbin')
             ->willReturn($restored);
 
+		$file = $this->getMockBuilder(File::class)
+			->getMock();
+
+		$this->folder->expects($this->any())
+			->method('get')
+			->willReturn($file);
+
+		$file->expects($this->any())
+			->method('isDeletable')
+			->willReturn($restored);
+
+		$file->expects($this->any())
+			->method('delete')
+			->willReturn($restored);
+
         $result = $controller->recover($id, $sequence, $command, $path, $name, $timestamp);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), $response);
@@ -196,16 +212,12 @@ class ScanControllerTest extends TestCase
             ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config, $this->classifier,
             $this->logger, $this->folder, $this->service, $this->sequenceAnalyzer, $this->entropyAnalyzer,
             $this->fileCorruptionAnalyzer, $this->fileExtensionAnalyzer, $this->connection, $this->userId])
-            ->setMethods(['getStorageStructure', 'getTrashStorageStructure', 'getLastActivity'])
+            ->setMethods(['getTrashFiles', 'getLastActivity'])
             ->getMock();
 
         $controller->expects($this->any())
-            ->method('getStorageStructure')
-            ->willReturn(new StorageStructure());
-
-        $controller->expects($this->any())
-            ->method('getTrashStorageStructure')
-            ->willReturn(new StorageStructure());
+            ->method('getTrashFiles')
+            ->willReturn(array());
 
         $controller->expects($this->any())
             ->method('getLastActivity')
@@ -239,7 +251,7 @@ class ScanControllerTest extends TestCase
 
         return [
             ['sequence' => [], 'fileOperation' => new FileOperation(), 'sequenceResult' => $sequenceResult,'response' => Http::STATUS_OK],
-            ['sequence' => [['timestamp' => 123]], 'fileOperation' => $fileOperation1, 'sequenceResult' => $sequenceResult, 'response' => Http::STATUS_OK]
+            ['sequence' => [['timestamp' => 123, 'path' => '/files_trashbin/test.bin', 'id' => 1]], 'fileOperation' => $fileOperation1, 'sequenceResult' => $sequenceResult, 'response' => Http::STATUS_OK]
         ];
     }
 
@@ -264,9 +276,39 @@ class ScanControllerTest extends TestCase
             ->method('buildFileOperation')
             ->willReturn($fileOperation);
 
+		$parentFolder = $this->getMockBuilder('OCP\Files\Folder')
+            ->getMock();
+
+		$this->folder->expects($this->any())
+			->method('getParent')
+			->willReturn($parentFolder);
+
+		$file = $this->getMockBuilder('OCP\Files\File')
+            ->getMock();
+
+		$parentFolder->expects($this->any())
+			->method('get')
+			->willReturn($file);
+
+		$file->expects($this->any())
+			->method('getInternalPath')
+			->willReturn('/files_trashbin/foo.bar');
+
         $this->sequenceAnalyzer->expects($this->any())
             ->method('analyze')
             ->willReturn($sequenceResult);
+
+		$this->fileExtensionAnalyzer->expects($this->any())
+			->method('analyze')
+			->willReturn(new FileExtensionResult(FileExtensionResult::NOT_SUSPICIOUS));
+
+		$this->fileCorruptionAnalyzer->expects($this->any())
+			->method('analyze')
+			->willReturn(new FileCorruptionResult(false));
+
+		$this->entropyAnalyzer->expects($this->any())
+			->method('analyze')
+			->willReturn(new EntropyResult(EntropyResult::ENCRYPTED, 8.0, 0.04));
 
         $result = $controller->scanSequence($sequence);
         $this->assertTrue($result instanceof JSONResponse);

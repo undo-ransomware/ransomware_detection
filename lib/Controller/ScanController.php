@@ -266,12 +266,59 @@ class ScanController extends OCSController
     }
 
     /**
+     * Just for testing purpose to mock the external static method.
+     *
+     * @return array
+     */
+    protected function getTrashFiles() {
+        return Helper::getTrashFiles("/", $this->userId, 'mtime', false);
+    }
+
+    /**
+     * Just for testing purpose to mock the external static method.
+     *
+     * @param  string   $trashPath
+     * @param  array    $pathInfo
+     * @param  integer  $timestamp
+     * @return boolean
+     */
+    protected function restoreFromTrashbin($trashPath, $name, $timestamp)
+    {
+        return Trashbin::restore($trashPath, $name, $timestamp);
+    }
+
+    /**
+     * Get last activity.
+     * Visibility 'protected' is that it's possible to mock the database access.
+     *
+     * @param $objectId
+     */
+    protected function getLastActivity($objectId)
+    {
+        $query = $this->connection->getQueryBuilder();
+    	$query->select('*')->from('activity');
+        $query->where($query->expr()->eq('affecteduser', $query->createNamedParameter($this->userId)))
+            ->andWhere($query->expr()->eq('object_id', $query->createNamedParameter($objectId)));
+        $result = $query->execute();
+        while ($row = $result->fetch()) {
+            $rows[] = $row;
+        }
+        $result->closeCursor();
+        if (is_array($rows)) {
+            return array_pop($rows);
+        } else {
+            $this->logger->debug('getLastActivity: No activity found.', array('app' => Application::APP_ID));
+            return 0;
+        }
+    }
+
+    /**
      * Builds a file operations from a file info array.
      *
      * @param  array $file
      * @return FileOperation
      */
-    protected function buildFileOperation($file)
+    private function buildFileOperation($file)
     {
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
@@ -319,38 +366,14 @@ class ScanController extends OCSController
     }
 
     /**
-     * Get last activity.
-     *
-     * @param $objectId
-     */
-    protected function getLastActivity($objectId)
-    {
-        $query = $this->connection->getQueryBuilder();
-		$query->select('*')->from('activity');
-        $query->where($query->expr()->eq('affecteduser', $query->createNamedParameter($this->userId)))
-            ->andWhere($query->expr()->eq('object_id', $query->createNamedParameter($objectId)));
-        $result = $query->execute();
-        while ($row = $result->fetch()) {
-            $rows[] = $row;
-        }
-        $result->closeCursor();
-        if (is_array($rows)) {
-            return array_pop($rows);
-        } else {
-            $this->logger->debug('getLastActivity: No activity found.', array('app' => Application::APP_ID));
-            return 0;
-        }
-    }
-
-    /**
      * Get trash storage structure.
      *
      * @return StorageStructure
      */
-    protected function getTrashStorageStructure()
+    private function getTrashStorageStructure()
     {
         $storageStructure = new StorageStructure(0, []);
-        $nodes = Helper::getTrashFiles("/", $this->userId, 'mtime', false);
+        $nodes = $this->getTrashFiles();
         foreach ($nodes as $node) {
             $storageStructure->addFile($node);
             $storageStructure->increaseNumberOfFiles();
@@ -365,7 +388,7 @@ class ScanController extends OCSController
      *
      * @return StorageStructure
      */
-    protected function getStorageStructure($node)
+    private function getStorageStructure($node)
     {
         // set count for node to 0
         $storageStructure = new StorageStructure(0, []);
@@ -404,7 +427,7 @@ class ScanController extends OCSController
      *
      * @return bool
      */
-    protected function deleteFromStorage($path)
+    private function deleteFromStorage($path)
     {
         try {
             $node = $this->userFolder->get($path);
@@ -421,18 +444,5 @@ class ScanController extends OCSController
 
             return true;
         }
-    }
-
-    /**
-     * Restores file from trash bin.
-     *
-     * @param  string   $trashPath
-     * @param  array    $pathInfo
-     * @param  integer  $timestamp
-     * @return boolean
-     */
-    protected function restoreFromTrashbin($trashPath, $name, $timestamp)
-    {
-        return Trashbin::restore($trashPath, $name, $timestamp);
     }
 }
