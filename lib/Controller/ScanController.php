@@ -254,7 +254,7 @@ class ScanController extends OCSController
                     'standardDeviation' => $fileOperation->getStandardDeviation(), 'command' => $fileOperation->getCommand(), 'fileClass' => $fileOperation->getFileClass(), 'fileExtensionClass' => $fileOperation->getFileExtensionClass(), 'suspicionClass' => $fileOperation->getSuspicionClass()];
                 $fileOperationSequence[] = $fileOperation;
             }
-            if (count($fileOperationSequence) > 0) {
+            if (sizeof($fileOperationSequence) > 0) {
                 $sequenceResult = $this->sequenceAnalyzer->analyze(0, $fileOperationSequence);
                 return new JSONResponse(['status' => 'success', 'suspicionScore' => $sequenceResult->getSuspicionScore(), 'sequence' => $jsonSequence], Http::STATUS_OK);
             } else {
