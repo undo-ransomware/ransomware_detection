@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.0
+
+### Added
+
+- Added more unit tests.
+
+### Changed
+
+- Simplified sequence classification and color coding.
+- Improved code quality.
+- Improved file corruption analysis.
+- Extended list of file signatures.
+
+### Fixed
+
+- Fixed many minor bugs in the documentation, the code and the tests.
+
 ## 0.3.3
 
 ### Added
