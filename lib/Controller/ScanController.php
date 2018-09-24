@@ -304,7 +304,7 @@ class ScanController extends OCSController
             $rows[] = $row;
         }
         $result->closeCursor();
-        if (is_array($rows)) {
+        if (isset($rows) && is_array($rows)) {
             return array_pop($rows);
         } else {
             $this->logger->debug('getLastActivity: No activity found.', array('app' => Application::APP_ID));
