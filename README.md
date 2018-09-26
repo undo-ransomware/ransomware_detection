@@ -15,3 +15,8 @@ This app monitors file operations during the synchronization to detect ransomwar
 * :mag_right:**Ransomware Scanner:** Scan your file storage after a ransomware attack - which even works without the app being installed during the infection - to easily recover your data and clean up your storage. This may take some time depending on how many files you have stored on your cloud storage.
 * :computer:**Recovery Interface:**  The color coded results of the classification offer an easy-to-use recovery interface giving the user full control of the recovery process.
 * :relaxed:**Guided Undo:** The guided user-controlled one-step recovery allows the user to quick and savely restore all - by ransomware - encrypted files without being affected by any false positives.
+
+## Installation
+
+In your Nextcloud, simply navigate to »Apps«, choose the category »Security«, find the Ransomware recovery app and enable it.
+Then open the Ransomware recovery app from the app menu.
