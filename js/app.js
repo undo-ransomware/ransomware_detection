@@ -24,7 +24,7 @@
 
     if (!OCA.RansomwareDetection) {
         /**
-         * Namespace for the ransomware detection app
+         * Namespace for the ransomware recovery app
          * @namespace OCA.RansomwareDetection
          */
         OCA.RansomwareDetection = {};
@@ -36,20 +36,20 @@
     OCA.RansomwareDetection.App = {
         utils: null,
         /**
-         * File list for the "Ransomware detection" section
+         * File list for the "Ransomware recovery" section
          *
          * @member {OCA.RansomwareDetection.FileList}
          */
         fileList: null,
         /**
-         * Scan for the "Ransomware detection" section
+         * Scan for the "Ransomware recovery" section
          *
          * @member {OCA.RansomwareDetection.Scan}
          */
         scan: null,
 
         /**
-         * Initializes the ransomware detection app
+         * Initializes the ransomware recovery app
          */
         initialize: function() {
             if (typeof OCA.RansomwareDetection.Utils != 'undefined') {

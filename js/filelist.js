@@ -35,7 +35,7 @@
      */
     FileList.prototype = {
         id: 'ransomware_detection',
-        appName: t('ransomware_detection', 'Ransomware Detection'),
+        appName: t('ransomware_detection', 'Ransomware Recovery'),
         $el: null,
         $container: null,
         $wrapper: null,

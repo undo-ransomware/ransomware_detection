@@ -78,7 +78,7 @@ class PersonalSection implements IIconSection
      */
     public function getName()
     {
-        return $this->l->t('Ransomware detection');
+        return $this->l->t('Ransomware recovery');
     }
 
     /**

@@ -63,10 +63,10 @@ class AdminSectionTest extends TestCase {
 	public function testGetName() {
         $this->l->expects($this->once())
             ->method('t')
-            ->with('Ransomware detection')
-            ->willReturn('Ransomware detection');
+            ->with('Ransomware recovery')
+            ->willReturn('Ransomware recovery');
 
-		$this->assertSame('Ransomware detection', $this->adminSection->getName());
+		$this->assertSame('Ransomware recovery', $this->adminSection->getName());
 	}
 
 	public function testGetPriority() {

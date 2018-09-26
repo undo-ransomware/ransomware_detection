@@ -63,10 +63,10 @@ class PersonalSectionTest extends TestCase {
 	public function testGetName() {
         $this->l->expects($this->once())
             ->method('t')
-            ->with('Ransomware detection')
-            ->willReturn('Ransomware detection');
+            ->with('Ransomware recovery')
+            ->willReturn('Ransomware recovery');
 
-		$this->assertSame('Ransomware detection', $this->personalSection->getName());
+		$this->assertSame('Ransomware recovery', $this->personalSection->getName());
 	}
 
 	public function testGetPriority() {

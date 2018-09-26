@@ -181,7 +181,7 @@ class Application extends App
 
             return [
                 'id' => self::APP_ID,
-                'name' => $l->t('Ransomware detection'),
+                'name' => $l->t('Ransomware recovery'),
             ];
         });
     }
