@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.1
+
+### Changed
+
+- Changed name of the app in the readme and info.
+
+### Fixed
+
+- Fixed some minor bugs.
+
 ## 0.4.0
 
 ### Added
