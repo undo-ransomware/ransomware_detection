@@ -126,35 +126,22 @@ class EntropyAnalyzer
      */
     protected function createEntropyArrayFromFile($node, $blockSize)
     {
-        $data = $node->getContent();
-        if (!$data) {
-            $this->logger->debug('createEntropyArrayFromFile: Getting data failed.', array('app' => Application::APP_ID));
+        $entropyArray = array();
+
+        $handle = $node->fopen('r');
+        if (!$handle) {
+            $this->logger->debug('createEntropyArrayFromFile: Getting file handle failed.', array('app' => Application::APP_ID));
 
             return [];
         }
 
-        return $this->createEntropyArrayFromData($data, $blockSize);
-    }
-
-    /**
-     * Creates an array with the entropy of the data blocks.
-     *
-     * @param string $data
-     * @param int    $blockSize
-     *
-     * @return array
-     */
-    protected function createEntropyArrayFromData($data, $blockSize)
-    {
-        $entropyArray = array();
-        $size = strlen($data);
-
-        for ($i = 0; $i < $size / $blockSize; $i++) {
-            if ($size >= $i * $blockSize + $blockSize) {
-                $block = substr($data, $i * $blockSize, $blockSize);
+        while (!feof($handle)) {
+            $data = fread($handle, $blockSize);
+            if (strlen($data) === $blockSize) {
                 $entropyArray[$i] = $this->entropy->calculateEntropy($block);
             }
         }
+        fclose($handle);
 
         return $entropyArray;
     }
