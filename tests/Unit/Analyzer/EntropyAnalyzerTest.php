@@ -123,35 +123,6 @@ class EntropyAnalyzerTest extends TestCase
         $this->assertEquals($this->invokePrivate($entropyAnalyzer, 'createEntropyArrayFromFile', [$node, EntropyAnalyzer::BLOCK_SIZE]), []);
     }
 
-    public function dataCreateEntropyArrayFromData()
-    {
-        return [
-            ['data' => 'asdf', 'blockSize' => 1, 'array' => [7.9, 7.9, 7.9, 7.9]],
-            ['data' => '', 'blockSize' => 1, 'array' => []],
-            ['data' => 'asdf', 'blockSize' => 2, 'array' => [7.9, 7.9]],
-            ['data' => 'a', 'blockSize' => 2, 'array' => []],
-            ['data' => 'aa', 'blockSize' => 2, 'array' => [7.9]],
-            ['data' => 'foobar1', 'blockSize' => 2, 'array' => [7.9, 7.9, 7.9]],
-        ];
-    }
-
-    /**
-     * @dataProvider dataCreateEntropyArrayFromData
-     *
-     * @param string $data
-     * @param int    $blockSize
-     * @param array  $array
-     */
-    public function testCreateEntropyArrayFromData($data, $blockSize, $array)
-    {
-        $entropyAnalyzer = new EntropyAnalyzer($this->logger, $this->rootFolder, $this->entropy, $this->userId);
-
-        $this->entropy->method('calculateEntropy')
-            ->willReturn(7.9);
-
-        $this->assertEquals($this->invokePrivate($entropyAnalyzer, 'createEntropyArrayFromData', [$data, $blockSize]), $array);
-    }
-
     public function testCalculateStandardDeviationOfEntropy()
     {
         $entropyAnalyzer = new EntropyAnalyzer($this->logger, $this->rootFolder, $this->entropy, $this->userId);
