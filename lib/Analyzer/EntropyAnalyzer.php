@@ -169,13 +169,25 @@ class EntropyAnalyzer
      */
     protected function calculateEntropyOfFile($node)
     {
-        $data = $node->getContent();
-        if (!$data) {
+        $handle = $node->fopen('r');
+        if (!$handle) {
             $this->logger->debug('calculateEntropyOfFile: Getting data failed.', array('app' => Application::APP_ID));
 
             return 0.0;
         }
 
-        return $this->entropy->calculateEntropy($data);
+        while (!feof($handle)) {
+            $data = fread($handle, 1024);
+            if (strlen($data) === 1024) {
+                $entropy = $entropy + $this->entropy->calculateEntropy($block);
+            }
+        }
+        fclose($handle);
+
+        if ($entropy >= 0) {
+            return $entopry;
+        } else {
+            return -$entropy;
+        }
     }
 }

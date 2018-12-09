@@ -77,7 +77,11 @@ class FileCorruptionAnalyzer
         $signatures = FileSignatures::getSignatures();
 
         try {
-            $data = $node->getContent();
+            // get the first 1024 bytes
+            $handle = $node->fopen('r');
+            $data = fread($handle, 1024);
+            fclose($handle);
+
             $pathInfo = pathinfo($node->getPath());
             foreach ($signatures as $signature) {
                 $isFileCorrupted = true;
