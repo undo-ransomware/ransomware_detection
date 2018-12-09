@@ -138,7 +138,7 @@ class EntropyAnalyzer
         while (!feof($handle)) {
             $data = fread($handle, $blockSize);
             if (strlen($data) === $blockSize) {
-                $entropyArray[$i] = $this->entropy->calculateEntropy($block);
+                array_push($entropyArray, $this->entropy->calculateEntropy($data));
             }
         }
         fclose($handle);
@@ -176,16 +176,22 @@ class EntropyAnalyzer
             return 0.0;
         }
 
+        $entropy = 0.0;
+        $total = 0;
+
         while (!feof($handle)) {
             $data = fread($handle, 1024);
+            $total = $total + 1;
             if (strlen($data) === 1024) {
-                $entropy = $entropy + $this->entropy->calculateEntropy($block);
+                $entropy = $entropy + $this->entropy->calculateEntropy($data);
             }
         }
         fclose($handle);
 
+        $entropy = $entropy / $total;
+
         if ($entropy >= 0) {
-            return $entopry;
+            return $entropy;
         } else {
             return -$entropy;
         }
