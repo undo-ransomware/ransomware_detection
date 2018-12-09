@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.2
+
+### Added
+
+- Nextcloud version 15 support.
+
+### Fixed
+
+- Fixed memory exhaustion with big files.
+
 ## 0.4.1
 
 ### Changed
