@@ -136,7 +136,7 @@ class EntropyAnalyzerTest extends TestCase
 
     public function testCalculateEntropyOfFile()
     {
-        $this->markTestSkipped('must be revisited.');
+        $this->markTestSkipped('getContent was removed.');
         $entropyAnalyzer = $this->getMockBuilder(EntropyAnalyzer::class)
             ->setConstructorArgs([$this->logger, $this->rootFolder, $this->entropy, 'john'])
             ->setMethods(array('calculateEntropy'))
