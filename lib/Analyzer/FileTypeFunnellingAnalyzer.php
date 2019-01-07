@@ -62,8 +62,10 @@ class FileTypeFunnellingAnalyzer
                         }
                         $numberOfKnownFileExtensions += $this->countKnownFileExtensions($file);
                         $pathInfo = pathinfo($file->getOriginalName());
-                        $writtenExtensions[$pathInfo['extension']] = 1;
-                        $writtenFiles[] = $file;
+                        if (isset($pathInfo['extension'])) {
+                            $writtenExtensions[$pathInfo['extension']] = 1;
+                            $writtenFiles[] = $file;
+                        }
                         if ($file->getCorrupted()) {
                             $corruptedFiles[] = $file;
                         }
@@ -74,7 +76,9 @@ class FileTypeFunnellingAnalyzer
                         break;
                     case Monitor::DELETE:
                         $pathInfo = pathinfo($file->getOriginalName());
-                        $deletedExtensions[] = $pathInfo['extension'];
+                        if (isset($pathInfo['extension'])) {
+                            $deletedExtensions[] = $pathInfo['extension'];
+                        }
                         break;
                     case Monitor::CREATE:
                         break;

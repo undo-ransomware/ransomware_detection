@@ -91,6 +91,6 @@ class FileExtensionAnalyzer
     {
         $file = pathinfo($fileName);
 
-        return $file['extension'];
+        return isset($file['extension']) ? $file['extension'] : '';
     }
 }
