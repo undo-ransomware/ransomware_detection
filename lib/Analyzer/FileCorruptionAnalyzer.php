@@ -85,7 +85,7 @@ class FileCorruptionAnalyzer
             $pathInfo = pathinfo($node->getPath());
             foreach ($signatures as $signature) {
                 $isFileCorrupted = true;
-                if (in_array(strtolower($pathInfo['extension']), $signature['extensions'])) {
+                if (isset($pathInfo['extension']) && in_array(strtolower($pathInfo['extension']), $signature['extensions'])) {
                     // txt file extension has no signature, but is not corrupted
                     if (array_key_exists('exists', $signature['signature'])) {
                         if ($signature['signature']['exists'] === false) {
