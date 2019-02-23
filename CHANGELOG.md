@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.3
+
+## Fixed
+
+- Fix undefined index: pathinfo(...)['extension']
+
 ## 0.4.2
 
 ### Added
