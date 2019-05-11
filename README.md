@@ -1,5 +1,5 @@
 # Nextcloud Ransomware Recovery
-[![Build Status](https://travis-ci.com/ilovemilk/ransomware_detection.svg?branch=master)](https://travis-ci.com/ilovemilk/ransomware_detection)
+[![Build Status](https://travis-ci.com/undo-ransomware/ransomware_detection.svg?branch=master)](https://travis-ci.com/undo-ransomware/ransomware_detection)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ilovemilk/ransomware_detection/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ilovemilk/ransomware_detection/?branch=master)
 [![codecov](https://codecov.io/gh/ilovemilk/ransomware_detection/branch/master/graph/badge.svg)](https://codecov.io/gh/ilovemilk/ransomware_detection)
 
