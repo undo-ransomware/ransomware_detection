@@ -16,11 +16,11 @@
     <category>monitoring</category>
     <category>security</category>
     <category>tools</category>
-    <bugs>https://github.com/ilovemilk/ransomware_detection/issues</bugs>
-    <screenshot>https://github.com/ilovemilk/ransomware_detection/raw/master/screenshots/monitoring-0.3.0.png</screenshot>
-    <screenshot>https://github.com/ilovemilk/ransomware_detection/raw/master/screenshots/scan-files-0.3.0.png</screenshot>
+    <bugs>https://github.com/undo-ransomware/ransomware_detection/issues</bugs>
+    <screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/monitoring-0.3.0.png</screenshot>
+    <screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/scan-files-0.3.0.png</screenshot>
     <dependencies>
-        <nextcloud min-version="13" max-version="15"/>
+        <nextcloud min-version="13" max-version="16"/>
     </dependencies>
 
     <background-jobs>
