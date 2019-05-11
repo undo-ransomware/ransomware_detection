@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.0
+
+## Added
+
+- Nextcloud version 16 support.
+
 ## 0.4.3
 
 ## Fixed
