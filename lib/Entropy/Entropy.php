@@ -57,6 +57,10 @@ class Entropy
         return $entropy;
     }
 
+    public function streamStandardDeviation($n, $sum, $mean) {
+        return sqrt((1 / $n) * $sum - pow($mean, 2));
+    }
+
     /**
      * Calculates the standard deviation.
      *
@@ -82,5 +86,15 @@ class Entropy
         }
 
         return 0.0;
+    }
+
+    public function streamMean($oldMean, $value, $step) {
+        $mean = 0;
+        if ($step === 1) {
+            $mean = (($step - 1) / $step) + ($value / $step);
+        } else {
+            $mean = $oldMean * (($step - 1) / $step) + ($value / $step);
+        }
+        return $mean;
     }
 }

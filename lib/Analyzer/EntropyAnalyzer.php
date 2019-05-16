@@ -104,8 +104,7 @@ class EntropyAnalyzer
     {
         $entropy = $this->calculateEntropyOfFile($node);
         if ($entropy > self::ENTROPY_CUT_OFF) {
-            $entropyArray = $this->createEntropyArrayFromFile($node, self::BLOCK_SIZE);
-            $standardDeviation = $this->calculateStandardDeviationOfEntropy($entropyArray);
+            $standardDeviation = $this->calculateStandardDeviationOfEntropy($node, self::BLOCK_SIZE);
             if ($standardDeviation > self::SD_CUT_OFF) {
                 return new EntropyResult(EntropyResult::COMPRESSED, $entropy, $standardDeviation);
             }
@@ -124,9 +123,12 @@ class EntropyAnalyzer
      *
      * @return array
      */
-    protected function createEntropyArrayFromFile($node, $blockSize)
+    protected function calculateStandardDeviationOfEntropy($node, $blockSize)
     {
-        $entropyArray = array();
+        $sum = 0.0;
+        $standardDeviation = 0.0;
+        $mean = 1;
+        $step = 1;
 
         $handle = $node->fopen('r');
         if (!$handle) {
@@ -137,27 +139,17 @@ class EntropyAnalyzer
 
         while (!feof($handle)) {
             $data = fread($handle, $blockSize);
+            $step = $step + 1;
             if (strlen($data) === $blockSize) {
-                array_push($entropyArray, $this->entropy->calculateEntropy($data));
+                $entropy = $this->entropy->calculateEntropy($data);
+                $sum = $sum + pow($entropy, 2);
+                $mean = $this->entropy->streamMean($mean, $entropy, $step);
+                $standardDeviation = $this->entropy->streamStandardDeviation($step, $sum, $mean);
             }
         }
         fclose($handle);
 
-        return $entropyArray;
-    }
-
-    /**
-     * Calculates standard deviation of the entropy of multiple data blocks.
-     *
-     * @param array $entropyArray
-     *
-     * @return float
-     */
-    protected function calculateStandardDeviationOfEntropy($entropyArray)
-    {
-        $sd = $this->entropy->sd($entropyArray);
-
-        return $sd;
+        return $standardDeviation;
     }
 
     /**
