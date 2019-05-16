@@ -128,7 +128,10 @@ class EntropyAnalyzerTest extends TestCase
     {
         $entropyAnalyzer = new EntropyAnalyzer($this->logger, $this->rootFolder, $this->entropy, $this->userId);
 
-        $this->entropy->method('sd')
+        $this->entropy->method('streamMean')
+            ->willReturn(0.002);
+
+        $this->entropy->method('streamStandardDeviation')
             ->willReturn(0.004);
 
         $this->assertEquals($this->invokePrivate($entropyAnalyzer, 'calculateStandardDeviationOfEntropy', [[]]), 0.004);
