@@ -4,11 +4,9 @@ php:
   - 7.2
 
 env:
-  global:
-    - CORE_BRANCH=stable16
-    - APP_NAME=ransomware_detection
-  matrix:
-    - DB=sqlite
+  - CORE_BRANCH=stable16
+  - APP_NAME=ransomware_detection
+  - DB=sqlite
 
 branches:
   only:
@@ -28,6 +26,7 @@ before_install:
   - ./occ app:list
 
 jobs:
+  fast_finish: true
   allow_failures:
     - env: DB=mysql;CODECHECK=2
   include:
@@ -68,6 +67,3 @@ after_success:
   - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then wget https://codecov.io/bash -O codecov.sh; fi"
   - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then bash codecov.sh; fi"
   - cd ..
-
-matrix:
-  fast_finish: true
