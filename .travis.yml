@@ -8,6 +8,7 @@ env:
     - CORE_BRANCH=stable16
     - APP_NAME=ransomware_detection
     - DB=sqlite
+    - CODECHECK=0
 
 branches:
   only:
@@ -27,9 +28,6 @@ before_install:
   - ./occ app:list
 
 jobs:
-  fast_finish: true
-  allow_failures:
-    - env: DB=mysql;CODECHECK=2
   include:
     - stage: test
       script: cd apps/$APP_NAME/
