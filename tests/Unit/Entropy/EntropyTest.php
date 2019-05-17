@@ -77,5 +77,12 @@ class EntropyTest extends TestCase
     public function testSd($data, $sd)
     {
         $this->assertEquals(number_format($this->invokePrivate($this->entropy, 'sd', [$data]), 6), $sd);
+        $sum = 0.0, $mean = 0.0, $standardDeviation = 0.0;
+        foreach($data as $key => $value) {
+            $sum = $sum + pow($value, 2);
+            $mean = $this->invokePrivate($this->entropy, 'streamMean', [$mean, $value, $key + 1]);
+            $standardDeviation = $this->invokePrivate($this->entropy, 'streamStandardDeviation', [$key + 1, $sum, $mean]);
+        }
+        $this->assertEquals(number_format($standardDeviation, 6), $sd);
     }
 }
