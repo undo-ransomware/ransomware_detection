@@ -134,7 +134,7 @@ class EntropyAnalyzer
         if (!$handle) {
             $this->logger->debug('createEntropyArrayFromFile: Getting file handle failed.', array('app' => Application::APP_ID));
 
-            return [];
+            return 0.0;
         }
 
         while (!feof($handle)) {

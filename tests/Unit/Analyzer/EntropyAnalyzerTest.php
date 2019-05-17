@@ -109,7 +109,7 @@ class EntropyAnalyzerTest extends TestCase
         $this->entropy->method('streamStandardDeviation')
             ->willReturn(0.004);
 
-        $this->assertEquals($this->invokePrivate($entropyAnalyzer, 'calculateStandardDeviationOfEntropy', [$node, EntropyAnalyzer::BLOCK_SIZE]), 0.004);
+        $this->assertEquals($this->invokePrivate($entropyAnalyzer, 'calculateStandardDeviationOfEntropy', [$node, EntropyAnalyzer::BLOCK_SIZE]), 0.0);
     }
 
     public function testCalculateEntropyOfFile()
