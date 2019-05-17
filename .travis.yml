@@ -9,7 +9,6 @@ env:
     - APP_NAME=ransomware_detection
   matrix:
     - DB=sqlite
-    - CORE_BRANCH=stable13
 
 before_install:
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
@@ -29,10 +28,10 @@ jobs:
       env: 
         - DB=sqlite
         - CORE_BRANCH=stable13
-      script: cd apps/$APP_NAME/
+      script: "cd apps/$APP_NAME/"
       # Test the app
       script: sh -c "if [ '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
-      script: cd ../../
+      script: "cd ../../"
       script: sh -c "if [ '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
       script: sh -c "if [ '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
       script: cd apps/$APP_NAME/
