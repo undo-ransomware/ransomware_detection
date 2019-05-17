@@ -31,14 +31,14 @@ jobs:
       script: 
         - cd apps/$APP_NAME/
         - sh -c "if [ '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
-      script: "cd ../../"
-      script: sh -c "if [ '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
-      script: sh -c "if [ '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
-      script: "cd apps/$APP_NAME/"
-      # Run phpunit tests
-      script: sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+        - cd ../../
+        - sh -c "if [ '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
+        - sh -c "if [ '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
+        - cd apps/$APP_NAME/
+        - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
     - stage: build
-      script: echo "Build"
+      script: 
+        - echo "Build"
 
 stages:
   - test
