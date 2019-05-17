@@ -89,6 +89,7 @@ jobs:
       env: 
         - DB=sqlite
       script:
+        - cd apps/$APP_NAME/
         - make appstore
 
 stages:
