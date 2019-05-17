@@ -27,18 +27,25 @@ before_install:
   - ./occ app:enable $APP_NAME
   - ./occ app:list
 
-script:
-  - cd apps/$APP_NAME/
+jobs:
+  include:
+    - stage: test
+      script:
+        - cd apps/$APP_NAME/
 
-  # Test the app
-  - sh -c "if [ '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
-  - cd ../../
-  - sh -c "if [ '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
-  - sh -c "if [ '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
-  - cd apps/$APP_NAME/
+        # Test the app
+        - sh -c "if [ '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
+        - cd ../../
+        - sh -c "if [ '$CODECHECK' = '1' ]; then ./occ app:check-code $APP_NAME -c private -c strong-comparison; fi"
+        - sh -c "if [ '$CODECHECK' = '2' ]; then ./occ app:check-code $APP_NAME -c deprecation; fi"
+        - cd apps/$APP_NAME/
 
-  # Run phpunit tests
-  - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+        # Run phpunit tests
+        - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+
+stages:
+  - test
+  - build
 
 after_success:
   # Create coverage report
