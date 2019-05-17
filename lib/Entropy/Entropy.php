@@ -61,33 +61,6 @@ class Entropy
         return sqrt((1 / $n) * $sum - pow($mean, 2));
     }
 
-    /**
-     * Calculates the standard deviation.
-     *
-     * @param array $array
-     *
-     * @return float
-     */
-    public function sd($array)
-    {
-        if (is_array($array) && count($array) > 0) {
-            // square root of sum of squares devided by N-1
-            return sqrt(array_sum(array_map(
-                function ($x, $mean) {
-                    return pow($x - $mean, 2);
-                },
-                $array,
-                array_fill(
-                    0,
-                    count($array),
-                (array_sum($array) / count($array))
-                )
-            )) / (count($array) - 1));
-        }
-
-        return 0.0;
-    }
-
     public function streamMean($oldMean, $value, $step) {
         $mean = 0;
         if ($step === 1) {

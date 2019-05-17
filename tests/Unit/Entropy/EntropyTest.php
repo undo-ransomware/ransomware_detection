@@ -63,7 +63,9 @@ class EntropyTest extends TestCase
     public function dataSd()
     {
         $tests = [];
-        $tests[] = [[10, 2, 38, 23, 38, 23, 21], 13.284434];
+        $tests[] = [[10, 2, 38, 23, 38, 23, 21], 12.298996];
+        $tests[] = [[10, 12, 23, 23, 16, 23, 21, 16], 4.898979]
+        $tests[] = [[-5, 1, 8, 7, 2], 4.673328]
 
         return $tests;
     }
@@ -76,7 +78,6 @@ class EntropyTest extends TestCase
      */
     public function testSd($data, $sd)
     {
-        $this->assertEquals(number_format($this->invokePrivate($this->entropy, 'sd', [$data]), 6), $sd);
         $sum = 0.0;
         $mean = 0.0;
         $standardDeviation = 0.0;
