@@ -23,7 +23,7 @@ before_install:
 jobs:
   include:
     - stage: test
-      script: "cd apps/$APP_NAME/"
+      script: cd apps/$APP_NAME/
       # Test the app
       script: sh -c "if [ '$CODECHECK' = '1' ]; then find . -name \*.php -exec php -l \"{}\" \;; fi"
       script: cd ../../
@@ -32,6 +32,14 @@ jobs:
       script: cd apps/$APP_NAME/
       # Run phpunit tests
       script: sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then phpunit --configuration phpunit.xml; fi"
+    - stage: build
+      script: echo "Build"
+
+stages:
+  - test
+  - build
+  - name: deploy
+    if: tag =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$
 
 after_success:
   # Create coverage report
