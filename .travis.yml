@@ -82,7 +82,7 @@ jobs:
         - ./occ app:check-code $APP_NAME -c deprecation
     - stage: build
       script: 
-        - echo "Build"
+        - make appstore
 
 stages:
   - test
