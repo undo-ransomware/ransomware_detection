@@ -14,8 +14,6 @@ branches:
 before_install:
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
   - . ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-
-  # Add some output debugging information
   - cd ../server
   - ./occ check
   - ./occ status
@@ -23,10 +21,10 @@ before_install:
   - ./occ app:list
 
 jobs:
+  fast_finish: true
+  allow_failures:
+    - env: "CHECKSTYLE=2"
   include:
-    fast_finish: true
-    allow_failures:
-      - env: "CHECKSTYLE=2"
     - stage: test
       php: 7.0
       env: 
