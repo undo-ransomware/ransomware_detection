@@ -95,38 +95,13 @@ class EntropyAnalyzerTest extends TestCase
         $this->assertEquals($result->getStandardDeviation(), $standardDeviation);
     }
 
-    public function testCreateEntropyArrayFromFile()
+    public function testCalculateStandardDeviationOfEntropy()
     {
-        $this->markTestSkipped('getContent was removed.');
-        $entropyAnalyzer = $this->getMockBuilder(EntropyAnalyzer::class)
-            ->setConstructorArgs([$this->logger, $this->rootFolder, $this->entropy, $this->userId])
-            ->setMethods(array('createEntropyArrayFromData'))
-            ->getMock();
+        $entropyAnalyzer = new EntropyAnalyzer($this->logger, $this->rootFolder, $this->entropy, $this->userId);
 
         $node = $this->createMock(File::class);
         $node->method('getContent')
             ->willReturn('test');
-
-        $userRoot = $this->createMock(Folder::class);
-        $userRoot->method('get')
-            ->willReturn($node);
-
-        $userFolder = $this->createMock(Folder::class);
-        $userFolder->method('getParent')
-            ->willReturn($userRoot);
-
-        $this->rootFolder->method('getUserFolder')
-            ->willReturn($userFolder);
-
-        $entropyAnalyzer->method('createEntropyArrayFromData')
-            ->willReturn([]);
-
-        $this->assertEquals($this->invokePrivate($entropyAnalyzer, 'createEntropyArrayFromFile', [$node, EntropyAnalyzer::BLOCK_SIZE]), []);
-    }
-
-    public function testCalculateStandardDeviationOfEntropy()
-    {
-        $entropyAnalyzer = new EntropyAnalyzer($this->logger, $this->rootFolder, $this->entropy, $this->userId);
 
         $this->entropy->method('streamMean')
             ->willReturn(0.002);
@@ -134,7 +109,7 @@ class EntropyAnalyzerTest extends TestCase
         $this->entropy->method('streamStandardDeviation')
             ->willReturn(0.004);
 
-        $this->assertEquals($this->invokePrivate($entropyAnalyzer, 'calculateStandardDeviationOfEntropy', [[]]), 0.004);
+        $this->assertEquals($this->invokePrivate($entropyAnalyzer, 'calculateStandardDeviationOfEntropy', [$nodes, EntropyAnalyzer::BLOCK_SIZE]), 0.004);
     }
 
     public function testCalculateEntropyOfFile()
