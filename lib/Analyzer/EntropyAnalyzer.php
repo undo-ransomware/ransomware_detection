@@ -121,7 +121,7 @@ class EntropyAnalyzer
      * @param File   $node
      * @param int    $blockSize
      *
-     * @return array
+     * @return float
      */
     protected function calculateStandardDeviationOfEntropy($node, $blockSize)
     {
