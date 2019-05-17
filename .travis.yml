@@ -84,6 +84,14 @@ jobs:
         - CHECKSTYLE=2
       script: 
         - ./occ app:check-code $APP_NAME -c deprecation
+    - stage: report
+      php: 7.1
+      env:
+        - DB=sqlite
+      script:
+        - cd tests
+        - wget https://codecov.io/bash -O codecov.sh
+        - bash codecov.sh
     - stage: build
       php: 7.1
       env: 
@@ -94,13 +102,7 @@ jobs:
 
 stages:
   - test
+  - report
   - build
   - name: deploy
     if: tag =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$
-
-after_success:
-  # Create coverage report
-  - cd tests
-  - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then wget https://codecov.io/bash -O codecov.sh; fi"
-  - sh -c "if [ '$CODECHECK' != '1' -a '$CODECHECK' != '2' ]; then bash codecov.sh; fi"
-  - cd ..
