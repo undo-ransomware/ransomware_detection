@@ -85,6 +85,9 @@ jobs:
       script: 
         - ./occ app:check-code $APP_NAME -c deprecation
     - stage: build
+      php: 7.1
+      env: 
+        - DB=sqlite
       script:
         - make appstore
 
