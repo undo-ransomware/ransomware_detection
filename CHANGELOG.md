@@ -1,15 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.1
+
+### Fixed
+
+- Fix out of memory error calculating standard deviation for large files.
+
 ## 0.5.0
 
-## Added
+### Added
 
 - Nextcloud version 16 support.
 
 ## 0.4.3
 
-## Fixed
+### Fixed
 
 - Fix undefined index: pathinfo(...)['extension']
 
