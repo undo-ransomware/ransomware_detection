@@ -143,8 +143,8 @@ class EntropyAnalyzer
             if (strlen($data) === $blockSize) {
                 $entropy = $this->entropy->calculateEntropy($data);
                 $sum = $sum + pow($entropy, 2);
-                $mean = $this->entropy->streamMean($mean, $entropy, $step);
-                $standardDeviation = $this->entropy->streamStandardDeviation($step, $sum, $mean);
+                $mean = $this->entropy->calculateMeanOfSeries($mean, $entropy, $step);
+                $standardDeviation = $this->entropy->calculateStandardDeviationOfSeries($step, $sum, $mean);
             }
         }
         fclose($handle);

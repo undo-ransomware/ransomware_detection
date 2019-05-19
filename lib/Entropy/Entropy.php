@@ -57,11 +57,33 @@ class Entropy
         return $entropy;
     }
 
-    public function streamStandardDeviation($n, $sum, $mean) {
-        return sqrt((1 / $n) * $sum - pow($mean, 2));
+    /**
+     * Calculates the standard deviation of a continoues series by passing
+     * the current number of values used to calculate the standard deviation
+     * the sum of all these values and the mean of all these values.
+     * 
+     * @param float $step current value
+     * @param float $sum sum of all values
+     * @param float $mean mean of all values
+     * 
+     * @return float
+     */
+    public function calculateStandardDeviationOfSeries($step, $sum, $mean) {
+        return sqrt((1 / $step) * $sum - pow($mean, 2));
     }
 
-    public function streamMean($oldMean, $value, $step) {
+    /**
+     * Calculates the mean of a continoues series by passing the old mean 
+     * the new value and the number of values used to calculate the mean
+     * including the new one.
+     * 
+     * @param float $oldMean
+     * @param float $value
+     * @param float $step
+     * 
+     * @param float
+     */
+    public function calculateMeanOfSeries($oldMean, $value, $step) {
         $mean = 0;
         if ($step === 1) {
             $mean = (($step - 1) / $step) + ($value / $step);
