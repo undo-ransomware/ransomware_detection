@@ -83,8 +83,8 @@ class EntropyTest extends TestCase
         $standardDeviation = 0.0;
         foreach($data as $key => $value) {
             $sum = $sum + pow($value, 2);
-            $mean = $this->invokePrivate($this->entropy, 'streamMean', [$mean, $value, $key + 1]);
-            $standardDeviation = $this->invokePrivate($this->entropy, 'streamStandardDeviation', [$key + 1, $sum, $mean]);
+            $mean = $this->invokePrivate($this->entropy, 'calculateMeanOfSeries', [$mean, $value, $key + 1]);
+            $standardDeviation = $this->invokePrivate($this->entropy, 'calculateStandardDeviationOfSeries', [$key + 1, $sum, $mean]);
         }
         $this->assertEquals(number_format($standardDeviation, 6), $sd);
     }
