@@ -103,10 +103,10 @@ class EntropyAnalyzerTest extends TestCase
         $node->method('getContent')
             ->willReturn('test');
 
-        $this->entropy->method('streamMean')
+        $this->entropy->method('calculateMeanOfSeries')
             ->willReturn(0.002);
 
-        $this->entropy->method('streamStandardDeviation')
+        $this->entropy->method('calculateStandardDeviationOfSeries')
             ->willReturn(0.004);
 
         $this->assertEquals($this->invokePrivate($entropyAnalyzer, 'calculateStandardDeviationOfEntropy', [$node, EntropyAnalyzer::BLOCK_SIZE]), 0.0);
