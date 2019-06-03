@@ -23,10 +23,6 @@ namespace OCA\RansomwareDetection\tests\Unit;
 
 use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\Analyzer\EntropyAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
-use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileCorruptionResult;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
@@ -69,12 +65,6 @@ class MonitorTest extends TestCase
     /** @var FileOperationMapper|\PHPUnit_Framework_MockObject_MockObject */
     protected $mapper;
 
-    /** @var FileExtensionAnalyzer|\PHPUnit_Framework_MockObject_MockObject */
-    protected $fileExtensionAnalyzer;
-
-    /** @var FileCorruptionAnalyzer|\PHPUnit_Framework_MockObject_MockObject */
-    protected $fileCorruptionAnalyzer;
-
     /** @var string */
     protected $userId = 'john';
 
@@ -90,8 +80,6 @@ class MonitorTest extends TestCase
         $this->rootFolder = $this->createMock(IRootFolder::class);
         $this->entropyAnalyzer = $this->createMock(EntropyAnalyzer::class);
         $this->mapper = $this->createMock(FileOperationMapper::class);
-        $this->fileExtensionAnalyzer = $this->createMock(FileExtensionAnalyzer::class);
-        $this->fileCorruptionAnalyzer = $this->createMock(FileCorruptionAnalyzer::class);
     }
 
     public function dataAnalyze()
@@ -120,9 +108,8 @@ class MonitorTest extends TestCase
         $monitor = $this->getMockBuilder(Monitor::class)
             ->setConstructorArgs([$this->request, $this->config, $this->time,
                 $this->appManager, $this->logger, $this->rootFolder,
-                $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
-                $this->fileCorruptionAnalyzer, $this->userId])
-            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'classifySequence', 'resetProfindCount'])
+                $this->entropyAnalyzer, $this->mapper, $this->userId])
+            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles'])
             ->getMock();
 
         $storage = $this->createMock(IStorage::class);
@@ -136,21 +123,10 @@ class MonitorTest extends TestCase
             ->method('isCreatingSkeletonFiles')
             ->willReturn(false);
 
-        $monitor->expects($this->any())
-            ->method('classifySequence');
-
-        $monitor->expects($this->any())
-            ->method('resetProfindCount');
-
         $entropyResult = new EntropyResult(EntropyResult::COMPRESSED, 7.99, 0.004);
 
         $this->entropyAnalyzer->method('analyze')
             ->willReturn($entropyResult);
-
-        $fileExtensionResult = new FileExtensionResult(FileExtensionResult::NOT_SUSPICIOUS, true, 4.0);
-
-        $this->fileExtensionAnalyzer->method('analyze')
-            ->willReturn($fileExtensionResult);
 
         $this->request->method('isUserAgent')
             ->willReturn($userAgent);
@@ -179,10 +155,6 @@ class MonitorTest extends TestCase
         $this->mapper->method('insert')
             ->willReturn($entity);
 
-        $fileCorruptionResult = new FileCorruptionResult(true);
-        $this->fileCorruptionAnalyzer->method('analyze')
-            ->willReturn($fileCorruptionResult);
-
         $monitor->analyze($storage, $paths, $mode);
         $this->assertTrue(true);
     }
@@ -200,9 +172,8 @@ class MonitorTest extends TestCase
         $monitor = $this->getMockBuilder(Monitor::class)
             ->setConstructorArgs([$this->request, $this->config, $this->time,
                 $this->appManager, $this->logger, $this->rootFolder,
-                $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
-                $this->fileCorruptionAnalyzer, $this->userId])
-            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'resetProfindCount'])
+                $this->entropyAnalyzer, $this->mapper, $this->userId])
+            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles'])
             ->getMock();
 
         $storage = $this->createMock(IStorage::class);
@@ -218,9 +189,6 @@ class MonitorTest extends TestCase
 
         $this->request->method('isUserAgent')
             ->willReturn($userAgent);
-
-        $monitor->expects($this->any())
-            ->method('resetProfindCount');
 
         $node = $this->createMock(Folder::class);
         $node->method('getInternalPath')
@@ -246,10 +214,6 @@ class MonitorTest extends TestCase
         $this->mapper->method('insert')
             ->willReturn($entity);
 
-        $fileCorruptionResult = new FileCorruptionResult(true);
-        $this->fileCorruptionAnalyzer->method('analyze')
-            ->willReturn($fileCorruptionResult);
-
         $monitor->analyze($storage, $paths, $mode);
         $this->assertTrue(true);
     }
@@ -274,8 +238,7 @@ class MonitorTest extends TestCase
 
         $monitor = new Monitor($this->request, $this->config, $this->time,
             $this->appManager, $this->logger, $this->rootFolder,
-            $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
-            $this->fileCorruptionAnalyzer, $this->userId);
+            $this->entropyAnalyzer, $this->mapper, $this->userId);
 
         $node = $this->createMock(File::class);
         $node->method('getSize')
@@ -318,8 +281,7 @@ class MonitorTest extends TestCase
 
         $monitor = new Monitor($this->request, $this->config, $this->time,
             $this->appManager, $this->logger, $this->rootFolder,
-            $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
-            $this->fileCorruptionAnalyzer, $this->userId);
+            $this->entropyAnalyzer, $this->mapper, $this->userId);
 
         $node = $this->createMock(Folder::class);
 
@@ -361,8 +323,7 @@ class MonitorTest extends TestCase
     {
         $monitor = new Monitor($this->request, $this->config, $this->time,
             $this->appManager, $this->logger, $this->rootFolder,
-            $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
-            $this->fileCorruptionAnalyzer, $this->userId);
+            $this->entropyAnalyzer, $this->mapper, $this->userId);
 
         $isUploadedFile = self::getMethod('isUploadedFile');
         $storage = $this->createMock(IStorage::class);
@@ -373,8 +334,7 @@ class MonitorTest extends TestCase
     {
         $monitor = new Monitor($this->request, $this->config, $this->time,
             $this->appManager, $this->logger, $this->rootFolder,
-            $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
-            $this->fileCorruptionAnalyzer, $this->userId);
+            $this->entropyAnalyzer, $this->mapper, $this->userId);
 
         $isCreateingSkeletonFiles = self::getMethod('isCreatingSkeletonFiles');
         $this->assertFalse($isCreateingSkeletonFiles->invokeArgs($monitor, []));

@@ -1,7 +1,7 @@
 <table class="logs">
     <thead>
         <tr>
-            <th>Extension</th>
+            <th>Name</th>
             <th>Type</th>
             <th>Mime Type</th>
             <th>Size</th>
@@ -17,7 +17,7 @@
         ?>
         <tr>
             <td>
-                <?php echo $fileOperation->getExtension(); ?>
+                <?php echo $fileOperation->getOriginalName(); ?>
             </td>
             <td>
                 <?php echo $fileOperation->getType(); ?>

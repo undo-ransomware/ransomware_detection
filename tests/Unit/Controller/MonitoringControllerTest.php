@@ -22,8 +22,6 @@
 namespace OCA\RansomwareDetection\tests\Unit\Controller;
 
 use OCA\RansomwareDetection\Monitor;
-use OCA\RansomwareDetection\Analyzer\SequenceAnalyzer;
-use OCA\RansomwareDetection\Analyzer\SequenceResult;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Controller\MonitoringController;
 use OCP\AppFramework\Http;
@@ -46,17 +44,11 @@ class MonitoringControllerTest extends TestCase
     /** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
     protected $logger;
 
-    /** @var Classifier|\PHPUnit_Framework_MockObject_MockObject */
-    protected $classifier;
-
     /** @var Folder|\PHPUnit_Framework_MockObject_MockObject */
     protected $folder;
 
     /** @var FileOperationService|\PHPUnit_Framework_MockObject_MockObject */
     protected $service;
-
-    /** @var SequenceAnalyzer|\PHPUnit_Framework_MockObject_MockObject */
-    protected $sequenceAnalyzer;
 
     /** @var string */
     protected $userId = 'john';
@@ -83,10 +75,6 @@ class MonitoringControllerTest extends TestCase
         $this->service = $this->getMockBuilder('OCA\RansomwareDetection\Service\FileOperationService')
             ->setConstructorArgs([$mapper, $this->userId])
             ->getMock();
-        $this->classifier = $this->getMockBuilder('OCA\RansomwareDetection\Classifier')
-            ->setConstructorArgs([$this->logger, $mapper, $this->service])
-            ->getMock();
-        $this->sequenceAnalyzer = $this->createMock(SequenceAnalyzer::class);
     }
 
     public function testListFileOperations()
@@ -96,11 +84,9 @@ class MonitoringControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
             'john'
         );
         $file = $this->getMockBuilder(FileOperation::class)
@@ -115,34 +101,7 @@ class MonitoringControllerTest extends TestCase
         $this->service->method('findAll')
             ->willReturn([$file]);
 
-        $this->classifier->method('classifyFile');
-        $this->sequenceAnalyzer->method('analyze')
-            ->willReturn($sequenceResult);
-
         $result = $controller->listFileOperations();
-        $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
-    }
-
-    public function testDeleteSequence()
-    {
-        $controller = new MonitoringController(
-            'ransomware_detection',
-            $this->request,
-            $this->userSession,
-            $this->config,
-            $this->classifier,
-            $this->logger,
-            $this->folder,
-            $this->service,
-            $this->sequenceAnalyzer,
-            'john'
-        );
-        $this->service->method('deleteSequenceById')
-            ->with(1)
-            ->will($this->returnValue([]));
-
-        $result = $controller->deleteSequence(1);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
     }
@@ -187,8 +146,8 @@ class MonitoringControllerTest extends TestCase
     public function testRecover($fileIds, $fileOperation, $deleted, $response)
     {
         $controller = $this->getMockBuilder(MonitoringController::class)
-            ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config, $this->classifier,
-            $this->logger, $this->folder, $this->service, $this->sequenceAnalyzer, 'john', ])
+            ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config,
+            $this->logger, $this->folder, $this->service, 'john', ])
             ->setMethods(['deleteFromStorage', 'getTrashFiles'])
             ->getMock();
 
@@ -213,8 +172,8 @@ class MonitoringControllerTest extends TestCase
     public function testRecoverMultipleObjectsReturnedException()
     {
         $controller = $this->getMockBuilder(MonitoringController::class)
-            ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config, $this->classifier,
-            $this->logger, $this->folder, $this->service, $this->sequenceAnalyzer, 'john', ])
+            ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config,
+            $this->logger, $this->folder, $this->service, 'john', ])
             ->setMethods(['getTrashFiles'])
             ->getMock();
 
@@ -242,11 +201,9 @@ class MonitoringControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
             'john'
         );
 
@@ -270,11 +227,9 @@ class MonitoringControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
             'john'
         );
         $file = $this->createMock(File::class);
@@ -296,11 +251,9 @@ class MonitoringControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
             'john'
         );
         $file = $this->createMock(File::class);
@@ -323,11 +276,9 @@ class MonitoringControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
             'john'
         );
         $folder = $this->createMock(Folder::class);

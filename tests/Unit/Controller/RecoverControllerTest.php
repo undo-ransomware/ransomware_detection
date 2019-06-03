@@ -30,6 +30,9 @@ class RecoverControllerTest extends TestCase
     /** @var RecoverController */
     protected $controller;
 
+    /** @var FileOperationService|\PHPUnit_Framework_MockObject_MockObject */
+    protected $service;
+
     /** @var string */
     private $userId = 'john';
 
@@ -39,9 +42,17 @@ class RecoverControllerTest extends TestCase
 
         $request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
+        $mapper = $this->getMockBuilder('OCA\RansomwareDetection\Db\FileOperationMapper')
+            ->setConstructorArgs([$connection])
+            ->getMock();
+        $this->service = $this->getMockBuilder('OCA\RansomwareDetection\Service\FileOperationService')
+            ->setConstructorArgs([$mapper, $this->userId])
+            ->getMock();
+
         $this->controller = new RecoverController(
             'ransomware_detection',
             $request,
+            $this->service,
             $this->userId
         );
     }

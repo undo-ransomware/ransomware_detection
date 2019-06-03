@@ -45,9 +45,6 @@ class MonitoringController extends OCSController
     /** @var IUserSession */
     protected $userSession;
 
-    /** @var Classifier */
-    protected $classifier;
-
     /** @var ILogger */
     protected $logger;
 

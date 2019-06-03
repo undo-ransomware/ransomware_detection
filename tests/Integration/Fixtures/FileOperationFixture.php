@@ -38,14 +38,10 @@ class FileOperationFixture extends FileOperation
             'type' => 'file',
             'mimeType' => 'image/gif',
             'size' => 148000,
-            'corrupted' => true,
             'timestamp' => date_timestamp_get(date_create()),
             'command' => 2,
-            'sequence' => 1,
             'entropy' => 7.9123595,
             'standardDeviation' => 0.04,
-            'fileClass' => 2,
-            'fileExtensionClass' => 1,
         ], $defaults);
         $this->fillDefaults($defaults);
     }
