@@ -11,7 +11,6 @@
 return [
     'routes' => [
         ['name' => 'recover#index', 'url' => '/', 'verb' => 'GET'],
-        ['name' => 'recover#scan', 'url' => '/scan', 'verb' => 'GET'],
     ],
     'ocs' => [
         // Basic controller
@@ -22,10 +21,6 @@ return [
         ['name' => 'monitoring#listFileOperations', 'url' => '/api/{apiVersion}/list', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
         ['name' => 'monitoring#export', 'url' => '/api/{apiVersion}/export', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
         ['name' => 'monitoring#deleteSequence', 'url' => '/api/{apiVersion}/delete-sequence/{sequence}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'monitoring#recover', 'url' => '/api/{apiVersion}/recover', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']],
-        // Scan controller
-        ['name' => 'scan#recover', 'url' => '/api/{apiVersion}/scan-recover', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'scan#filesToScan', 'url' => '/api/{apiVersion}/files-to-scan', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'scan#scanSequence', 'url' => '/api/{apiVersion}/scan-sequence', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'monitoring#recover', 'url' => '/api/{apiVersion}/recover', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']]
     ],
 ];

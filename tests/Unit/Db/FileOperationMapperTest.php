@@ -187,18 +187,6 @@ class FileOperationMapperTest extends MapperTestUtility
         $this->assertEquals($this->fileOperations, $result);
     }
 
-    public function testFindSequenceById()
-    {
-        $userId = 'john';
-        $sequence = '1';
-        $rows = $this->twoRows;
-        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `sequence` = ? AND `user_id` = ?';
-
-        $this->setMapperResult($sql, [$sequence, $userId], $rows);
-        $result = $this->mapper->findSequenceById([$sequence, $userId]);
-        $this->assertEquals($this->fileOperations, $result);
-    }
-
     public function testDelete()
     {
         $fileOperation = new FileOperation();
@@ -225,21 +213,5 @@ class FileOperationMapperTest extends MapperTestUtility
         $this->setMapperResult($sql, $arguments, [], null, null, true);
 
         $this->mapper->deleteById($fileOperation->getId(), $userId);
-    }
-
-    public function testDeleteSequenceById()
-    {
-        $userId = 'john';
-        $fileOperation = new FileOperation();
-        $fileOperation->setId(3);
-        $fileOperation->setUserId($userId);
-        $fileOperation->setSequence(1);
-
-        $sql = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `sequence` = ? AND `user_id` = ?';
-        $arguments = [$fileOperation->getSequence(), $userId];
-
-        $this->setMapperResult($sql, $arguments, [], null, null, true);
-
-        $this->mapper->deleteSequenceById($fileOperation->getSequence(), $userId);
     }
 }

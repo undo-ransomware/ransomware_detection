@@ -23,18 +23,6 @@ namespace OCA\RansomwareDetection\Analyzer;
 
 class EntropyResult
 {
-    /**
-     * File classes.
-     *
-     * @var int
-     */
-    const ENCRYPTED = 1;
-    const COMPRESSED = 2;
-    const NORMAL = 3;
-
-    /** @var int */
-    private $fileClass;
-
     /** @var float */
     private $entropy;
 
@@ -47,29 +35,11 @@ class EntropyResult
      * @param float $standardDeviation
      */
     public function __construct(
-        $fileClass,
         $entropy,
         $standardDeviation
     ) {
-        $this->fileClass = $fileClass;
         $this->entropy = $entropy;
         $this->standardDeviation = $standardDeviation;
-    }
-
-    /**
-     * @param int $fileClass
-     */
-    public function setFileClass($fileClass)
-    {
-        $this->fileClass = $fileClass;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFileClass()
-    {
-        return $this->fileClass;
     }
 
     /**

@@ -70,50 +70,10 @@ class Application extends App
             );
         });
 
-        // classifier
-        $container->registerService('Classifier', function ($c) {
-            return new Classifier(
-                $c->query(ILogger::class),
-                $c->query(FileOperationMapper::class),
-                $c->query(FileOperationService::class)
-            );
-        });
-
         // entropy
         $container->registerService('Entropy', function ($c) {
             return new Entropy(
                 $c->query(ILogger::class)
-            );
-        });
-
-        // analyzer
-        $container->registerService('SequenceSizeAnalyzer', function ($c) {
-            return new SequenceSizeAnalyzer();
-        });
-
-        $container->registerService('FileTypeFunnellingAnalyzer', function ($c) {
-            return new FileTypeFunnellingAnalyzer();
-        });
-
-        $container->registerService('EntropyFunnellingAnalyzer', function ($c) {
-            return new EntropyFunnellingAnalyzer(
-                $c->query(ILogger::class)
-            );
-        });
-
-        $container->registerService('FileExtensionAnalyzer', function ($c) {
-            return new FileExtensionAnalyzer(
-                $c->query(ILogger::class),
-                $c->query(Entropy::class)
-
-            );
-        });
-
-        $container->registerService('SequenceAnalyzer', function ($c) {
-            return new SequenceAnalyzer(
-                $c->query(SequenceSizeAnalyzer::class),
-                $c->query(FileTypeFunnellingAnalyzer::class),
-                $c->query(EntropyFunnellingAnalyzer::class)
             );
         });
     }
@@ -123,21 +83,7 @@ class Application extends App
      */
     public function register()
     {
-        // register sabre plugin to catch the profind requests
-        $eventDispatcher = $this->getContainer()->getServer()->getEventDispatcher();
-        $eventDispatcher->addListener('OCA\DAV\Connector\Sabre::addPlugin', function (SabrePluginEvent $event) {
-            $logger = $this->getContainer()->query(ILogger::class);
-            $config = $this->getContainer()->query(IConfig::class);
-            $userSession = $this->getContainer()->query(IUserSession::class);
-            $session = $this->getContainer()->query(ISession::class);
-            $service = $this->getContainer()->query(FileOperationService::class);
-            $notifications = $this->getContainer()->query(IManager::class);
-            $classifier = $this->getContainer()->query(Classifier::class);
-            $sequenceAnalyzer = $this->getContainer()->query(SequenceAnalyzer::class);
-            $event->getServer()->addPlugin(new RequestPlugin($logger, $config, $userSession, $session, $service, $notifications, $classifier, $sequenceAnalyzer));
-        });
         Util::connectHook('OC_Filesystem', 'preSetup', $this, 'addStorageWrapper');
-        $this->registerNotificationNotifier();
     }
 
     /**
@@ -170,19 +116,5 @@ class Application extends App
         }
 
         return $storage;
-    }
-
-    protected function registerNotificationNotifier()
-    {
-        $this->getContainer()->getServer()->getNotificationManager()->registerNotifier(function () {
-            return $this->getContainer()->query(Notifier::class);
-        }, function () {
-            $l = $this->getContainer()->getServer()->getL10NFactory()->get(self::APP_ID);
-
-            return [
-                'id' => self::APP_ID,
-                'name' => $l->t('Ransomware recovery'),
-            ];
-        });
     }
 }

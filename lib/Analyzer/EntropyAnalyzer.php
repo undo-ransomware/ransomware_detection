@@ -103,16 +103,8 @@ class EntropyAnalyzer
     public function analyze($node)
     {
         $entropy = $this->calculateEntropyOfFile($node);
-        if ($entropy > self::ENTROPY_CUT_OFF) {
-            $standardDeviation = $this->calculateStandardDeviationOfEntropy($node, self::BLOCK_SIZE);
-            if ($standardDeviation > self::SD_CUT_OFF) {
-                return new EntropyResult(EntropyResult::COMPRESSED, $entropy, $standardDeviation);
-            }
-
-            return new EntropyResult(EntropyResult::ENCRYPTED, $entropy, $standardDeviation);
-        }
-
-        return new EntropyResult(EntropyResult::NORMAL, $entropy, 0.0);
+        $standardDeviation = $this->calculateStandardDeviationOfEntropy($node, self::BLOCK_SIZE);
+        return new EntropyResult($entropy, $standardDeviation);
     }
 
     /**

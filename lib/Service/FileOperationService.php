@@ -103,22 +103,6 @@ class FileOperationService
     }
 
     /**
-     * Find sequence by id.
-     *
-     * @param array $params
-     * @param int   $limit
-     * @param int   $offset
-     *
-     * @return array
-     */
-    public function findSequenceById(array $params = [], $limit = null, $offset = null)
-    {
-        array_push($params, $this->userId);
-
-        return $this->mapper->findSequenceById($params, $limit, $offset);
-    }
-
-    /**
      * Delete one by id.
      *
      * @param int $id
@@ -126,16 +110,6 @@ class FileOperationService
     public function deleteById($id)
     {
         $this->mapper->deleteById($id, $this->userId);
-    }
-
-    /**
-     * Delete sequence by id.
-     *
-     * @param int $sequence
-     */
-    public function deleteSequenceById($sequence)
-    {
-        $this->mapper->deleteSequenceById($sequence, $this->userId);
     }
 
     /**

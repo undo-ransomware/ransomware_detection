@@ -22,8 +22,6 @@
 namespace OCA\RansomwareDetection\Controller;
 
 use OCA\RansomwareDetection\Monitor;
-use OCA\RansomwareDetection\Classifier;
-use OCA\RansomwareDetection\Analyzer\SequenceAnalyzer;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Service\FileOperationService;
@@ -59,9 +57,6 @@ class MonitoringController extends OCSController
     /** @var FileOperationService */
     protected $service;
 
-    /** @var SequenceAnalyzer */
-    protected $sequenceAnalyzer;
-
     /** @var string */
     protected $userId;
 
@@ -70,11 +65,9 @@ class MonitoringController extends OCSController
      * @param IRequest             $request
      * @param IUserSession         $userSession
      * @param IConfig              $config
-     * @param Classifier           $classifier
      * @param ILogger              $logger
      * @param Folder               $userFolder
      * @param FileOperationService $service
-     * @param SequenceAnalyzer     $sequenceAnalyzer
      * @param string               $userId
      */
     public function __construct(
@@ -82,22 +75,18 @@ class MonitoringController extends OCSController
         IRequest $request,
         IUserSession $userSession,
         IConfig $config,
-        Classifier $classifier,
         ILogger $logger,
         Folder $userFolder,
         FileOperationService $service,
-        SequenceAnalyzer $sequenceAnalyzer,
         $userId
     ) {
         parent::__construct($appName, $request);
 
         $this->config = $config;
         $this->userSession = $userSession;
-        $this->classifier = $classifier;
         $this->userFolder = $userFolder;
         $this->logger = $logger;
         $this->service = $service;
-        $this->sequenceAnalyzer = $sequenceAnalyzer;
         $this->userId = $userId;
     }
 
@@ -112,81 +101,11 @@ class MonitoringController extends OCSController
     {
         $files = $this->service->findAll();
 
-        $sequences = [];
-
-        // Classify files and put together the sequences.
-        foreach ($files as $file) {
-            $this->classifier->classifyFile($file);
-            $sequences[$file->getSequence()][] = $file;
-        }
-
-        $result = [];
-
-        foreach ($sequences as $sequenceId => $sequence) {
-            if (sizeof($sequence) >= $this->config->getAppValue(Application::APP_ID, 'minimum_sequence_length', 0)) {
-                usort($sequence, function ($a, $b) {
-                    return $b->getId() - $a->getId();
-                });
-                $sequenceResult = $this->sequenceAnalyzer->analyze($sequenceId, $sequence);
-                $sequenceInformation = ['id' => $sequenceId, 'suspicionScore' => $sequenceResult->getSuspicionScore(), 'sequence' => $sequence];
-                $result[] = $sequenceInformation;
-            }
-        }
-
-        usort($result, function ($a, $b) {
+        usort($files, function ($a, $b) {
             return $b['id'] - $a['id'];
         });
 
-        return new JSONResponse($result, Http::STATUS_ACCEPTED);
-    }
-
-    /**
-     * Exports classification and analysis data.
-     *
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     *
-     * @param int $sequence
-     *
-     * @return JSONResponse
-     */
-    public function export()
-    {
-        $files = $this->service->findAll();
-
-        $sequences = [];
-
-        // Classify files and put together the sequences.
-        foreach ($files as $file) {
-            $this->classifier->classifyFile($file);
-            $sequences[$file->getSequence()][] = $file;
-        }
-
-        $result = [];
-
-        foreach ($sequences as $sequenceId => $sequence) {
-            if (sizeof($sequence) >= $this->config->getAppValue(Application::APP_ID, 'minimum_sequence_length', 0)) {
-                $result[] = $this->sequenceAnalyzer->analyze($sequenceId, $sequence);
-            }
-        }
-
-        return new JSONResponse($result, Http::STATUS_ACCEPTED);
-    }
-
-    /**
-     * Deletes a sequence from the database.
-     *
-     * @NoAdminRequired
-     *
-     * @param int $sequence
-     *
-     * @return JSONResponse
-     */
-    public function deleteSequence($sequence)
-    {
-        $files = $this->service->deleteSequenceById($sequence);
-
-        return new JSONResponse(['status' => 'success'], Http::STATUS_ACCEPTED);
+        return new JSONResponse($files, Http::STATUS_ACCEPTED);
     }
 
     /**

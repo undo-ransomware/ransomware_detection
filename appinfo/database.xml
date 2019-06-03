@@ -56,12 +56,6 @@
                 <length>32</length>
             </field>
             <field>
-                <name>corrupted</name>
-                <type>integer</type>
-                <notnull>false</notnull>
-                <length>32</length>
-            </field>
-            <field>
                 <name>timestamp</name>
                 <type>integer</type>
                 <notnull>true</notnull>
@@ -74,12 +68,6 @@
                 <length>12</length>
             </field>
             <field>
-                <name>sequence</name>
-                <type>integer</type>
-                <notnull>true</notnull>
-                <length>255</length>
-            </field>
-            <field>
                 <name>entropy</name>
                 <type>float</type>
                 <notnull>false</notnull>
@@ -88,18 +76,6 @@
                 <name>standard_deviation</name>
                 <type>float</type>
                 <notnull>false</notnull>
-            </field>
-            <field>
-                <name>file_class</name>
-                <type>text</type>
-                <notnull>false</notnull>
-                <length>64</length>
-            </field>
-            <field>
-                <name>file_extension_class</name>
-                <type>text</type>
-                <notnull>false</notnull>
-                <length>64</length>
             </field>
         </declaration>
     </table>

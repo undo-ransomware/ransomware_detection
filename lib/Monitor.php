@@ -24,9 +24,6 @@ namespace OCA\RansomwareDetection;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Analyzer\EntropyAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
-use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileExtensionResult;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
 use OCP\App\IAppManager;
@@ -76,12 +73,6 @@ class Monitor
     /** @var FileOperationMapper */
     protected $mapper;
 
-    /** @var FileExtensionAnalyzer */
-    protected $fileExtensionAnalyzer;
-
-    /** @var FileCorruptionAnalyzer */
-    protected $fileCorruptionAnalyzer;
-
     /** @var string */
     protected $userId;
 
@@ -97,8 +88,6 @@ class Monitor
      * @param IRootFolder          $rootFolder
      * @param EntropyAnalyzer      $entropyAnalyzer
      * @param FileOperationMapper  $mapper
-     * @param FileExtensionAnalyzer     $fileExtensionAnalyzer
-     * @param FileCorruptionAnalyzer $fileCorruptionAnalyzer
      * @param string               $userId
      */
     public function __construct(
@@ -110,8 +99,6 @@ class Monitor
         IRootFolder $rootFolder,
         EntropyAnalyzer $entropyAnalyzer,
         FileOperationMapper $mapper,
-        FileExtensionAnalyzer $fileExtensionAnalyzer,
-        FileCorruptionAnalyzer $fileCorruptionAnalyzer,
         $userId
     ) {
         $this->request = $request;
@@ -122,8 +109,6 @@ class Monitor
         $this->rootFolder = $rootFolder;
         $this->entropyAnalyzer = $entropyAnalyzer;
         $this->mapper = $mapper;
-        $this->fileExtensionAnalyzer = $fileExtensionAnalyzer;
-        $this->fileCorruptionAnalyzer = $fileCorruptionAnalyzer;
         $this->userId = $userId;
     }
 
@@ -158,8 +143,6 @@ class Monitor
                 if (preg_match('/.+\.d[0-9]+/', pathinfo($paths[1])['basename']) > 0) {
                     return;
                 }
-                // reset PROPFIND_COUNT
-                $this->resetProfindCount();
 
                 try {
                     $userRoot = $this->rootFolder->getUserFolder($this->userId)->getParent();
@@ -186,9 +169,6 @@ class Monitor
 
                 return;
             case self::WRITE:
-                // reset PROPFIND_COUNT
-                $this->resetProfindCount();
-
                 try {
                     $userRoot = $this->rootFolder->getUserFolder($this->userId)->getParent();
                     $node = $userRoot->get($path);
@@ -214,9 +194,6 @@ class Monitor
 
                 return;
             case self::DELETE:
-                // reset PROPFIND_COUNT
-                $this->resetProfindCount();
-
                 try {
                     $userRoot = $this->rootFolder->getUserFolder($this->userId)->getParent();
                     $node = $userRoot->get($path);
@@ -243,9 +220,6 @@ class Monitor
             case self::CREATE:
                 // only folders are created
 
-                // reset PROPFIND_COUNT
-                $this->resetProfindCount();
-
                 $fileOperation = new FileOperation();
                 $fileOperation->setUserId($this->userId);
                 $fileOperation->setPath(str_replace('files', '', pathinfo($path)['dirname']));
@@ -254,18 +228,11 @@ class Monitor
                 $fileOperation->setMimeType('httpd/unix-directory');
                 $fileOperation->setSize(0);
                 $fileOperation->setTimestamp(time());
-                $fileOperation->setCorrupted(false);
                 $fileOperation->setCommand(self::CREATE);
-                $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
-                $fileOperation->setSequence($sequenceId);
 
                 // entropy analysis
                 $fileOperation->setEntropy(0.0);
                 $fileOperation->setStandardDeviation(0.0);
-                $fileOperation->setFileClass(EntropyResult::NORMAL);
-
-                // file extension analysis
-                $fileOperation->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
 
                 $this->mapper->insert($fileOperation);
                 $this->nestingLevel--;
@@ -296,19 +263,6 @@ class Monitor
         }
 
         return false;
-    }
-
-    /**
-     * Reset PROPFIND_COUNT.
-     */
-    protected function resetProfindCount()
-    {
-        $userKeys = $this->config->getUserKeys($this->userId, Application::APP_ID);
-        foreach ($userKeys as $key) {
-            if (strpos($key, 'propfind_count') !== false) {
-                $this->config->deleteUserValue($this->userId, Application::APP_ID, $key);
-            }
-        }
     }
 
     /**
@@ -395,18 +349,11 @@ class Monitor
         $fileOperation->setMimeType($node->getMimeType());
         $fileOperation->setSize(0);
         $fileOperation->setTimestamp(time());
-        $fileOperation->setCorrupted(false);
         $fileOperation->setCommand($operation);
-        $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
-        $fileOperation->setSequence($sequenceId);
 
         // entropy analysis
         $fileOperation->setEntropy(0.0);
         $fileOperation->setStandardDeviation(0.0);
-        $fileOperation->setFileClass(EntropyResult::NORMAL);
-
-        // file extension analysis
-        $fileOperation->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
 
         $this->mapper->insert($fileOperation);
     }
@@ -432,26 +379,11 @@ class Monitor
         $fileOperation->setSize($node->getSize());
         $fileOperation->setTimestamp(time());
         $fileOperation->setCommand($operation);
-        $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
-        $fileOperation->setSequence($sequenceId);
-
-        // file extension analysis
-        $fileExtensionResult = $this->fileExtensionAnalyzer->analyze($node->getInternalPath());
-        $fileOperation->setFileExtensionClass($fileExtensionResult->getFileExtensionClass());
-
-        $fileCorruptionResult = $this->fileCorruptionAnalyzer->analyze($node);
-        $isCorrupted = $fileCorruptionResult->isCorrupted();
-        $fileOperation->setCorrupted($isCorrupted);
-        if ($isCorrupted) {
-            $fileOperation->setFileExtensionClass(FileExtensionResult::SUSPICIOUS);
-        }
 
         // entropy analysis
         $entropyResult = $this->entropyAnalyzer->analyze($node);
         $fileOperation->setEntropy($entropyResult->getEntropy());
         $fileOperation->setStandardDeviation($entropyResult->getStandardDeviation());
-        $fileOperation->setFileClass($entropyResult->getFileClass());
-
 
         $entity = $this->mapper->insert($fileOperation);
     }

@@ -57,17 +57,4 @@ class RecoverController extends Controller
     {
         return new TemplateResponse(Application::APP_ID, 'index');
     }
-
-    /**
-     * Scan page.
-     *
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     *
-     * @return TemplateResponse
-     */
-    public function scan()
-    {
-        return new TemplateResponse(Application::APP_ID, 'scan');
-    }
 }

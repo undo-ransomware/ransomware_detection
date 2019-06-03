@@ -46,17 +46,11 @@ class FileOperation extends Entity
     /** @var int */
     public $size;
 
-    /** @var int */
-    public $corrupted;
-
     /** @var string */
     public $timestamp;
 
     /** @var int */
     public $command;
-
-    /** @var int */
-    public $sequence;
 
     /** @var float */
     public $entropy;
@@ -64,26 +58,12 @@ class FileOperation extends Entity
     /** @var float */
     public $standardDeviation;
 
-    /** @var string */
-    public $fileClass;
-
-    /** @var string */
-    public $fileExtensionClass;
-
-    /** @var int */
-    public $suspicionClass;
-
     public function __construct()
     {
         // Add types in constructor
         $this->addType('size', 'integer');
-        $this->addType('corrupted', 'integer');
         $this->addType('command', 'integer');
-        $this->addType('sequence', 'integer');
         $this->addType('entropy', 'float');
         $this->addType('standardDeviation', 'float');
-        $this->addType('suspicionClass', 'integer');
-        $this->addType('fileExtensionClass', 'integer');
-        $this->addType('fileClass', 'integer');
     }
 }

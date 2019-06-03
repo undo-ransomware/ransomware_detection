@@ -50,7 +50,6 @@ class FileOperationTest extends TestCase
             ['field' => 'type', 'value' => 'file'],
             ['field' => 'mimeType', 'value' => 'image/jpg'],
             ['field' => 'size', 'value' => 123],
-            ['field' => 'corrupted', 'value' => true],
             ['field' => 'timestamp', 'value' => new \DateTime()],
             ['field' => 'command', 'value' => Monitor::WRITE],
             ['field' => 'command', 'value' => Monitor::READ],
@@ -59,16 +58,6 @@ class FileOperationTest extends TestCase
             ['field' => 'sequence', 'value' => 1],
             ['field' => 'entropy', 'value' => 7.99],
             ['field' => 'standardDeviation', 'value' => 0.004],
-            ['field' => 'fileClass', 'value' => EntropyResult::NORMAL],
-            ['field' => 'fileClass', 'value' => EntropyResult::ENCRYPTED],
-            ['field' => 'fileClass', 'value' => EntropyResult::COMPRESSED],
-            ['field' => 'fileExtensionClass', 'value' => FileExtensionResult::NOT_SUSPICIOUS],
-            ['field' => 'fileExtensionClass', 'value' => FileExtensionResult::SUSPICIOUS],
-            ['field' => 'suspicionClass', 'value' => Classifier::NO_INFORMATION],
-            ['field' => 'suspicionClass', 'value' => Classifier::NOT_SUSPICIOUS],
-            ['field' => 'suspicionClass', 'value' => Classifier::MAYBE_SUSPICIOUS],
-            ['field' => 'suspicionClass', 'value' => Classifier::MAYBE_SUSPICIOUS],
-            ['field' => 'suspicionClass', 'value' => Classifier::SUSPICIOUS],
         ];
 
         return $data;
