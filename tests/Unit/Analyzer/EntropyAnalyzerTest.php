@@ -56,10 +56,10 @@ class EntropyAnalyzerTest extends TestCase
     public function dataAnalyze()
     {
         return [
-            ['entropy' => 6.0, 'standardDeviation' => 0.0, 'class' => EntropyResult::NORMAL],
-            ['entropy' => 7.91, 'standardDeviation' => 0.002, 'class' => EntropyResult::ENCRYPTED],
-            ['entropy' => 7.91, 'standardDeviation' => 0.05, 'class' => EntropyResult::ENCRYPTED],
-            ['entropy' => 7.91, 'standardDeviation' => 0.15, 'class' => EntropyResult::COMPRESSED],
+            ['entropy' => 6.0, 'standardDeviation' => 0.0],
+            ['entropy' => 7.91, 'standardDeviation' => 0.002],
+            ['entropy' => 7.91, 'standardDeviation' => 0.05],
+            ['entropy' => 7.91, 'standardDeviation' => 0.15],
         ];
     }
 
@@ -74,16 +74,12 @@ class EntropyAnalyzerTest extends TestCase
     {
         $entropyAnalyzer = $this->getMockBuilder(EntropyAnalyzer::class)
             ->setConstructorArgs([$this->logger, $this->rootFolder, $this->entropy, $this->userId])
-            ->setMethods(array('calculateEntropyOfFile', 'createEntropyArrayFromFile', 'calculateStandardDeviationOfEntropy'))
+            ->setMethods(array('calculateEntropyOfFile', 'calculateStandardDeviationOfEntropy'))
             ->getMock();
 
         $entropyAnalyzer->expects($this->any())
             ->method('calculateEntropyOfFile')
             ->willReturn($entropy);
-
-        $entropyAnalyzer->expects($this->any())
-            ->method('createEntropyArrayFromFile')
-            ->willReturn([]);
 
         $entropyAnalyzer->expects($this->any())
             ->method('calculateStandardDeviationOfEntropy')

@@ -33,22 +33,13 @@ class EntropyResultTest extends TestCase
     {
         parent::setUp();
 
-        $this->entropyResult = new EntropyResult(EntropyResult::ENCRYPTED, 7.99, 0.004);
+        $this->entropyResult = new EntropyResult(7.99, 0.004);
     }
 
     public function testConstruct()
     {
-        $this->assertEquals($this->entropyResult->getFileClass(), EntropyResult::ENCRYPTED);
         $this->assertEquals($this->entropyResult->getEntropy(), 7.99);
         $this->assertEquals($this->entropyResult->getStandardDeviation(), 0.004);
-    }
-
-    public function testFileClass()
-    {
-        $this->entropyResult->setFileClass(EntropyResult::COMPRESSED);
-        $this->assertEquals($this->entropyResult->getFileClass(), EntropyResult::COMPRESSED);
-        $this->entropyResult->setFileClass(EntropyResult::NORMAL);
-        $this->assertEquals($this->entropyResult->getFileClass(), EntropyResult::NORMAL);
     }
 
     public function testEntropy()

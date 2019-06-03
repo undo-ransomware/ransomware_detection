@@ -22,7 +22,6 @@
 namespace OCA\RansomwareDetection\tests\Unit\AppInfo;
 
 use OCA\RansomwareDetection\AppInfo\Application;
-use OCA\RansomwareDetection\Notification\Notifier;
 use OCP\Files\Storage\IStorage;
 use OCP\Notification\INotifier;
 use Test\TestCase;
