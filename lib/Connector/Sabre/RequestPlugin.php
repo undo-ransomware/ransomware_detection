@@ -108,20 +108,23 @@ class RequestPlugin extends ServerPlugin
 
     public function beforeHttpPropFind(RequestInterface $request, ResponseInterface $response)
     {
-        $propfindCount = $this->config->getUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'propfind_count:'.$this->session->getId(), 0);
-        if ($propfindCount + 1 < self::PROPFIND_COUNT) {
-            // less than PROPFIND_COUNT + 1 PROPFIND requests
-            $this->config->setUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'propfind_count:'.$this->session->getId(), $propfindCount + 1);
-        } else {
-            // more than PROPFIND_COUNT PROPFIND requests and no file is uploading
-            $sequenceId = $this->config->getUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'sequence_id', 0);
-            $sequence = $this->service->findSequenceById([$sequenceId]);
-            if (sizeof($sequence) > 0) {
-                // get old sequence id
-                // start a new sequence by increasing the sequence id
-                $this->config->setUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'sequence_id', $sequenceId + 1);
-                $this->config->setUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'propfind_count:'.$this->session->getId(), 0);
-                $this->classifySequence($sequence);
+        if ($this->userSession !== null && $this->userSession->getUser() !== null) {
+            // only process the propfind request if there is a active user session
+            $propfindCount = $this->config->getUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'propfind_count:'.$this->session->getId(), 0);
+            if ($propfindCount + 1 < self::PROPFIND_COUNT) {
+                // less than PROPFIND_COUNT + 1 PROPFIND requests
+                $this->config->setUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'propfind_count:'.$this->session->getId(), $propfindCount + 1);
+            } else {
+                // more than PROPFIND_COUNT PROPFIND requests and no file is uploading
+                $sequenceId = $this->config->getUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'sequence_id', 0);
+                $sequence = $this->service->findSequenceById([$sequenceId]);
+                if (sizeof($sequence) > 0) {
+                    // get old sequence id
+                    // start a new sequence by increasing the sequence id
+                    $this->config->setUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'sequence_id', $sequenceId + 1);
+                    $this->config->setUserValue($this->userSession->getUser()->getUID(), Application::APP_ID, 'propfind_count:'.$this->session->getId(), 0);
+                    $this->classifySequence($sequence);
+                }
             }
         }
     }
