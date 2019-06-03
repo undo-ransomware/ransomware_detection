@@ -1,5 +1,12 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
+
+## 0.5.2
+
+### Fixed
+
+- Fix error of non-existing user session during propfind analysis e.g. calender public link.
 
 ## 0.5.1
 
