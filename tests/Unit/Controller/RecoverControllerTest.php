@@ -61,6 +61,13 @@ class RecoverControllerTest extends TestCase
 
     public function testIndex()
     {
+
+        $file = $this->getMockBuilder(FileOperation::class)
+            ->getMock();
+
+        $this->service->method('findAll')
+            ->willReturn([$file]);
+            
         $result = $this->controller->index();
 
         $this->assertEquals('index', $result->getTemplateName());
