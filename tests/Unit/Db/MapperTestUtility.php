@@ -21,7 +21,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace OCA\RansomwareDetection\Tests\Unit\Db;
+namespace OCA\RansomwareDetection\tests\Unit\Db;
 
 use Test\TestCase;
 
