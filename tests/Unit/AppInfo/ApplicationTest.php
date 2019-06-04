@@ -23,7 +23,6 @@ namespace OCA\RansomwareDetection\tests\Unit\AppInfo;
 
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCP\Files\Storage\IStorage;
-use OCP\Notification\INotifier;
 use Test\TestCase;
 
 class ApplicationTest extends TestCase
@@ -50,7 +49,6 @@ class ApplicationTest extends TestCase
     public function dataContainerQuery()
     {
         return [
-            [Notifier::class, INotifier::class],
         ];
     }
 

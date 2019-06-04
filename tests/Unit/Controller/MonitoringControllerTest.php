@@ -90,13 +90,7 @@ class MonitoringControllerTest extends TestCase
             'john'
         );
         $file = $this->getMockBuilder(FileOperation::class)
-            ->setMethods(['getSequence'])
             ->getMock();
-
-        $sequenceResult = new SequenceResult(0, 0, 0, 0, 0, 0);
-
-        $file->method('getSequence')
-            ->willReturn(1);
 
         $this->service->method('findAll')
             ->willReturn([$file]);

@@ -68,9 +68,8 @@ class EntropyAnalyzerTest extends TestCase
      *
      * @param float $entropy
      * @param float $standardDeviation
-     * @param int   $class
      */
-    public function testAnalyze($entropy, $standardDeviation, $class)
+    public function testAnalyze($entropy, $standardDeviation)
     {
         $entropyAnalyzer = $this->getMockBuilder(EntropyAnalyzer::class)
             ->setConstructorArgs([$this->logger, $this->rootFolder, $this->entropy, $this->userId])
@@ -87,7 +86,6 @@ class EntropyAnalyzerTest extends TestCase
 
         $result = $entropyAnalyzer->analyze('test', $this->userId);
         $this->assertInstanceOf(EntropyResult::class, $result);
-        $this->assertEquals($result->getFileClass(), $class);
         $this->assertEquals($result->getStandardDeviation(), $standardDeviation);
     }
 

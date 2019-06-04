@@ -123,7 +123,7 @@ class MonitorTest extends TestCase
             ->method('isCreatingSkeletonFiles')
             ->willReturn(false);
 
-        $entropyResult = new EntropyResult(EntropyResult::COMPRESSED, 7.99, 0.004);
+        $entropyResult = new EntropyResult(7.99, 0.004);
 
         $this->entropyAnalyzer->method('analyze')
             ->willReturn($entropyResult);

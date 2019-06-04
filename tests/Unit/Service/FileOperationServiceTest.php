@@ -211,7 +211,6 @@ class FileOperationServiceTest extends MapperTestUtility
         $fileOperation = new FileOperation();
         $fileOperation->setId(3);
         $fileOperation->setUserId($userId);
-        $fileOperation->setSequence(1);
         $fileOperation->setTimestamp(strtotime('-1 week'));
 
         $sql = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `timestamp` < ?';

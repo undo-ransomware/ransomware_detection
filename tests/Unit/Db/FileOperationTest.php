@@ -55,7 +55,6 @@ class FileOperationTest extends TestCase
             ['field' => 'command', 'value' => Monitor::READ],
             ['field' => 'command', 'value' => Monitor::RENAME],
             ['field' => 'command', 'value' => Monitor::DELETE],
-            ['field' => 'sequence', 'value' => 1],
             ['field' => 'entropy', 'value' => 7.99],
             ['field' => 'standardDeviation', 'value' => 0.004],
         ];

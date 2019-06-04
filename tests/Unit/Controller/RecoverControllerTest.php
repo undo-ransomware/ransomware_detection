@@ -42,6 +42,8 @@ class RecoverControllerTest extends TestCase
 
         $request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
+        $connection = $this->getMockBuilder('OCP\IDBConnection')
+            ->getMock();
         $mapper = $this->getMockBuilder('OCA\RansomwareDetection\Db\FileOperationMapper')
             ->setConstructorArgs([$connection])
             ->getMock();
