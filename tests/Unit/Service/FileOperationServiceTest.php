@@ -24,7 +24,7 @@ namespace OCA\RansomwareDetection\tests\Unit\Service;
 use OCA\RansomwareDetection\Service\FileOperationService;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
-use OCA\RansomwareDetection\Tests\Unit\Db\MapperTestUtility;
+use OCA\RansomwareDetection\tests\Unit\Db\MapperTestUtility;
 
 class FileOperationServiceTest extends MapperTestUtility
 {

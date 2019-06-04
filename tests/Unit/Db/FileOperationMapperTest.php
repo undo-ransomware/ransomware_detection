@@ -23,6 +23,7 @@ namespace OCA\RansomwareDetection\tests\Unit\Db;
 
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
+use OCA\RansomwareDetection\tests\Unit\Db\MapperTestUtility;
 
 class FileOperationMapperTest extends MapperTestUtility
 {
