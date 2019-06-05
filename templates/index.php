@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-script('ransomware_detection', 'script');
+script('ransomware_detection', 'index');
 style('ransomware_detection', 'style');
 ?>
 
@@ -32,3 +32,4 @@ style('ransomware_detection', 'style');
 	</div>
 </div>
 
+<div id="vue-content"></div>
