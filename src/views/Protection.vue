@@ -1,30 +1,17 @@
 <template>
-    <Content app-name="ransomware_detection">
-        <AppNavigation>
-            <ul>
-				<AppNavigationItem v-for="item in menu" :key="item.key" :item="item" />
-			</ul>
-        </AppNavigation>
-        <AppContent>
-            <ProtectionStatus>
-            </ProtectionStatus>
-        </AppContent>
-    </Content>
+    <AppContent>
+        <ProtectionStatus>
+        </ProtectionStatus>
+    </AppContent>
 </template>
 
 <script>
-import Content from 'nextcloud-vue/dist/Components/Content'
-import AppNavigation from 'nextcloud-vue/dist/Components/AppNavigation'
-import AppNavigationItem from 'nextcloud-vue/dist/Components/AppNavigationItem'
 import AppContent from 'nextcloud-vue/dist/Components/AppContent'
 import ProtectionStatus from '../components/ProtectionStatus'
 
 export default {
     name: 'Protection',
     components: {
-		Content,
-        AppNavigation,
-        AppNavigationItem,
         AppContent,
         ProtectionStatus
     },

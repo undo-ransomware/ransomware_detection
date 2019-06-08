@@ -23,7 +23,7 @@ Vue.prototype.OCA = OCA
 
 /* eslint-disable-next-line no-new */
 new Vue({
-	el: '#vue-content',
+	el: '#content',
 	router,
 	render: h => h(App)
 })

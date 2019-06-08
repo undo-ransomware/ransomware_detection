@@ -1,11 +1,9 @@
 <template>
-    <div id="app">
-        <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
-            <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-            <vaadin-grid-sort-column width="9em" path="originalName"></vaadin-grid-sort-column>
-            <vaadin-grid-sort-column width="9em" path="timestamp"></vaadin-grid-sort-column>
-        </vaadin-grid>
-    </div>
+    <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
+        <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
+        <vaadin-grid-sort-column width="9em" path="originalName"></vaadin-grid-sort-column>
+        <vaadin-grid-sort-column width="9em" path="timestamp"></vaadin-grid-sort-column>
+    </vaadin-grid>
 </template>
 
 <script>
@@ -45,7 +43,7 @@ export default {
 </script>
 
 <style scoped>
-    #app {
+    vaadin-grid {
         width: 100%;
         height: 100%;
     }
