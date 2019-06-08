@@ -1,6 +1,11 @@
-import Vue from 'vue'
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
+import Vue from 'vue'
 import App from './App'
+import router from './router'
+import {sync} from 'vuex-router-sync'
+
 
 // CSP config for webpack dynamic chunk loading
 // eslint-disable-next-line
@@ -18,5 +23,7 @@ Vue.prototype.OCA = OCA
 
 /* eslint-disable-next-line no-new */
 new Vue({
+	el: '#vue-content',
+	router,
 	render: h => h(App)
-}).$mount('#vue-content')
+})

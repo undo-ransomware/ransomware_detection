@@ -11,16 +11,11 @@
 return [
     'routes' => [
         ['name' => 'recover#index', 'url' => '/', 'verb' => 'GET'],
-    ],
-    'ocs' => [
+        // File operation controller
+        ['name' => 'fileOperation#findAll', 'url' => '/api/{apiVersion}/file-operation', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
         // Basic controller
         ['name' => 'basic#changeColorMode', 'url' => '/api/{apiVersion}/change-color-mode/{colorMode}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
         ['name' => 'basic#getColorMode', 'url' => '/api/{apiVersion}/get-color-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
         ['name' => 'basic#getDebugMode', 'url' => '/api/{apiVersion}/get-debug-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        // Monitoring controller
-        ['name' => 'monitoring#listFileOperations', 'url' => '/api/{apiVersion}/list', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'monitoring#export', 'url' => '/api/{apiVersion}/export', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'monitoring#deleteSequence', 'url' => '/api/{apiVersion}/delete-sequence/{sequence}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'monitoring#recover', 'url' => '/api/{apiVersion}/recover', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']]
     ],
 ];

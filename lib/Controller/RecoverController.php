@@ -62,15 +62,6 @@ class RecoverController extends Controller
      */
     public function index()
     {
-        $fileOperations = $this->service->findAll();
-
-		// sort ASC for timestamp
-        usort($fileOperations, function ($a, $b) {
-            if ($a->getTimestamp() === $b->getTimestamp()) {
-                return 0;
-            }
-            return $b->getTimestamp() - $a->getTimestamp();
-        });
-        return new TemplateResponse(Application::APP_ID, 'index', array('fileOperations' => $fileOperations));
+        return new TemplateResponse(Application::APP_ID, 'index');
     }
 }

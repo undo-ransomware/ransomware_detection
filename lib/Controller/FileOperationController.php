@@ -21,15 +21,23 @@
 
 namespace OCA\RansomwareDetection\Controller;
 
+use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\AppInfo\Application;
+use OCA\RansomwareDetection\Db\FileOperation;
+use OCA\RansomwareDetection\Service\FileOperationService;
+use OCA\Files_Trashbin\Trashbin;
+use OCA\Files_Trashbin\Helper;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\OCSController;
+use OCP\AppFramework\Controller;
+use OCP\Files\File;
+use OCP\Files\Folder;
 use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\IRequest;
+use OCP\ILogger;
 
-class BasicController extends OCSController
+class FileOperationController extends Controller
 {
     /** @var IConfig */
     protected $config;
@@ -37,14 +45,26 @@ class BasicController extends OCSController
     /** @var IUserSession */
     protected $userSession;
 
-    /** @var int */
-    private $userId;
+    /** @var ILogger */
+    protected $logger;
+
+    /** @var Folder */
+    protected $userFolder;
+
+    /** @var FileOperationService */
+    protected $service;
+
+    /** @var string */
+    protected $userId;
 
     /**
      * @param string               $appName
      * @param IRequest             $request
      * @param IUserSession         $userSession
      * @param IConfig              $config
+     * @param ILogger              $logger
+     * @param Folder               $userFolder
+     * @param FileOperationService $service
      * @param string               $userId
      */
     public function __construct(
@@ -52,57 +72,33 @@ class BasicController extends OCSController
         IRequest $request,
         IUserSession $userSession,
         IConfig $config,
+        ILogger $logger,
+        Folder $userFolder,
+        FileOperationService $service,
         $userId
     ) {
         parent::__construct($appName, $request);
 
         $this->config = $config;
         $this->userSession = $userSession;
+        $this->userFolder = $userFolder;
+        $this->logger = $logger;
+        $this->service = $service;
         $this->userId = $userId;
     }
 
     /**
-     * Get debug mode.
-     *
-     * @NoAdminRequired
-     *
-     * @return JSONResponse
-     */
-    public function getDebugMode()
-    {
-        $debugMode = $this->config->getAppValue(Application::APP_ID, 'debug', 0);
-
-        return new JSONResponse(['status' => 'success', 'message' => 'Get debug mode.', 'debugMode' => $debugMode], Http::STATUS_ACCEPTED);
-    }
-
-    /**
-     * Get color mode.
+     * Lists the files.
      *
      * @NoAdminRequired
      * @NoCSRFRequired
      *
      * @return JSONResponse
      */
-    public function getColorMode()
+    public function findAll()
     {
-        $colorMode = $this->config->getUserValue($this->userId, Application::APP_ID, 'color_mode', 0);
+        $files = $this->service->findAll();
 
-        return new JSONResponse(['status' => 'success', 'message' => 'Get color mode.', 'colorMode' => $colorMode], Http::STATUS_ACCEPTED);
-    }
-
-    /**
-     * Changes color mode.
-     *
-     * @NoAdminRequired
-     *
-     * @param int $colorMode
-     *
-     * @return JSONResponse
-     */
-    public function changeColorMode($colorMode)
-    {
-        $this->config->setUserValue($this->userId, Application::APP_ID, 'color_mode', $colorMode);
-
-        return new JSONResponse(['status' => 'success', 'message' => 'Color mode changed.'], Http::STATUS_ACCEPTED);
+        return new JSONResponse($files, Http::STATUS_ACCEPTED);
     }
 }
