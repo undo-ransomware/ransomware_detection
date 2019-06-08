@@ -1,6 +1,7 @@
 <template>
     <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
         <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
+        <vaadin-grid-column width="5em" flex-grow="0" id="status" header="Status"></vaadin-grid-column>
         <vaadin-grid-sort-column width="9em" path="originalName"></vaadin-grid-sort-column>
         <vaadin-grid-sort-column width="9em" path="timestamp"></vaadin-grid-sort-column>
     </vaadin-grid>
@@ -11,16 +12,20 @@ import '@vaadin/vaadin-grid/vaadin-grid.js';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column.js';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column.js';
 import '@vaadin/vaadin-grid/vaadin-grid-column.js';
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/iron-icons.js';
 
 export default {
     name: 'RansomwareTable',
     mounted () {
-        // Customize the "Address" column's renderer
-        /*document.querySelector('#addresscolumn').renderer = (root, grid, rowData) => {
-            root.textContent = `${rowData.item.address.street}, ${rowData.item.address.city}`;
-        };*/
+        document.querySelector('#status').renderer = (root, grid, rowData) => {
+            const icon = document.createElement('iron-icon');
+            icon.setAttribute('icon', 'verified-user');
+            icon.classList.add('good');
+            root.innerHTML = '';
+            root.appendChild(icon);
+        }
 
-        // Populate the grid with data
         this.fetchData();
     },
     methods: {
@@ -46,5 +51,13 @@ export default {
     vaadin-grid {
         width: 100%;
         height: 100%;
+    }
+
+    .good {
+        fill: green !important;
+    }
+
+    .bad {
+        color: red;
     }
 </style>
