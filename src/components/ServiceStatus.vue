@@ -15,7 +15,7 @@ import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 
 export default {
-    name: 'ProtectionStatus',
+    name: 'ServiceStatus',
 }
 </script>
 
