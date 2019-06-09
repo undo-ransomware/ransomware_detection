@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Matthias Held <matthias.held@uni-konstanz.de>
+ * @copyright Copyright (c) 2019 Matthias Held <matthias.held@uni-konstanz.de>
  * @author Matthias Held <matthias.held@uni-konstanz.de>
  * @license GNU AGPL version 3 or any later version
  *
@@ -18,10 +18,37 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace OCA\RansomwareDetection;
+namespace OCA\RansomwareDetection\Model;
 
-abstract class Status {
-    const PENDING = 0;
-    const GOOD = 1;
-    const BAD = 2;
+class Settings {
+    /**
+     * The debug state of the app.
+     */
+    private $debug;
+
+    /**
+     * The color state of the app.
+     */
+    private $color;
+
+    public function __construct($debug, $color) {
+        $this->debug = $debug;
+        $this->color = $color;
+    }
+
+    public function getDebug() {
+        return $this->debug;
+    }
+
+    public function setDebug($debug) {
+        $this->debug = $debug;
+    }
+
+    public function getColor() {
+        return $this->color;
+    }
+
+    public function setColor() {
+        $this->color = $color;
+    }
 }

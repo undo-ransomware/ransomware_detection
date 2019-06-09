@@ -26,6 +26,7 @@ use OCA\RansomwareDetection\Analyzer\EntropyAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyResult;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
+use OCA\RansomwareDetection\Model\Status;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\File;
