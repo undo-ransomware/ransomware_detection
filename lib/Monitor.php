@@ -221,6 +221,7 @@ class Monitor
                 // only folders are created
 
                 $fileOperation = new FileOperation();
+                $fileOperation->setStatus(Status::PENDING);
                 $fileOperation->setUserId($this->userId);
                 $fileOperation->setPath(str_replace('files', '', pathinfo($path)['dirname']));
                 $fileOperation->setOriginalName(pathinfo($path)['basename']);
@@ -339,6 +340,7 @@ class Monitor
     private function addFolderOperation($paths, $node, $operation)
     {
         $fileOperation = new FileOperation();
+        $fileOperation->setStatus(Status::PENDING);
         $fileOperation->setUserId($this->userId);
         $fileOperation->setPath(str_replace('files', '', pathinfo($node->getInternalPath())['dirname']));
         $fileOperation->setOriginalName($node->getName());
@@ -368,6 +370,7 @@ class Monitor
     private function addFileOperation($paths, $node, $operation)
     {
         $fileOperation = new FileOperation();
+        $fileOperation->setStatus(Status::PENDING);
         $fileOperation->setUserId($this->userId);
         $fileOperation->setPath(str_replace('files', '', pathinfo($node->getInternalPath())['dirname']));
         $fileOperation->setOriginalName($node->getName());

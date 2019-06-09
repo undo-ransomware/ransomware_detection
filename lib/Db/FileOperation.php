@@ -25,6 +25,9 @@ use OCP\AppFramework\Db\Entity;
 
 class FileOperation extends Entity
 {
+    /** @var int */
+    public $status;
+
     /** @var string */
     public $userId;
 
@@ -61,6 +64,7 @@ class FileOperation extends Entity
     public function __construct()
     {
         // Add types in constructor
+        $this->addType('status', 'integer');
         $this->addType('size', 'integer');
         $this->addType('command', 'integer');
         $this->addType('entropy', 'float');
