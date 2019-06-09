@@ -27,7 +27,7 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
 
-class RecoverController extends Controller
+class PageController extends Controller
 {
     /** @var FileOperationService */
     protected $service;

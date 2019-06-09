@@ -23,14 +23,14 @@ namespace OCA\RansomwareDetection\tests\Unit\Controller;
 
 use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\Db\FileOperation;
-use OCA\RansomwareDetection\Controller\MonitoringController;
+use OCA\RansomwareDetection\Controller\FileOperationController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use Test\TestCase;
 
-class MonitoringControllerTest extends TestCase
+class FileOperationControllerTest extends TestCase
 {
     /** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
@@ -77,9 +77,9 @@ class MonitoringControllerTest extends TestCase
             ->getMock();
     }
 
-    public function testListFileOperations()
+    public function testFindAll()
     {
-        $controller = new MonitoringController(
+        $controller = new FileOperationController(
             'ransomware_detection',
             $this->request,
             $this->userSession,
@@ -95,7 +95,7 @@ class MonitoringControllerTest extends TestCase
         $this->service->method('findAll')
             ->willReturn([$file]);
 
-        $result = $controller->listFileOperations();
+        $result = $controller->findAll();
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
     }
@@ -139,7 +139,7 @@ class MonitoringControllerTest extends TestCase
      */
     public function testRecover($fileIds, $fileOperation, $deleted, $response)
     {
-        $controller = $this->getMockBuilder(MonitoringController::class)
+        $controller = $this->getMockBuilder(FileOperationController::class)
             ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config,
             $this->logger, $this->folder, $this->service, 'john', ])
             ->setMethods(['deleteFromStorage', 'getTrashFiles'])
@@ -165,7 +165,7 @@ class MonitoringControllerTest extends TestCase
 
     public function testRecoverMultipleObjectsReturnedException()
     {
-        $controller = $this->getMockBuilder(MonitoringController::class)
+        $controller = $this->getMockBuilder(FileOperationController::class)
             ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config,
             $this->logger, $this->folder, $this->service, 'john', ])
             ->setMethods(['getTrashFiles'])
@@ -190,7 +190,7 @@ class MonitoringControllerTest extends TestCase
 
     public function testDoesNotExistException()
     {
-        $controller = new MonitoringController(
+        $controller = new FileOperationController(
             'ransomware_detection',
             $this->request,
             $this->userSession,
@@ -216,7 +216,7 @@ class MonitoringControllerTest extends TestCase
 
     public function testDeleteFromStorage()
     {
-        $controller = new MonitoringController(
+        $controller = new FileOperationController(
             'ransomware_detection',
             $this->request,
             $this->userSession,
@@ -240,7 +240,7 @@ class MonitoringControllerTest extends TestCase
 
     public function testDeleteFromStorageNotPossible()
     {
-        $controller = new MonitoringController(
+        $controller = new FileOperationController(
             'ransomware_detection',
             $this->request,
             $this->userSession,
@@ -265,7 +265,7 @@ class MonitoringControllerTest extends TestCase
 
     public function testDeleteFromStorageNotFoundException()
     {
-        $controller = new MonitoringController(
+        $controller = new FileOperationController(
             'ransomware_detection',
             $this->request,
             $this->userSession,

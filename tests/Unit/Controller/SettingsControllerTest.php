@@ -21,14 +21,14 @@
 
 namespace OCA\RansomwareDetection\tests\Unit\Controller;
 
-use OCA\RansomwareDetection\Controller\BasicController;
+use OCA\RansomwareDetection\Controller\SettingsController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use Test\TestCase;
 
-class BasicControllerTest extends TestCase
+class SettingsControllerTest extends TestCase
 {
     /** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
@@ -56,7 +56,7 @@ class BasicControllerTest extends TestCase
 
     public function testGetDebugMode()
     {
-        $controller = new BasicController(
+        $controller = new SettingsController(
             'ransomware_detection',
             $this->request,
             $this->userSession,
@@ -71,7 +71,7 @@ class BasicControllerTest extends TestCase
 
     public function testGetColorMode()
     {
-        $controller = new BasicController(
+        $controller = new SettingsController(
             'ransomware_detection',
             $this->request,
             $this->userSession,
@@ -86,7 +86,7 @@ class BasicControllerTest extends TestCase
 
     public function testChangeColorMode()
     {
-        $controller = new BasicController(
+        $controller = new SettingsController(
             'ransomware_detection',
             $this->request,
             $this->userSession,

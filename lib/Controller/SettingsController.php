@@ -29,7 +29,7 @@ use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\IRequest;
 
-class BasicController extends OCSController
+class SettingsController extends OCSController
 {
     /** @var IConfig */
     protected $config;

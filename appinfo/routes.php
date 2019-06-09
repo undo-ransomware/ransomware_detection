@@ -10,12 +10,13 @@
  */
 return [
     'routes' => [
-        ['name' => 'recover#index', 'url' => '/', 'verb' => 'GET'],
+        ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
         // File operation controller
         ['name' => 'fileOperation#findAll', 'url' => '/api/{apiVersion}/file-operation', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        // Basic controller
-        ['name' => 'basic#changeColorMode', 'url' => '/api/{apiVersion}/change-color-mode/{colorMode}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'basic#getColorMode', 'url' => '/api/{apiVersion}/get-color-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'basic#getDebugMode', 'url' => '/api/{apiVersion}/get-debug-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'fileOperation#recover', 'url' => '/api/{apiVersion}/file-operation/{id}/recover', 'verb' => 'PUT', 'requirements' => ['apiVersion' => 'v1']],
+        // Settings controller
+        ['name' => 'settings#changeColorMode', 'url' => '/api/{apiVersion}/change-color-mode/{colorMode}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'settings#getColorMode', 'url' => '/api/{apiVersion}/get-color-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'settings#getDebugMode', 'url' => '/api/{apiVersion}/get-debug-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
     ],
 ];
