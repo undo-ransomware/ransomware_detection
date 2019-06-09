@@ -2,7 +2,7 @@
 	"name": "ransomware_detection",
 	"version": "0.1.0",
 	"description": "[![Build Status](https://travis-ci.com/undo-ransomware/ransomware_detection.svg?branch=master)](https://travis-ci.com/undo-ransomware/ransomware_detection)\r [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/undo-ransomware/ransomware_detection/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/undo-ransomware/ransomware_detection/?branch=master)\r [![codecov](https://codecov.io/gh/undo-ransomware/ransomware_detection/branch/master/graph/badge.svg)](https://codecov.io/gh/undo-ransomware/ransomware_detection)",
-	"main": "index.js",
+	"main": "main.js",
 	"directories": {
 		"lib": "lib",
 		"test": "tests"
@@ -39,7 +39,9 @@
 		"nextcloud-axios": "^0.2.0",
 		"nextcloud-server": "^0.15.9",
 		"nextcloud-vue": "^0.11.4",
+		"time-elements": "^2.0.2",
 		"vue": "^2.6.10",
+		"vue-moment": "^4.0.0",
 		"vue-router": "^3.0.6",
 		"vuex-router-sync": "^5.0.0"
 	},

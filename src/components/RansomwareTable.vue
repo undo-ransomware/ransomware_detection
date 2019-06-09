@@ -3,7 +3,7 @@
         <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
         <vaadin-grid-column width="5em" flex-grow="0" id="status" header="Status"></vaadin-grid-column>
         <vaadin-grid-sort-column width="9em" path="originalName"></vaadin-grid-sort-column>
-        <vaadin-grid-sort-column width="9em" path="timestamp"></vaadin-grid-sort-column>
+        <vaadin-grid-sort-column width="9em" path="timestamp" id="time"></vaadin-grid-sort-column>
     </vaadin-grid>
 </template>
 
@@ -14,6 +14,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-sort-column.js';
 import '@vaadin/vaadin-grid/vaadin-grid-column.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
+import 'time-elements/dist/time-elements';
 
 export default {
     name: 'RansomwareTable',
@@ -21,9 +22,17 @@ export default {
         document.querySelector('#status').renderer = (root, grid, rowData) => {
             const icon = document.createElement('iron-icon');
             icon.setAttribute('icon', 'verified-user');
-            icon.classList.add('good');
+            icon.style = "color: green;";
             root.innerHTML = '';
             root.appendChild(icon);
+        }
+
+        document.querySelector('#time').renderer = (root, grid, rowData) => {
+            const localTime = document.createElement('local-time');
+            localTime.setAttribute('datetime', moment.unix(rowData.item.timestamp).format("YYYY-MM-DDTHH:mm:ss.SSS"));
+            localTime.textContent = moment.unix(rowData.item.timestamp).format('dddd, MMMM Do YYYY, HH:mm:ss');
+            root.innerHTML = '';
+            root.appendChild(localTime);
         }
 
         this.fetchData();
@@ -49,15 +58,6 @@ export default {
 
 <style scoped>
     vaadin-grid {
-        width: 100%;
         height: 100%;
-    }
-
-    .good {
-        fill: green !important;
-    }
-
-    .bad {
-        color: red;
     }
 </style>

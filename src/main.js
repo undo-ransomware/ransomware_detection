@@ -4,6 +4,7 @@ import "regenerator-runtime/runtime";
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueMoment from 'vue-moment'
 import {sync} from 'vuex-router-sync'
 
 
@@ -20,6 +21,8 @@ Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
+
+Vue.use(require('vue-moment'));
 
 /* eslint-disable-next-line no-new */
 new Vue({
