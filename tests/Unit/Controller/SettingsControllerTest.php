@@ -54,7 +54,7 @@ class SettingsControllerTest extends TestCase
             ->getMock();
     }
 
-    public function testGetDebugMode()
+    public function testGetSettings()
     {
         $controller = new SettingsController(
             'ransomware_detection',
@@ -64,12 +64,12 @@ class SettingsControllerTest extends TestCase
             'john'
         );
 
-        $result = $controller->getDebugMode();
+        $result = $controller->getSettings();
         $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
+        $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }
 
-    public function testGetColorMode()
+    public function testSetSettings()
     {
         $controller = new SettingsController(
             'ransomware_detection',
@@ -79,23 +79,8 @@ class SettingsControllerTest extends TestCase
             'john'
         );
 
-        $result = $controller->getColorMode();
+        $result = $controller->setSettings(['settings' => ['color' => 1, 'debug' => 0]]);
         $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
-    }
-
-    public function testChangeColorMode()
-    {
-        $controller = new SettingsController(
-            'ransomware_detection',
-            $this->request,
-            $this->userSession,
-            $this->config,
-            'john'
-        );
-
-        $result = $controller->changeColorMode(1);
-        $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
+        $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }
 }
