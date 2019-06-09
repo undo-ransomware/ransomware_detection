@@ -75,7 +75,7 @@ class SettingsController extends Controller
         $color = $this->config->getUserValue($this->userId, Application::APP_ID, 'color_mode', 0);
         $settings = new Settings($debug, $color);
 
-        return new JSONResponse(['settings' => $settings], Http::STATUS_OK);
+        return new JSONResponse($settings, Http::STATUS_OK);
     }
 
     /**
@@ -86,8 +86,8 @@ class SettingsController extends Controller
      *
      * @return JSONResponse
      */
-    public function setSettings($settings) {
-        $this->config->setUserValue($this->userId, Application::APP_ID, 'color_mode', $settings['color']);
+    public function setSettings($color, $debug) {
+        $this->config->setUserValue($this->userId, Application::APP_ID, 'color_mode', $color);
 
         return new JSONResponse(null, Http::STATUS_OK);
     }

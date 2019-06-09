@@ -79,7 +79,7 @@ class SettingsControllerTest extends TestCase
             'john'
         );
 
-        $result = $controller->setSettings(['color' => 1, 'debug' => 0]);
+        $result = $controller->setSettings(1, 0);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }

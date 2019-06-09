@@ -114,7 +114,7 @@ class FileOperationController extends Controller
     {
         $file = $this->service->find($id);
 
-        return new JSONResponse(['fileOperation' => $file], Http::STATUS_OK);
+        return new JSONResponse($file, Http::STATUS_OK);
     }
 
     /**
