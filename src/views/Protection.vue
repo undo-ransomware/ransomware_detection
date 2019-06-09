@@ -26,10 +26,10 @@ export default {
 
 <style scoped>
 	#protection-status {
-		height: 30vh;
+		height: 40vh;
 	}
 	#services {
-		height: 60vh;
+		height: 50vh;
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
