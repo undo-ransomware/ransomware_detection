@@ -20,7 +20,7 @@
 
 namespace OCA\RansomwareDetection\Model;
 
-class Settings {
+class Settings implements \JsonSerializable {
     /**
      * The debug state of the app.
      */
@@ -50,5 +50,10 @@ class Settings {
 
     public function setColor() {
         $this->color = $color;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

@@ -99,7 +99,22 @@ class FileOperationController extends Controller
     {
         $files = $this->service->findAll();
 
-        return new JSONResponse($files, Http::STATUS_ACCEPTED);
+        return new JSONResponse($files, Http::STATUS_OK);
+    }
+
+    /**
+     * Find file with id.
+     *
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     *
+     * @return JSONResponse
+     */
+    public function find($id)
+    {
+        $file = $this->service->find($id);
+
+        return new JSONResponse(['fileOperation' => $file], Http::STATUS_OK);
     }
 
     /**

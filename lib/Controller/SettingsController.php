@@ -22,14 +22,15 @@
 namespace OCA\RansomwareDetection\Controller;
 
 use OCA\RansomwareDetection\AppInfo\Application;
+use OCA\RansomwareDetection\Model\Settings;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\OCSController;
+use OCP\AppFramework\Controller;
 use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\IRequest;
 
-class SettingsController extends OCSController
+class SettingsController extends Controller
 {
     /** @var IConfig */
     protected $config;
@@ -62,47 +63,32 @@ class SettingsController extends OCSController
     }
 
     /**
-     * Get debug mode.
+     * Get settings.
      *
-     * @NoAdminRequired
-     *
-     * @return JSONResponse
-     */
-    public function getDebugMode()
-    {
-        $debugMode = $this->config->getAppValue(Application::APP_ID, 'debug', 0);
-
-        return new JSONResponse(['status' => 'success', 'message' => 'Get debug mode.', 'debugMode' => $debugMode], Http::STATUS_ACCEPTED);
-    }
-
-    /**
-     * Get color mode.
-     *
-     * @NoAdminRequired
      * @NoCSRFRequired
+     * @NoAdminRequired
      *
      * @return JSONResponse
      */
-    public function getColorMode()
-    {
-        $colorMode = $this->config->getUserValue($this->userId, Application::APP_ID, 'color_mode', 0);
+    public function getSettings() {
+        $debug = $this->config->getAppValue(Application::APP_ID, 'debug', 0);
+        $color = $this->config->getUserValue($this->userId, Application::APP_ID, 'color_mode', 0);
+        $settings = new Settings($debug, $color);
 
-        return new JSONResponse(['status' => 'success', 'message' => 'Get color mode.', 'colorMode' => $colorMode], Http::STATUS_ACCEPTED);
+        return new JSONResponse(['settings' => $settings], Http::STATUS_OK);
     }
 
     /**
-     * Changes color mode.
+     * Set settings.
      *
+     * @NoCSRFRequired
      * @NoAdminRequired
-     *
-     * @param int $colorMode
      *
      * @return JSONResponse
      */
-    public function changeColorMode($colorMode)
-    {
-        $this->config->setUserValue($this->userId, Application::APP_ID, 'color_mode', $colorMode);
+    public function setSettings($settings) {
+        $this->config->setUserValue($this->userId, Application::APP_ID, 'color_mode', $settings['color']);
 
-        return new JSONResponse(['status' => 'success', 'message' => 'Color mode changed.'], Http::STATUS_ACCEPTED);
+        return new JSONResponse(null, Http::STATUS_OK);
     }
 }

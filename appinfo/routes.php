@@ -13,10 +13,10 @@ return [
         ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
         // File operation controller
         ['name' => 'fileOperation#findAll', 'url' => '/api/{apiVersion}/file-operation', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'fileOperation#find', 'url' => '/api/{apiVersion}/file-operation/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
         ['name' => 'fileOperation#recover', 'url' => '/api/{apiVersion}/file-operation/{id}/recover', 'verb' => 'PUT', 'requirements' => ['apiVersion' => 'v1']],
         // Settings controller
-        ['name' => 'settings#changeColorMode', 'url' => '/api/{apiVersion}/change-color-mode/{colorMode}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'settings#getColorMode', 'url' => '/api/{apiVersion}/get-color-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'settings#getDebugMode', 'url' => '/api/{apiVersion}/get-debug-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'settings#setSettings', 'url' => '/api/{apiVersion}/settings', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'settings#getSettings', 'url' => '/api/{apiVersion}/settings', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
     ],
 ];
