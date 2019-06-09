@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "." + {"0":"c3e8168e1bf22810c21f","2":"c2cd95533ef877e8c747","3":"81b7d37b26032e8cd4ea","4":"f0ce41c16dce0a368cda","5":"2a71de2748f69976f1ab","6":"e4270813634c3807d564"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "." + {"0":"c3e8168e1bf22810c21f","1":"b1e861aaad67849dc796","2":"c2cd95533ef877e8c747","3":"147ce8fdb266ec38926a","4":"0e3dfdddfb9027b1ad24","5":"7e1295482894299f8f4f"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -34399,15 +34399,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Protection = function Protection() {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(6), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./views/Protection */ "./src/views/Protection.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./views/Protection */ "./src/views/Protection.vue"));
 };
 
 var Recover = function Recover() {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./views/Recover */ "./src/views/Recover.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./views/Recover */ "./src/views/Recover.vue"));
 };
 
 var History = function History() {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(6), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./views/History */ "./src/views/History.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./views/History */ "./src/views/History.vue"));
 };
 
 vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);

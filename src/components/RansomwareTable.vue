@@ -79,6 +79,6 @@ export default {
 
 <style scoped>
     vaadin-grid {
-        height: 100%;
+        border: none;
     }
 </style>
