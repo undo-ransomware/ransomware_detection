@@ -33,7 +33,7 @@
     <navigations>
         <navigation>
             <name>Ransomware recovery</name>
-            <route>ransomware_detection.recover.index</route>
+            <route>ransomware_detection.page.index</route>
         </navigation>
     </navigations>
 </info>
