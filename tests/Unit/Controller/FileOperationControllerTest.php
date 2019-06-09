@@ -97,7 +97,7 @@ class FileOperationControllerTest extends TestCase
 
         $result = $controller->findAll();
         $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
+        $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }
 
     public function dataRecover()
