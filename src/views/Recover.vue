@@ -1,6 +1,6 @@
 <template>
     <AppContent>
-    	<RansomwareTable></RansomwareTable>
+    	<RansomwareTable :link="fileOperationsUrl"></RansomwareTable>
     </AppContent>
 </template>
 
@@ -13,6 +13,11 @@ export default {
     components: {
 		AppContent,
         RansomwareTable
+    },
+    computed: {
+        fileOperationsUrl() {
+            return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operation');
+        }
     }
 }
 </script>

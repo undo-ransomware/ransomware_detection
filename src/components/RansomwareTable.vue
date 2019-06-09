@@ -2,8 +2,8 @@
     <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
         <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
         <vaadin-grid-column width="5em" flex-grow="0" id="status" header="Status"></vaadin-grid-column>
-        <vaadin-grid-sort-column width="9em" path="originalName"></vaadin-grid-sort-column>
-        <vaadin-grid-sort-column width="9em" path="timestamp" id="time"></vaadin-grid-sort-column>
+        <vaadin-grid-sort-column width="9em" path="originalName" header="Name"></vaadin-grid-sort-column>
+        <vaadin-grid-sort-column width="9em" path="timestamp" id="time" header="Geändert"></vaadin-grid-sort-column>
     </vaadin-grid>
 </template>
 
@@ -15,14 +15,38 @@ import '@vaadin/vaadin-grid/vaadin-grid-column.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import 'time-elements/dist/time-elements';
+import axios from 'nextcloud-axios'
 
 export default {
     name: 'RansomwareTable',
+    props: {
+        link: {
+			type: String,
+			default: '',
+			required: true
+		}
+    },
     mounted () {
         document.querySelector('#status').renderer = (root, grid, rowData) => {
             const icon = document.createElement('iron-icon');
-            icon.setAttribute('icon', 'verified-user');
-            icon.style = "color: green;";
+            switch (rowData.item.status) {
+                case 0:
+                    icon.setAttribute('icon', 'cached');
+                    icon.style = "color: blue;";
+                    break;
+                case 1:
+                    icon.setAttribute('icon', 'verified-user');
+                    icon.style = "color: green;";
+                    break;
+                case 2:
+                    icon.setAttribute('icon', 'error');
+                    icon.style = "color: red;";
+                    break;
+                default:
+                    icon.setAttribute('icon', 'cached');
+                    icon.style = "color: blue;";
+                    break;
+            }
             root.innerHTML = '';
             root.appendChild(icon);
         }
@@ -40,17 +64,14 @@ export default {
     methods: {
         fetchData() {
             const grid = document.querySelector('vaadin-grid');
-            fetch(new Request(this.fileOperationsUrl))
-                .then(response => response.json())
-                .then(json => {
-                    grid.items = json;
-                })
-                .catch( error => { console.log(error); });
-        }
-    },
-    computed: {
-        fileOperationsUrl() {
-            return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operation');
+            axios({
+				method: 'GET',
+				url: this.link
+            })
+            .then(json => {
+                grid.items = json.data;
+            })
+            .catch( error => { console.error(error); });
         }
     }
 }
