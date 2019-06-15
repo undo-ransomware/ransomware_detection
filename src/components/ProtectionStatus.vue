@@ -1,5 +1,5 @@
 <template>
-    <paper-card>
+    <paper-card heading="Protection Status">
         <div class="card-content">
             <h1>
                 <iron-icon icon="verified-user"></iron-icon><span>You are protected.</span>
@@ -19,18 +19,20 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     paper-card {
+        --paper-card-background-color: #247209;
         width: 100%;
         height: 100%;
-        background-color: #fff;
-        color: #247209;
-    }
-    .card-content {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        box-shadow: none;
+        --paper-card-header-color: #fff;
+        --paper-card-content: {
+            height: 100%;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        };
     }
     h1 {
         font-size: 48px;
