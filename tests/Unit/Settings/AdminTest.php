@@ -59,7 +59,7 @@ class AdminTest extends TestCase {
 
         $this->config->expects($this->any())
             ->method('getAppValue')
-            ->withConsecutive([Application::APP_ID, 'serivce_uri', $this->anything()])
+            ->withConsecutive([Application::APP_ID, 'service_uri', $this->anything()])
             ->willReturnOnConsecutiveCalls($serviceUri);
 
 		$expected = new TemplateResponse(Application::APP_ID, 'admin',
