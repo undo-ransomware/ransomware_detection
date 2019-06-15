@@ -32,40 +32,22 @@ use OCP\IRequest;
 
 class ServiceController extends Controller
 {
-    /** @var IConfig */
-    protected $config;
-
-    /** @var IUserSession */
-    protected $userSession;
-
     /** @var ServiceWatcher */
     protected $serviceWatcher;
-
-    /** @var int */
-    private $userId;
 
     /**
      * @param string               $appName
      * @param IRequest             $request
-     * @param IUserSession         $userSession
-     * @param IConfig              $config
      * @param ServiceWatcher       $serviceWatcher
-     * @param string               $userId
      */
     public function __construct(
         $appName,
         IRequest $request,
-        IUserSession $userSession,
-        IConfig $config,
-        ServiceWatcher $serviceWatcher,
-        $userId
+        ServiceWatcher $serviceWatcher
     ) {
         parent::__construct($appName, $request);
 
-        $this->config = $config;
-        $this->userSession = $userSession;
         $this->serviceWatcher = $serviceWatcher;
-        $this->userId = $userId;
     }
 
     /**

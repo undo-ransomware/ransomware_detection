@@ -4,7 +4,7 @@
         </ProtectionStatus>
 		<div id="services">
 			<ServiceStatus :link="detectionServiceUrl" class="service"></ServiceStatus>
-			<ServiceStatus :link="detectionServiceUrl" class="service"></ServiceStatus>
+			<ServiceStatus :link="monitorServiceUrl" class="service"></ServiceStatus>
 		</div>
     </AppContent>
 </template>
@@ -24,6 +24,9 @@ export default {
     computed: {
         detectionServiceUrl() {
             return OC.generateUrl('/apps/ransomware_detection/api/v1/service/0');
+		},
+		monitorServiceUrl() {
+            return OC.generateUrl('/apps/ransomware_detection/api/v1/service/1');
         }
     }
 }

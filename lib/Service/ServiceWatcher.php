@@ -28,15 +28,16 @@ class ServiceWatcher implements IServiceWatcher {
 
     protected $services = array();
 
-    public function getServices() {
+    public function __construct() {
         array_push($this->services, $this->getDetectionService());
         array_push($this->services, $this->getMonitorService());
+    }
+
+    public function getServices() {
         return $this->services;
     }
 
     public function getService($id) {
-        array_push($this->services, $this->getDetectionService());
-        array_push($this->services, $this->getMonitorService());
         return $this->services[$id];
     }
 

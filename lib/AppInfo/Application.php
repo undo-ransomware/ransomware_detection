@@ -26,6 +26,8 @@ use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\Entropy\Entropy;
 use OCA\RansomwareDetection\StorageWrapper;
 use OCA\RansomwareDetection\Service\FileOperationService;
+use OCA\RansomwareDetection\Service\ServiceWatcher;
+use OCA\RansomwareDetection\Controller\ServiceController;
 use OCA\RansomwareDetection\Mapper\FileOperationMapper;
 use OCP\AppFramework\App;
 use OCP\Files\Storage\IStorage;
@@ -59,6 +61,19 @@ class Application extends App
             return new FileOperationService(
                 $c->query('FileOperationMapper'),
                 $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
+            );
+        });
+
+        $container->registerService('ServiceWatcher', function ($c) {
+            return new ServiceWatcher();
+        });
+
+        // controller
+        $container->registerService('ServiceController', function ($c) {
+            return new ServiceController(
+                $c->query('AppName'),
+                $c->query('Request'),
+                $c->query('ServiceWatcher')
             );
         });
 
