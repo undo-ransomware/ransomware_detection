@@ -46,30 +46,24 @@ class AdminTest extends TestCase {
     public function dataGetForm()
     {
         return [
-            ['suspicionLevel' => 2, 'minimumSequenceLength' => 5, 'expireDays' => 7, 'activeSuspicionLevel' => ['code' => 2, 'name' => 'Suspicious'], 'suspicionLevels' => [['code' => 1, 'name' => 'Maybe suspicious']]],
-            ['suspicionLevel' => 1, 'minimumSequenceLength' => 5, 'expireDays' => 7, 'activeSuspicionLevel' => ['code' => 1, 'name' => 'Maybe suspicious'], 'suspicionLevels' => [['code' => 2, 'name' => 'Suspicious']]],
-            ['suspicionLevel' => 3, 'minimumSequenceLength' => 5, 'expireDays' => 7, 'activeSuspicionLevel' => [], 'suspicionLevels' => [['code' => 1, 'name' => 'Maybe suspicious'], ['code' => 2, 'name' => 'Suspicious']]],
+            ['serviceUri' => 'http://localhost:8080/api/status']
         ];
     }
 
     /**
      * @dataProvider dataGetForm
      *
-     * @param int     $suspicionLevel
-     * @param int     $minimumSequenceLength
-     * @param int     $expireDays
-     * @param array   $activeSuspicionLevel
-     * @param array   $suspicionLevels
+     * @param int     $serviceUri
      */
-	public function testGetForm($suspicionLevel, $minimumSequenceLength, $expireDays, $activeSuspicionLevel, $suspicionLevels) {
+	public function testGetForm($serviceUri) {
 
         $this->config->expects($this->any())
             ->method('getAppValue')
-            ->withConsecutive([Application::APP_ID, 'suspicion_level', $this->anything()], [Application::APP_ID, 'minimum_sequence_length', $this->anything()], [Application::APP_ID, 'expire_days', $this->anything()])
-            ->willReturnOnConsecutiveCalls($suspicionLevel, $minimumSequenceLength, $expireDays);
+            ->withConsecutive([Application::APP_ID, 'serivce_uri', $this->anything()])
+            ->willReturnOnConsecutiveCalls($serviceUri);
 
 		$expected = new TemplateResponse(Application::APP_ID, 'admin',
-                            ['minimum_sequence_length' => $minimumSequenceLength, 'active_suspicion_level' => $activeSuspicionLevel, 'suspicion_levels' => $suspicionLevels, 'expire_days' => $expireDays], '');
+                            ['service_uri' => $serviceUri], '');
 
         $this->assertEquals($expected, $this->admin->getForm());
 	}
