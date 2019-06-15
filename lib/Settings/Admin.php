@@ -47,24 +47,8 @@ class Admin implements ISettings
      */
     public function getForm()
     {
-        $suspicionLevel = $this->config->getAppValue(Application::APP_ID, 'suspicion_level', 2);
-
-        $activeSuspicionLevel = [];
-        $suspicionLevels = [['code' => 1, 'name' => 'Maybe suspicious'], ['code' => 2, 'name' => 'Suspicious']];
-
-        if (intval($suspicionLevel) === 1) {
-            $activeSuspicionLevel = ['code' => 1, 'name' => 'Maybe suspicious'];
-            $suspicionLevels = [['code' => 2, 'name' => 'Suspicious']];
-        } elseif (intval($suspicionLevel) === 2) {
-            $activeSuspicionLevel = ['code' => 2, 'name' => 'Suspicious'];
-            $suspicionLevels = [['code' => 1, 'name' => 'Maybe suspicious']];
-        }
-
         return new TemplateResponse(Application::APP_ID, 'admin', [
-            'minimum_sequence_length' => $this->config->getAppValue(Application::APP_ID, 'minimum_sequence_length', 5),
-            'active_suspicion_level' => $activeSuspicionLevel,
-            'suspicion_levels' => $suspicionLevels,
-            'expire_days' => $this->config->getAppValue(Application::APP_ID, 'expire_days', 7),
+            'service_uri' => $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:8080/api/status'),
         ], '');
     }
 

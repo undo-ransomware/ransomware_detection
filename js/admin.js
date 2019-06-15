@@ -20,40 +20,14 @@
  */
 
 $(document).ready(function() {
-    var timeouts = {
-        'minimum_sequence_length': undefined,
-        'expire_days': undefined
-    };
     // Save number of ransomware files function
     var saveTextInput = function(fieldId, $field) {
         OCP.AppConfig.setValue('ransomware_detection', fieldId, $field.val());
     };
 
-    $('#expire_days').on('change input paste keyup', function(e) {
+    $('#save').on('click', function(e) {
         var $field = $(e.currentTarget);
 
-        if (!_.isUndefined(timeouts['expire_days'])) {
-           clearTimeout(timeouts['expire_days']);
-       }
-
-        timeouts['expire_days'] = setTimeout(_.bind(saveTextInput, this, 'expire_days', $field), 1500);
-    });
-
-    $('#minimum_sequence_length').on('change input paste keyup', function(e) {
-        var $field = $(e.currentTarget);
-
-        if (!_.isUndefined(timeouts['minimum_sequence_length'])) {
-           clearTimeout(timeouts['minimum_sequence_length']);
-       }
-
-        timeouts['minimum_sequence_length'] = setTimeout(_.bind(saveTextInput, this, 'minimum_sequence_length', $field), 1500);
-    });
-
-    $('#sequence-suspicion-level').on('change', function(e) {
-        var $field = $(e.currentTarget);
-
-        $('#sequence-suspicion-level').attr('class', 'suspicion-level-' + $field.val());
-
-        OCP.AppConfig.setValue('ransomware_detection', 'suspicion_level', $field.val());
+        saveTextInput('service_uri', $field);
     });
 });
