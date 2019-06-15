@@ -23,16 +23,8 @@ namespace OCA\RansomwareDetection\AppInfo;
 
 use OC\Files\Filesystem;
 use OCA\RansomwareDetection\Monitor;
-use OCA\RansomwareDetection\Classifier;
-use OCA\RansomwareDetection\Analyzer\SequenceAnalyzer;
-use OCA\RansomwareDetection\Analyzer\SequenceSizeAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileTypeFunnellingAnalyzer;
-use OCA\RansomwareDetection\Analyzer\EntropyFunnellingAnalyzer;
-use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
 use OCA\RansomwareDetection\Entropy\Entropy;
-use OCA\RansomwareDetection\Notification\Notifier;
 use OCA\RansomwareDetection\StorageWrapper;
-use OCA\RansomwareDetection\Connector\Sabre\RequestPlugin;
 use OCA\RansomwareDetection\Service\FileOperationService;
 use OCA\RansomwareDetection\Mapper\FileOperationMapper;
 use OCP\AppFramework\App;

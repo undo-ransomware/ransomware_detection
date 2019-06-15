@@ -18,5 +18,8 @@ return [
         // Settings controller
         ['name' => 'settings#setSettings', 'url' => '/api/{apiVersion}/settings', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']],
         ['name' => 'settings#getSettings', 'url' => '/api/{apiVersion}/settings', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        // Service controller
+        ['name' => 'service#findAll', 'url' => '/api/{apiVersion}/service', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'service#find', 'url' => '/api/{apiVersion}/service/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
     ],
 ];

@@ -52,7 +52,7 @@ export default {
 				url: this.link
             })
             .then(json => {
-                this.serviceStatus = json.data.serviceStatus;
+                this.serviceStatus = json.data.status;
             })
             .catch( error => { console.error(error); });
         }
