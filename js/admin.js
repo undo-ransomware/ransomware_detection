@@ -20,14 +20,9 @@
  */
 
 $(document).ready(function() {
-    // Save number of ransomware files function
-    var saveTextInput = function(fieldId, $field) {
-        OCP.AppConfig.setValue('ransomware_detection', fieldId, $field.val());
-    };
-
     $('#save').on('click', function(e) {
-        var $field = $(e.currentTarget);
+        var $field = $('#service-uri');
 
-        saveTextInput('service_uri', $field);
+        OCP.AppConfig.setValue('ransomware_detection', 'service_uri', $field.val());
     });
 });
