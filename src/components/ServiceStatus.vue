@@ -66,30 +66,21 @@ export default {
         height: 100%;
         background-color: #fff;
         box-shadow: none;
-        --paper-card-header-text: {
-            text-align: center;
-        };
-    }
-
-    .card-content {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    h1 {
-        font-size: 48px;
-    }
-
-    iron-icon {
-        width: 66px;
-        height: 66px;
-        &.good {
-            color: #247209;
-        }
-        &.bad {
-            color: red;
+        .card-content {
+            height: calc(100% - 52px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            iron-icon {
+                width: 66px;
+                height: 66px;
+                &.good {
+                    color: #247209;
+                }
+                &.bad {
+                    color: red;
+                }
+            }
         }
     }
 

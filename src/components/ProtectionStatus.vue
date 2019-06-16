@@ -21,22 +21,24 @@ export default {
 
 <style lang="scss" scoped>
     paper-card {
+        .card-content {
+            height: calc(100% - 52px);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
         --paper-card-background-color: #247209;
         width: 100%;
         height: 100%;
         box-shadow: none;
         --paper-card-header-color: #fff;
-        --paper-card-content: {
-            height: 100%;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        };
     }
+    
     h1 {
         font-size: 48px;
     }
+
     iron-icon {
         width: 66px;
         height: 66px;
