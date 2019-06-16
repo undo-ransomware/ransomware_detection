@@ -18,33 +18,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace OCA\RansomwareDetection\Service;
+namespace OCA\RansomwareDetection\Model;
 
-use OCA\RansomwareDetection\Model\Service;
-use OCA\RansomwareDetection\Model\ServiceStatus;
+class Detection implements \JsonSerializable {
+    private $fileOperations;
 
-class ServiceWatcher implements IServiceWatcher {
-
-    protected $services = array();
-
-    public function __construct() {
-        array_push($this->services, $this->getDetectionService());
-        array_push($this->services, $this->getMonitorService());
+    public function __construct($fileOperations) {
+        $this->fileOperations = $fileOperations;
     }
 
-    public function getServices() {
-        return $this->services;
+    public function getFileOperations() {
+        return $this->fileOperations;
     }
 
-    public function getService($id) {
-        return $this->services[$id];
+    public function setFileOperations($fileOperations) {
+        $this->fileOperations = $fileOperations;
     }
 
-    private function getDetectionService() {
-        return new Service("Detection Service", ServiceStatus::ONLINE);
-    }
-
-    private function getMonitorService() {
-        return new Service("Monitor Service", ServiceStatus::ONLINE);
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

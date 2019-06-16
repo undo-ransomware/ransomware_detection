@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @copyright Copyright (c) 2019 Matthias Held <matthias.held@uni-konstanz.de>
  * @author Matthias Held <matthias.held@uni-konstanz.de>

@@ -20,31 +20,18 @@
 
 namespace OCA\RansomwareDetection\Service;
 
-use OCA\RansomwareDetection\Model\Service;
-use OCA\RansomwareDetection\Model\ServiceStatus;
+use OCA\RansomwareDetection\Model\Detection;
 
-class ServiceWatcher implements IServiceWatcher {
+class DetectionService {
 
-    protected $services = array();
-
-    public function __construct() {
-        array_push($this->services, $this->getDetectionService());
-        array_push($this->services, $this->getMonitorService());
+    public function getDetections() {
+        return [
+            new Detection(array()),
+            new Detection(array())
+        ];
     }
 
-    public function getServices() {
-        return $this->services;
-    }
-
-    public function getService($id) {
-        return $this->services[$id];
-    }
-
-    private function getDetectionService() {
-        return new Service("Detection Service", ServiceStatus::ONLINE);
-    }
-
-    private function getMonitorService() {
-        return new Service("Monitor Service", ServiceStatus::ONLINE);
+    public function getDetection() {
+        return new Detection(array());
     }
 }

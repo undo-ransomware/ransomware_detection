@@ -21,5 +21,8 @@ return [
         // Service controller
         ['name' => 'service#findAll', 'url' => '/api/{apiVersion}/service', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
         ['name' => 'service#find', 'url' => '/api/{apiVersion}/service/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        // Detection controller
+        ['name' => 'detection#findAll', 'url' => '/api/{apiVersion}/detection', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'detection#find', 'url' => '/api/{apiVersion}/detection/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
     ],
 ];
