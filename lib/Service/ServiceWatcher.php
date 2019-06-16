@@ -56,6 +56,7 @@ class ServiceWatcher implements IServiceWatcher {
         if ($result === false) {
             return new Service("Detection Service", ServiceStatus::OFFLINE);
         } else {
+            //TODO: use json object and check for status info and not only if some thing is returned.
             return new Service("Detection Service", ServiceStatus::ONLINE);
         }
     }
