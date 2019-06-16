@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "." + {"0":"c3e8168e1bf22810c21f","1":"384d207f9c0e7f434cf3","2":"f7a83f523f5ed6aa03b5","3":"19a2863db781dc3e0a13","4":"06dbf2bf4f24eef73a4f","5":"5eb498b9cea112139142","6":"e5bcf64f7ba5c502357d"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "." + {"0":"bf1750019f7a60bf38ba","1":"06bbddcf0f6a4489146a","2":"f7a83f523f5ed6aa03b5","3":"147ce8fdb266ec38926a","6":"ec662bda0e9ba37674e5","7":"0d281dcbe31e62fb29a8"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -34399,11 +34399,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Protection = function Protection() {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./views/Protection */ "./src/views/Protection.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, /*! ./views/Protection */ "./src/views/Protection.vue"));
 };
 
 var Recover = function Recover() {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./views/Recover */ "./src/views/Recover.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(7), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./views/Recover */ "./src/views/Recover.vue"));
 };
 
 var History = function History() {

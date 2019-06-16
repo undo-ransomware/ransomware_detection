@@ -1,8 +1,12 @@
 <template>
-    <paper-card heading="Protection Status">
+    <paper-card heading="Protection Status" v-bind:class="[protection && !detection? 'good' : 'bad']">
         <div class="card-content">
             <h1>
-                <iron-icon icon="verified-user"></iron-icon><span>You are protected.</span>
+                <iron-icon v-if="protection && !detection" icon="verified-user"></iron-icon>
+                <iron-icon v-if="!protection || (protection && detection)" icon="error"></iron-icon>
+                <span v-if="protection && !detection">You are protected.</span>
+                <span v-if="!protection">You are not protected.</span>
+                <span v-if="protection && detection">Ransomware detected.</span>
             </h1>
         </div>
     </paper-card>
@@ -13,9 +17,43 @@ import '@polymer/paper-card/paper-card.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
+import axios from 'nextcloud-axios'
 
 export default {
     name: 'ProtectionStatus',
+    props: {
+        link: {
+			type: String,
+			default: '',
+			required: true
+		}
+    },
+    created() {
+        this.fetchServicesStatus();
+    },
+    data() {
+        return {
+            detection: 0,
+            protection: 0
+        };
+    },
+    methods: {
+        fetchServicesStatus() {
+            axios({
+				method: 'GET',
+				url: this.link
+            })
+            .then(json => {
+                this.protection = 1;
+                for (i = 0; i < json.data.length; i++) {
+                    if (json.data[i].status == 0) {
+                        this.protection = 0;
+                    }
+                }
+            })
+            .catch( error => { console.error(error); });
+        }
+    }
 }
 </script>
 
@@ -28,11 +66,16 @@ export default {
             justify-content: center;
             align-items: center;
         }
-        --paper-card-background-color: #247209;
         width: 100%;
         height: 100%;
         box-shadow: none;
         --paper-card-header-color: #fff;
+        &.good {
+            --paper-card-background-color: #247209;
+        }
+        &.bad {
+            --paper-card-background-color: red;
+        }
     }
     
     h1 {
