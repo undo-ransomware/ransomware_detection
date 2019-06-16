@@ -23,38 +23,20 @@ namespace OCA\RansomwareDetection;
 
 class RequestTemplate implements IRequestTemplate {
     public function get($url) {
-        $request = new HttpRequest();
-        $request->setUrl($url);
-        $request->setMethod(HttpRequest::METH_GET);
-
-        return $request->send();
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);   
+        $result = curl_exec($ch);
+        curl_close($ch);    
+        return $result;
     }
 
     public function post($url, $queryData) {
-        $request = new HttpRequest();
-        $request->setUrl($url);
-        $request->setMethod(HttpRequest::METH_POST);
-
-        $request->setQueryData($queryData);
-
-        return $request->send();
     }
 
     public function put($url, $queryData) {
-        $request = new HttpRequest();
-        $request->setUrl($url);
-        $request->setMethod(HttpRequest::METH_PUT);
-
-        $request->setQueryData($queryData);
-
-        return $request->send();
     }
 
     public function delete($url) {
-        $request = new HttpRequest();
-        $request->setUrl($url);
-        $request->setMethod(HttpRequest::METH_DELETE);
-
-        return $request->send();
     }
 }
