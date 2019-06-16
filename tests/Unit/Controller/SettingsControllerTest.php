@@ -54,7 +54,7 @@ class SettingsControllerTest extends TestCase
             ->getMock();
     }
 
-    public function testGetSettings()
+    public function testFindAll()
     {
         $controller = new SettingsController(
             'ransomware_detection',
@@ -64,12 +64,12 @@ class SettingsControllerTest extends TestCase
             'john'
         );
 
-        $result = $controller->getSettings();
+        $result = $controller->findAll();
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }
 
-    public function testSetSettings()
+    public function testUpdate()
     {
         $controller = new SettingsController(
             'ransomware_detection',
@@ -79,7 +79,7 @@ class SettingsControllerTest extends TestCase
             'john'
         );
 
-        $result = $controller->setSettings(1, 0);
+        $result = $controller->update(1, 0);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }
