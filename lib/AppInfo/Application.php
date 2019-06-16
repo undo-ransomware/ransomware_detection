@@ -67,7 +67,9 @@ class Application extends App
         });
 
         $container->registerService('ServiceWatcher', function ($c) {
-            return new ServiceWatcher();
+            return new ServiceWatcher(
+                $c->query('IConfig')
+            );
         });
 
         $container->registerService('DetectionService', function ($c) {

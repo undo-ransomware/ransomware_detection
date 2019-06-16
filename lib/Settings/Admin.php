@@ -48,7 +48,7 @@ class Admin implements ISettings
     public function getForm()
     {
         return new TemplateResponse(Application::APP_ID, 'admin', [
-            'service_uri' => $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:8080/api/status'),
+            'service_uri' => $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:8080/api'),
         ], '');
     }
 

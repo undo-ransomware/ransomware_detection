@@ -20,14 +20,23 @@
 
 namespace OCA\RansomwareDetection\Service;
 
+use OCA\RansomwareDetection\AppInfo\Application;
+use OCA\RansomwareDetection\RequestTemplate;
 use OCA\RansomwareDetection\Model\Service;
 use OCA\RansomwareDetection\Model\ServiceStatus;
+use OCP\IConfig;
 
 class ServiceWatcher implements IServiceWatcher {
 
     protected $services = array();
 
-    public function __construct() {
+    /** @var IConfig */
+    protected $config;
+
+    public function __construct(
+        IConfig $config
+    ) {
+        $this->config = $config;
         array_push($this->services, $this->getDetectionService());
         array_push($this->services, $this->getMonitorService());
     }
@@ -41,7 +50,14 @@ class ServiceWatcher implements IServiceWatcher {
     }
 
     private function getDetectionService() {
-        return new Service("Detection Service", ServiceStatus::ONLINE);
+        $requestTemplate = new RequestTemplate();
+        $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:8080/api');
+        $result = $requestTemplate->get($serviceUri . "/status");
+        if ($result === false) {
+            return new Service("Detection Service", ServiceStatus::OFFLINE);
+        } else {
+            return new Service("Detection Service", ServiceStatus::ONLINE);
+        }
     }
 
     private function getMonitorService() {
