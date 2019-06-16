@@ -30,7 +30,7 @@ use OCA\RansomwareDetection\Service\ServiceWatcher;
 use OCA\RansomwareDetection\Service\DetectionService;
 use OCA\RansomwareDetection\Controller\ServiceController;
 use OCA\RansomwareDetection\Controller\DetectionController;
-use OCA\RansomwareDetection\Mapper\FileOperationMapper;
+use OCA\RansomwareDetection\Db\FileOperationMapper;
 use OCP\AppFramework\App;
 use OCP\Files\Storage\IStorage;
 use OCP\Notification\IManager;
@@ -54,7 +54,7 @@ class Application extends App
         // mapper
         $container->registerService('FileOperationMapper', function ($c) {
             return new FileOperationMapper(
-                $c->query('ServerContainer')->getDb()
+                $c->query('ServerContainer')->getDatabaseConnection()
             );
         });
 
@@ -71,7 +71,9 @@ class Application extends App
         });
 
         $container->registerService('DetectionService', function ($c) {
-            return new DetectionService();
+            return new DetectionService(
+                $c->query('FileOperationService')
+            );
         });
 
         // controller

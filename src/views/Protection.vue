@@ -19,7 +19,7 @@ export default {
         AppContent,
 		ProtectionStatus,
 		ServiceStatus
-    },
+	},
     computed: {
 		servicesUrl() {
             return OC.generateUrl('/apps/ransomware_detection/api/v1/service');
@@ -47,5 +47,9 @@ export default {
 	#services .service {
 		width: 40%;
 		height: 40%;
+	}
+	#loading {
+		display: inline-block;
+		vertical-align: sub;
 	}
 </style>

@@ -24,10 +24,19 @@ use OCA\RansomwareDetection\Model\Detection;
 
 class DetectionService {
 
+    /** @var FileOperationService */
+    protected $service;
+
+    public function __construct(
+        FileOperationService $service
+    ) 
+    {
+        $this->service = $service;
+    }
+
     public function getDetections() {
         return [
-            new Detection(array()),
-            new Detection(array())
+            new Detection($this->service->findAll())
         ];
     }
 
