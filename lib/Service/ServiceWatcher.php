@@ -62,6 +62,7 @@ class ServiceWatcher implements IServiceWatcher {
     }
 
     private function getMonitorService() {
+        //TODO: check logs for errors or exceptions?
         return new Service("Monitor Service", ServiceStatus::ONLINE);
     }
 }
