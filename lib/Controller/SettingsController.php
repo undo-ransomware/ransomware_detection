@@ -70,7 +70,7 @@ class SettingsController extends Controller
      *
      * @return JSONResponse
      */
-    public function getSettings() {
+    public function findAll() {
         $debug = $this->config->getAppValue(Application::APP_ID, 'debug', 0);
         $color = $this->config->getUserValue($this->userId, Application::APP_ID, 'color_mode', 0);
         $settings = new Settings($debug, $color);
@@ -86,7 +86,7 @@ class SettingsController extends Controller
      *
      * @return JSONResponse
      */
-    public function setSettings($color, $debug) {
+    public function update($color, $debug) {
         $this->config->setUserValue($this->userId, Application::APP_ID, 'color_mode', $color);
 
         return new JSONResponse(null, Http::STATUS_OK);
