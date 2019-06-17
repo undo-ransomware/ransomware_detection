@@ -138,7 +138,7 @@ class FileOperationController extends Controller
                     if ($this->deleteFromStorage($filePath)) {
                         $this->service->deleteById($id);
 
-                        return new JSONResponse(null, Http::STATUS_OK);
+                        return new JSONResponse(null, Http::STATUS_NO_CONTENT);
                     } else {
                         // File cannot be deleted
                         return new JSONResponse(null, Http::STATUS_INTERNAL_SERVER_ERROR);
@@ -154,7 +154,7 @@ class FileOperationController extends Controller
                         if (Trashbin::restore($path, $candidate['name'], $candidate['mtime']) !== false) {
                             $this->service->deleteById($id);
 
-                            return new JSONResponse(null, Http::STATUS_OK);
+                            return new JSONResponse(null, Http::STATUS_NO_CONTENT);
                         }
                         // File does not exist
                         return new JSONResponse(null, Http::STATUS_BAD_REQUEST);
@@ -166,7 +166,7 @@ class FileOperationController extends Controller
                 case Monitor::RENAME:
                     $this->service->deleteById($id);
 
-                    return new JSONResponse(null, Http::STATUS_OK);
+                    return new JSONResponse(null, Http::STATUS_NO_CONTENT);
                     break;
                 case Monitor::CREATE:
                     // Recover new created folders
@@ -174,7 +174,7 @@ class FileOperationController extends Controller
                     if ($this->deleteFromStorage($filePath)) {
                         $this->service->deleteById($id);
 
-                        return new JSONResponse(null, Http::STATUS_OK);
+                        return new JSONResponse(null, Http::STATUS_NO_CONTENT);
                     } else {
                         // File cannot be deleted
                         return new JSONResponse(null, Http::STATUS_INTERNAL_SERVER_ERROR);
@@ -184,7 +184,7 @@ class FileOperationController extends Controller
                     // All other commands need no recovery
                     $this->service->deleteById($id);
 
-                    return new JSONResponse(null, Http::STATUS_OK);
+                    return new JSONResponse(null, Http::STATUS_NO_CONTENT);
                     break;
             }
         } catch (\OCP\AppFramework\Db\MultipleObjectsReturnedException $exception) {
