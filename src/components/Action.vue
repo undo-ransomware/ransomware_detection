@@ -33,7 +33,8 @@ export default {
 
 	methods: {
 		onClickActionButton: function() {
-			axios({
+			console.log(document.querySelector('#ransomware-table').selectedItems);
+			/*axios({
 				method: this.type || 'GET',
 				url: this.link
 			})
@@ -50,7 +51,7 @@ export default {
 				})
 				.catch(() => {
 					OC.Notification.showTemporary(t('notifications', 'Failed to perform action'))
-				})
+				});*/
 		}
 	}
 }
