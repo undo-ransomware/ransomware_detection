@@ -72,6 +72,7 @@ export default {
                 for(i = 0; i < json.data.length; i++) {
                     grid.items = json.data[i].fileOperations;
                 }
+                this.$emit('table-state-changed');
             })
             .catch( error => { console.error(error); });
         }

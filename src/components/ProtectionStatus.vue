@@ -50,6 +50,7 @@ export default {
                         this.protection = 0;
                     }
                 }
+                this.$emit('protection-state-changed');
             })
             .catch( error => { console.error(error); });
         }

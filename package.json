@@ -32,8 +32,10 @@
 	"dependencies": {
 		"@polymer/iron-icon": "^3.0.1",
 		"@polymer/iron-icons": "^3.0.1",
+		"@polymer/iron-pages": "^3.0.1",
 		"@polymer/paper-button": "^3.0.1",
 		"@polymer/paper-card": "^3.0.1",
+		"@polymer/paper-spinner": "^3.0.2",
 		"@vaadin/vaadin-grid": "^5.4.3",
 		"core-js": "^3.0.1",
 		"nextcloud-axios": "^0.2.0",

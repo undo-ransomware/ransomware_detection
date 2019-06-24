@@ -70,6 +70,7 @@ export default {
             })
             .then(json => {
                 grid.items = json.data;
+                this.$emit('table-state-changed');
             })
             .catch( error => { console.error(error); });
         }

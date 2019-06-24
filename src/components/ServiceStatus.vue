@@ -53,6 +53,7 @@ export default {
             })
             .then(json => {
                 this.serviceStatus = json.data.status;
+                this.$emit('service-state-changed');
             })
             .catch( error => { console.error(error); });
         }
