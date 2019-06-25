@@ -5,7 +5,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueMoment from 'vue-moment'
+import AsyncComputed from 'vue-async-computed'
 import {sync} from 'vuex-router-sync'
+import axios from "axios";
 
 
 // CSP config for webpack dynamic chunk loading
@@ -21,8 +23,12 @@ Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
+Vue.prototype.$axios = axios
 
-Vue.use(require('vue-moment'));
+Vue.use(VueMoment);
+Vue.use(AsyncComputed);
+
+Vue.config.devtools = true
 
 /* eslint-disable-next-line no-new */
 new Vue({

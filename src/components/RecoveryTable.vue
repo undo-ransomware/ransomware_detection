@@ -1,5 +1,5 @@
 <template>
-    <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
+    <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort :items.prop="fileOperations">
         <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
         <vaadin-grid-column width="5em" flex-grow="0" id="status" header="Status"></vaadin-grid-column>
         <vaadin-grid-sort-column width="9em" path="originalName" header="Name"></vaadin-grid-sort-column>
@@ -15,16 +15,30 @@ import '@vaadin/vaadin-grid/vaadin-grid-column.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import 'time-elements/dist/time-elements';
-import axios from 'nextcloud-axios'
 
 export default {
     name: 'RecoveryTable',
+    data() {
+        return {
+            fileOperations: this.items
+        }
+    },
     props: {
-        link: {
-			type: String,
-			default: '',
-			required: true
-		}
+        data: {
+            type: Array,
+            required: true
+        }
+    },
+    watch: {
+        data: {
+            immediate: true, 
+            handler (newVal, oldVal) {
+                this.fileOperations = newVal;
+                this.$emit('table-state-changed');
+                document.querySelector('vaadin-grid').clearCache();
+                document.querySelector('vaadin-grid vaadin-grid-selection-column').selectAll = false;
+            }
+        }
     },
     mounted () {
         document.querySelector('#status').renderer = (root, grid, rowData) => {
@@ -57,24 +71,6 @@ export default {
             localTime.textContent = moment.unix(rowData.item.timestamp).format('dddd, MMMM Do YYYY, HH:mm:ss');
             root.innerHTML = '';
             root.appendChild(localTime);
-        }
-
-        this.fetchData();
-    },
-    methods: {
-        fetchData() {
-            const grid = document.querySelector('vaadin-grid');
-            axios({
-				method: 'GET',
-				url: this.link
-            })
-            .then(json => {
-                for(i = 0; i < json.data.length; i++) {
-                    grid.items = json.data[i].fileOperations;
-                }
-                this.$emit('table-state-changed');
-            })
-            .catch( error => { console.error(error); });
         }
     }
 }

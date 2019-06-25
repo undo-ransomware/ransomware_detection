@@ -6,7 +6,7 @@
 			</div>
 			<div class="page">
                 <Header header="History">
-                    <Action id="recover" label="Recover" link="" type="GET" primary></Action>
+                    <Action id="recover" label="Recover" primary></Action>
                 </Header>
                 <HistoryTable id="ransomware-table" :link="fileOperationsUrl" v-on:table-state-changed="tableStateChanged"></HistoryTable>
             </div>

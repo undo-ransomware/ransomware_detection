@@ -28,13 +28,17 @@ export default {
 			type: String,
 			default: '',
 			required: true
+		},
+		data: {
+			type: Object,
+			default: {},
+			required: false
 		}
 	},
 
 	methods: {
 		onClickActionButton: function() {
-			console.log(document.querySelector('#ransomware-table').selectedItems);
-			/*axios({
+			axios({
 				method: this.type || 'GET',
 				url: this.link
 			})
@@ -51,7 +55,7 @@ export default {
 				})
 				.catch(() => {
 					OC.Notification.showTemporary(t('notifications', 'Failed to perform action'))
-				});*/
+				});
 		}
 	}
 }
