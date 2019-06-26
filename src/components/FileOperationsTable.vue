@@ -17,7 +17,7 @@ import '@polymer/iron-icons/iron-icons.js';
 import 'time-elements/dist/time-elements';
 
 export default {
-    name: 'RecoveryTable',
+    name: 'FileOperationsTable',
     data() {
         return {
             fileOperations: this.items
@@ -35,8 +35,10 @@ export default {
             handler (newVal, oldVal) {
                 this.fileOperations = newVal;
                 this.$emit('table-state-changed');
-                document.querySelector('vaadin-grid').clearCache();
-                document.querySelector('vaadin-grid vaadin-grid-selection-column').selectAll = false;
+                if (oldVal !== undefined) {
+                    document.querySelector('vaadin-grid').clearCache();
+                    document.querySelector('vaadin-grid vaadin-grid-selection-column').selectAll = false;
+                }
             }
         }
     },

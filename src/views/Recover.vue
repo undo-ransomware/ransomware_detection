@@ -1,6 +1,6 @@
 <template>
     <AppContent>
-        <iron-pages selected="0">
+        <iron-pages :selected="page">
 			<div id="loading" class="page">
 				<paper-spinner active></paper-spinner>
 			</div>
@@ -8,7 +8,7 @@
                 <Header header="Recover">
                     <RecoverAction v-if="detected" id="recover" label="Recover" v-on:recover="onRecover" primary></RecoverAction>
                 </Header>
-                <RecoveryTable v-if="detected" id="ransomware-table" :data="fileOperations" v-on:table-state-changed="tableStateChanged"></RecoveryTable>
+                <FileOperationsTable v-if="detected" id="ransomware-table" :data="fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
                 <span id="message" v-if="!detected">
                     <iron-icon icon="verified-user"></iron-icon>
                     Nothing found. You are save.
@@ -23,7 +23,7 @@ import '@polymer/paper-spinner/paper-spinner.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
-import RecoveryTable from '../components/RecoveryTable'
+import FileOperationsTable from '../components/FileOperationsTable'
 import Header from '../components/Header'
 import RecoverAction from '../components/RecoverAction'
 import AppContent from 'nextcloud-vue/dist/Components/AppContent'
@@ -32,17 +32,19 @@ export default {
     name: 'Recover',
     components: {
 		AppContent,
-        RecoveryTable,
+        FileOperationsTable,
         Header,
         RecoverAction
     },
     data() {
         return {
             detected: 0,
-            fileOperations: []
+            fileOperations: [],
+            page: 0
         };
     },
-    created() {
+    mounted() {
+        this.page = 0;
         this.fetchDetectionStatus();
         this.fetchData();
     },
@@ -56,18 +58,18 @@ export default {
                 if (json.data.length > 0) {
                     this.detected = 1;
                 } else {
-                    document.querySelector('iron-pages').selectIndex(1);
+                    this.page = 1;
                 }
             })
             .catch( error => { console.error(error); });
         },
         tableStateChanged() {
-            document.querySelector('iron-pages').selectIndex(1);
+            this.page = 1;
         },
         fetchData() {
             this.$axios({
                 method: 'GET',
-                url: this.recoverUrl
+                url: this.fileOperationsUrl
             })
             .then(json => {
                 this.fileOperations = json.data;
@@ -78,23 +80,7 @@ export default {
             const items = document.querySelector('#ransomware-table').items;
             const selected = document.querySelector('#ransomware-table').selectedItems;
             for (var i = 0; i < selected.length; i++) {
-                this.remove(selected[i].id);
-				/*this.$axios({
-					method: this.type || 'GET',
-					url: this.link + '/' + selected[i].id + '/recover'
-				})
-					.then(response => {
-						switch(response.status) {
-							case 204:
-								document.querySelector('#ransomware-table').remove(selected[i].id);
-								break;
-							default:
-								console.log(response);
-								break;
-						}
-					})
-					.catch(() => {
-					});*/
+                this.recover(selected[i].id);
 			}
         },
         remove(id) {
@@ -103,6 +89,25 @@ export default {
                     this.fileOperations.splice(i, 1);
                 }
             }
+        },
+        async recover(id) {
+            await this.$axios({
+					method: 'PUT',
+					url: this.recoverUrl + '/' + id + '/recover'
+				})
+					.then(response => {
+						switch(response.status) {
+							case 204:
+								this.remove(id);
+								break;
+							default:
+								console.log(response);
+								break;
+						}
+					})
+					.catch(error => {
+                        console.error(error);
+					});
         }
     },
     computed: {
@@ -110,6 +115,9 @@ export default {
             return OC.generateUrl('/apps/ransomware_detection/api/v1/detection');
         },
         recoverUrl() {
+            return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operation')
+        },
+        fileOperationsUrl() {
             return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operation')
         }
     }
