@@ -51,13 +51,17 @@ class ServiceWatcher implements IServiceWatcher {
 
     private function getDetectionService() {
         $requestTemplate = new RequestTemplate();
-        $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:8080/api');
-        $result = $requestTemplate->get($serviceUri . "/status");
+        $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
+        $result = $requestTemplate->get($serviceUri . "/info");
         if ($result === false) {
             return new Service("Detection Service", ServiceStatus::OFFLINE);
         } else {
-            //TODO: use json object and check for status info and not only if some thing is returned.
-            return new Service("Detection Service", ServiceStatus::ONLINE);
+            $info = json_decode($result, true);
+            if ($info['status'] === "UP") {
+                return new Service("Detection Service", ServiceStatus::ONLINE);
+            } else {
+                return new Service("Detection Service", ServiceStatus::OFFLINE);
+            }
         }
     }
 
