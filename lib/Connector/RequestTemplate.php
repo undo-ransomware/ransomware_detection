@@ -19,11 +19,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace OCA\RansomwareDetection;
+namespace OCA\RansomwareDetection\Connector;
 
-interface IRequestTemplate {
-    public static function get($url);
-    public static function post($url, $queryData);
-    public static function put($url, $queryData);
-    public static function delete($url);
+use GuzzleHttp\Client;
+
+class RequestTemplate implements IRequestTemplate {
+    public static function get($url) {
+        $client = new Client();
+        return $client->request('GET', $url);   
+    }
+
+    public static function post($url, $queryData) {
+        $client = new Client();
+        return $client->post($url, [
+            'json' => $queryData
+        ]);
+    }
+
+    public static function put($url, $queryData) {
+        $client = new Client();
+        return $client->put($url, [
+            'json' => $queryData
+        ]);
+    }
+
+    public static function delete($url) {
+        $client = new Client();
+        return $client->delete($url);
+    }
 }
