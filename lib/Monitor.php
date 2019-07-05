@@ -236,7 +236,7 @@ class Monitor
                 $fileOperation->setEntropy(0.0);
                 $fileOperation->setStandardDeviation(0.0);
 
-                $this->mapper->insert($fileOperation);
+                $entity = $this->mapper->insert($fileOperation);
 
                 $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
                 $result = RequestTemplate::post($serviceUri . "/file-operation", $entity);
@@ -365,7 +365,7 @@ class Monitor
         $fileOperation->setEntropy(0.0);
         $fileOperation->setStandardDeviation(0.0);
 
-        $this->mapper->insert($fileOperation);
+        $entity = $this->mapper->insert($fileOperation);
 
         $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
         $result = RequestTemplate::post($serviceUri . "/file-operation", $entity);

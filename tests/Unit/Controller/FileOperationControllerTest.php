@@ -123,9 +123,9 @@ class FileOperationControllerTest extends TestCase
         $fileOperationRename->setOriginalName('test.jpg');
 
         return [
-            ['id' => 4, 'fileOperation' => new FileOperation(), 'deleted' => false, 'response' => Http::STATUS_OK],
-            ['id' => 1, 'fileOperation' => $fileOperationRead, 'deleted' => true, 'response' => Http::STATUS_OK],
-            ['id' => 2, 'fileOperation' => $fileOperationRename, 'deleted' => true, 'response' => Http::STATUS_OK],
+            ['id' => 4, 'fileOperation' => new FileOperation(), 'deleted' => false, 'response' => Http::STATUS_NO_CONTENT],
+            ['id' => 1, 'fileOperation' => $fileOperationRead, 'deleted' => true, 'response' => Http::STATUS_NO_CONTENT],
+            ['id' => 2, 'fileOperation' => $fileOperationRename, 'deleted' => true, 'response' => Http::STATUS_NO_CONTENT],
         ];
     }
 
