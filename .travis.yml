@@ -19,6 +19,7 @@ before_install:
   - ./occ status
   - ./occ app:enable $APP_NAME
   - ./occ app:list
+  - composer install
 
 jobs:
   fast_finish: true
