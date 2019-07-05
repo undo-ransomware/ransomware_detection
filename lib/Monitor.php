@@ -237,6 +237,13 @@ class Monitor
                 $fileOperation->setStandardDeviation(0.0);
 
                 $this->mapper->insert($fileOperation);
+
+                $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
+                $result = RequestTemplate::post($serviceUri . "/file-operation", $entity);
+                if ($result->getStatusCode() !== 200) {
+                    $this->logger->error("The detection service is not working correctly.");
+                }
+
                 $this->nestingLevel--;
 
                 return;
@@ -359,6 +366,12 @@ class Monitor
         $fileOperation->setStandardDeviation(0.0);
 
         $this->mapper->insert($fileOperation);
+
+        $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
+        $result = RequestTemplate::post($serviceUri . "/file-operation", $entity);
+        if ($result->getStatusCode() !== 200) {
+            $this->logger->error("The detection service is not working correctly.");
+        }
     }
 
     /**
@@ -390,5 +403,11 @@ class Monitor
         $fileOperation->setStandardDeviation($entropyResult->getStandardDeviation());
 
         $entity = $this->mapper->insert($fileOperation);
+
+        $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
+        $result = RequestTemplate::post($serviceUri . "/file-operation", $entity);
+        if ($result->getStatusCode() !== 200) {
+            $this->logger->error("The detection service is not working correctly.");
+        }
     }
 }
