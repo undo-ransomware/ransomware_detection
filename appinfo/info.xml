@@ -5,7 +5,7 @@
     <name>Ransomware recovery</name>
     <summary><![CDATA[This app offers synchronization monitoring and a file storage scanner for a guided user-controlled one-step ransomare recovery.]]></summary>
     <description><![CDATA[This app monitors file operations during the synchronization to detect ransomware attacks and also offers a post infection file storage scanner, which works even if it happend that you didn't have this app installed during an attack. This is done by using generic indicators for a guided user-controlled one-step recovery utilizing the integrated file versioning methods.]]></description>
-    <version>0.6.4</version>
+    <version>0.6.5</version>
     <licence>agpl</licence>
     <author mail="matthias.held@uni-konstanz.de">Matthias Held</author>
     <namespace>RansomwareDetection</namespace>

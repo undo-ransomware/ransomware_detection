@@ -245,7 +245,7 @@ class Monitor
                     if ($result->getStatusCode() !== 200) {
                         $this->logger->error("The detection service is not working correctly.");
                     }
-                } catch (ConnectionException $ex) {
+                } catch (ConnectException $ex) {
                     //TODO: Notify the use by the Notifier
                     $this->logger->error("No connection to the detection service.");
                 }
@@ -379,7 +379,7 @@ class Monitor
             if ($result->getStatusCode() !== 200) {
                 $this->logger->error("The detection service is not working correctly.");
             }
-        } catch (ConnectionException $ex) {
+        } catch (ConnectException $ex) {
             //TODO: Notify the use by the Notifier
             $this->logger->error("No connection to the detection service.");
         }
@@ -421,7 +421,7 @@ class Monitor
             if ($result->getStatusCode() !== 200) {
                 $this->logger->error("The detection service is not working correctly.");
             }
-        } catch (ConnectionException $ex) {
+        } catch (ConnectException $ex) {
             //TODO: Notify the use by the Notifier
             $this->logger->error("No connection to the detection service.");
         }
