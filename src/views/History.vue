@@ -39,6 +39,7 @@ export default {
     mounted() {
         this.page = 0;
         this.fetchData();
+        setInterval(() => this.fetchData(), 3000);
     },
     computed: {
         recoverUrl() {

@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "." + {"0":"fc590c97be7956e40c44","1":"81f800c4856a79a199c8","3":"66368b3eb394916cb4c0","4":"38afb15d9b45b2c90d56","5":"8f7c61b8118455605647","6":"274ff1a928d7d4113cd9","7":"e73025244eb50589f103"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "." + {"0":"fc590c97be7956e40c44","1":"81f800c4856a79a199c8","2":"0bccefa9c47b83d1a7b6","3":"7fff26d9f59ba5b845b3","4":"4b07a581d6ae4f152c1b","5":"067ace57cb3dcfd11200","6":"c463e6b02472f15825bf"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2026,7 +2026,7 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         id: 'app-category-history',
         classes: [],
-        icon: 'icon-category-disabled',
+        icon: 'icon-history',
         router: {
           name: 'history'
         },
@@ -36455,15 +36455,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Protection = function Protection() {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(5), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./views/Protection */ "./src/views/Protection.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(4), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./views/Protection */ "./src/views/Protection.vue"));
 };
 
 var Recover = function Recover() {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(7)]).then(__webpack_require__.bind(null, /*! ./views/Recover */ "./src/views/Recover.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(2), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! ./views/Recover */ "./src/views/Recover.vue"));
 };
 
 var History = function History() {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(6)]).then(__webpack_require__.bind(null, /*! ./views/History */ "./src/views/History.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./views/History */ "./src/views/History.vue"));
 };
 
 vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);

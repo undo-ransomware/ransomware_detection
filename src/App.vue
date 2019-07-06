@@ -42,7 +42,7 @@ export default {
 				}, {
 					id: 'app-category-history',
 					classes: [],
-					icon: 'icon-category-disabled',
+					icon: 'icon-history',
 					router: {name: 'history'},
 					text: t('ransomware_detection', 'History'),
 				}
