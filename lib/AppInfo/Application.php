@@ -62,6 +62,8 @@ class Application extends App
         $container->registerService('FileOperationService', function ($c) {
             return new FileOperationService(
                 $c->query('FileOperationMapper'),
+                $c->query(IConfig::class),
+                $c->query(ILogger::class),
                 $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
             );
         });

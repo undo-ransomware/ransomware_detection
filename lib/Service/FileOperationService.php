@@ -21,6 +21,9 @@
 namespace OCA\RansomwareDetection\Service;
 
 use OCA\RansomwareDetection\Db\FileOperationMapper;
+use OCA\RansomwareDetection\Model\Status;
+use OCP\IConfig;
+use OCP\ILogger;
 
 class FileOperationService
 {
@@ -30,15 +33,27 @@ class FileOperationService
     /** @var string */
     protected $userId;
 
+    /** @var IConfig */
+    protected $config;
+
+    /** @var ILogger */
+    protected $logger;
+
     /**
      * @param FileOperationMapper $mapper
+     * @param IConfig             $config
+     * @param ILogger             $logger
      * @param string              $userId
      */
     public function __construct(
         FileOperationMapper $mapper,
+        $config,
+        $logger,
         $userId
     ) {
         $this->mapper = $mapper;
+        $this->logger = $logger;
+        $this->config = $config;
         $this->userId = $userId;
     }
 
@@ -98,7 +113,26 @@ class FileOperationService
     {
         array_push($params, $this->userId);
 
-        return $this->mapper->findAll($params, $limit, $offset);
+        $fileOperations = $this->mapper->findAll($params, $limit, $offset);
+
+        // check if all file operations are analysed if not get results from detection service
+        foreach($fileOperations as $fileOperation) {
+            if ($fileOperation->getStatus() === Status::PENDING) {
+                try {
+                    $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
+                    $result = RequestTemplate::get($serviceUri . "/file-operation/" + $fileOperation->getId());
+                    if ($result->getStatusCode() !== 200) {
+                        $this->logger->error("The detection service is not working correctly.");
+                    }
+                    $this->logger->error($result);
+                } catch (ConnectException $ex) {
+                    //TODO: Notify the use by the Notifier
+                    $this->logger->error("No connection to the detection service.");
+                }
+            }
+        }
+
+        return $fileOperations;
     }
 
     /**
