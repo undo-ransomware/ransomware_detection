@@ -181,6 +181,9 @@ class MonitorTest extends TestCase
 
         $storage = $this->createMock(IStorage::class);
 
+        $this->config->method('getAppValue')
+            ->willReturn('http://localhost:5000');
+
         $monitor->expects($this->any())
             ->method('isUploadedFile')
             ->with($storage, $paths[0])
