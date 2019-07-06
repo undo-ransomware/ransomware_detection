@@ -25,6 +25,8 @@ use OCA\RansomwareDetection\Service\FileOperationService;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
 use OCA\RansomwareDetection\Tests\Unit\Db\MapperTestUtility;
+use OCP\IConfig;
+use OCP\ILogger;
 
 class FileOperationServiceTest extends MapperTestUtility
 {
