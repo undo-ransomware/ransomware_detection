@@ -42,13 +42,18 @@ class PageControllerTest extends TestCase
 
         $request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
+        $config = $this->getMockBuilder('OCP\IConfig')
+            ->getMock();
+        $logger = $this->getMockBuilder('OCP\ILogger')
+            ->getMock();
+
         $connection = $this->getMockBuilder('OCP\IDBConnection')
             ->getMock();
         $mapper = $this->getMockBuilder('OCA\RansomwareDetection\Db\FileOperationMapper')
             ->setConstructorArgs([$connection])
             ->getMock();
         $this->service = $this->getMockBuilder('OCA\RansomwareDetection\Service\FileOperationService')
-            ->setConstructorArgs([$mapper, $this->userId])
+            ->setConstructorArgs([$mapper, $config, $logger, $this->userId])
             ->getMock();
 
         $this->controller = new PageController(
