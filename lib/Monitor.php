@@ -39,6 +39,7 @@ use OCP\IConfig;
 use OCP\ILogger;
 use OCP\IRequest;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
 
 class Monitor
 {
@@ -241,13 +242,12 @@ class Monitor
 
                 $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
                 try {
-                    $result = RequestTemplate::post($serviceUri . "/file-operation", $entity);
-                    if ($result->getStatusCode() !== 200) {
-                        $this->logger->error("The detection service is not working correctly.");
-                    }
+                    RequestTemplate::post($serviceUri . "/file-operation", $entity);
                 } catch (ConnectException $ex) {
                     //TODO: Notify the use by the Notifier
                     $this->logger->error("No connection to the detection service.");
+                } catch (ServerException $ex) {
+                    $this->logger->error("The detection service is not working correctly.");
                 }
 
                 $this->nestingLevel--;
@@ -375,13 +375,12 @@ class Monitor
 
         $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
         try {
-            $result = RequestTemplate::post($serviceUri . "/file-operation", $entity);
-            if ($result->getStatusCode() !== 200) {
-                $this->logger->error("The detection service is not working correctly.");
-            }
+            RequestTemplate::post($serviceUri . "/file-operation", $entity);
         } catch (ConnectException $ex) {
             //TODO: Notify the use by the Notifier
             $this->logger->error("No connection to the detection service.");
+        } catch (ServerException $ex) {
+            $this->logger->error("The detection service is not working correctly.");
         }
     }
 
@@ -417,13 +416,12 @@ class Monitor
 
         $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
         try {
-            $result = RequestTemplate::post($serviceUri . "/file-operation", $entity);
-            if ($result->getStatusCode() !== 200) {
-                $this->logger->error("The detection service is not working correctly.");
-            }
+            RequestTemplate::post($serviceUri . "/file-operation", $entity);
         } catch (ConnectException $ex) {
             //TODO: Notify the use by the Notifier
             $this->logger->error("No connection to the detection service.");
+        } catch (ServerException $ex) {
+            $this->logger->error("The detection service is not working correctly.");
         }
     }
 }

@@ -20,10 +20,14 @@
 
 namespace OCA\RansomwareDetection\Service;
 
+use OCA\RansomwareDetection\AppInfo\Application;
+use OCA\RansomwareDetection\RequestTemplate;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
 use OCA\RansomwareDetection\Model\Status;
 use OCP\IConfig;
 use OCP\ILogger;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 class FileOperationService
 {
@@ -47,8 +51,8 @@ class FileOperationService
      */
     public function __construct(
         FileOperationMapper $mapper,
-        $config,
-        $logger,
+        IConfig $config,
+        ILogger $logger,
         $userId
     ) {
         $this->mapper = $mapper;
@@ -120,11 +124,25 @@ class FileOperationService
             if ($fileOperation->getStatus() === Status::PENDING) {
                 try {
                     $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
-                    $result = RequestTemplate::get($serviceUri . "/file-operation/" + $fileOperation->getId());
-                    if ($result->getStatusCode() !== 200) {
+                    try {
+                        RequestTemplate::get($serviceUri . "/file-operation/" . $fileOperation->getId());
+                    } catch (ClientException $ex) {
+                        if ($ex->getResponse()->getStatusCode() === 404) {
+                            // if the detection service doesn't know the file analyze it again.
+                            try {
+                                RequestTemplate::post($serviceUri . "/file-operation", $fileOperation);
+                            } catch(ClientException $ex) {
+                                // already exists
+                            } catch (ServerException $ex) {
+                                $this->logger->error("The detection service is not working correctly.");
+                            }
+                        } else {
+                            // update local file operation and save it to the database
+                            $fileOperation->setStatus(json_decode($result)['status']);
+                        }
+                    } catch (ServerException $ex) {
                         $this->logger->error("The detection service is not working correctly.");
                     }
-                    $this->logger->error($result);
                 } catch (ConnectException $ex) {
                     //TODO: Notify the use by the Notifier
                     $this->logger->error("No connection to the detection service.");
