@@ -5,7 +5,7 @@
 				<paper-spinner active></paper-spinner>
 			</div>
 			<div>
-				<ProtectionStatus :link="servicesUrl" id="protection-status" v-on:protection-state-changed="protectionStateChanged"></ProtectionStatus>
+				<ProtectionStatus :detection-link="detectionUrl" :protection-link="servicesUrl" id="protection-status" v-on:protection-state-changed="protectionStateChanged"></ProtectionStatus>
 				<div id="services">
 					<ServiceStatus :link="detectionServiceUrl" v-on:service-state-changed="detectionStateChanged" class="service"></ServiceStatus>
 					<ServiceStatus :link="monitorServiceUrl" v-on:service-state-changed="monitorStateChanged" class="service"></ServiceStatus>
@@ -37,6 +37,9 @@ export default {
         };
     },
     computed: {
+		detectionUrl() {
+            return OC.generateUrl('/apps/ransomware_detection/api/v1/detection');
+		},
 		servicesUrl() {
             return OC.generateUrl('/apps/ransomware_detection/api/v1/service');
 		},

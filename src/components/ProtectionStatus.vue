@@ -8,6 +8,7 @@
                 <span v-if="!protection">You are not protected.</span>
                 <span v-if="protection && detection">Ransomware detected.</span>
             </h1>
+            <paper-button class="recover-button" @click="$router.push('recover')" v-if="protection && detection"><iron-icon icon="undo"></iron-icon>Recover</paper-button>
         </div>
     </paper-card>
 </template>
@@ -22,7 +23,12 @@ import axios from 'nextcloud-axios'
 export default {
     name: 'ProtectionStatus',
     props: {
-        link: {
+        protectionLink: {
+			type: String,
+			default: '',
+			required: true
+        },
+        detectionLink: {
 			type: String,
 			default: '',
 			required: true
@@ -30,6 +36,7 @@ export default {
     },
     created() {
         this.fetchServicesStatus();
+        this.fetchDetectionStatus();
     },
     data() {
         return {
@@ -41,7 +48,7 @@ export default {
         fetchServicesStatus() {
             axios({
 				method: 'GET',
-				url: this.link
+				url: this.protectionLink
             })
             .then(json => {
                 this.protection = 1;
@@ -51,6 +58,19 @@ export default {
                     }
                 }
                 this.$emit('protection-state-changed');
+            })
+            .catch( error => { console.error(error); });
+        },
+        fetchDetectionStatus() {
+            axios({
+				method: 'GET',
+				url: this.detectionLink
+            })
+            .then(json => {
+                this.detection = 0;
+                if (json.data.length > 0) {
+                    this.detection = 1;
+                }
             })
             .catch( error => { console.error(error); });
         }
@@ -66,6 +86,7 @@ export default {
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
         width: 100%;
         height: 100%;
@@ -83,8 +104,18 @@ export default {
         font-size: 48px;
     }
 
-    iron-icon {
+    h1 iron-icon {
         width: 66px;
         height: 66px;
+    }
+    
+    .recover-button {
+        display: flex;
+        border: 1px solid #fff;
+    }
+
+    .recover-button:hover {
+        background-color: #fff;
+        color: red;
     }
 </style>
