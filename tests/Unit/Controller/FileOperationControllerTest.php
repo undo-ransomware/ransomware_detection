@@ -73,7 +73,7 @@ class FileOperationControllerTest extends TestCase
             ->setConstructorArgs([$connection])
             ->getMock();
         $this->service = $this->getMockBuilder('OCA\RansomwareDetection\Service\FileOperationService')
-            ->setConstructorArgs([$mapper, $this->userId])
+            ->setConstructorArgs([$mapper, $this->config, $this->logger, $this->userId])
             ->getMock();
     }
 
