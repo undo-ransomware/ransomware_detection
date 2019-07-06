@@ -33,7 +33,7 @@ class FileOperationServiceTest extends MapperTestUtility
 
     /** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
     protected $logger;
-    
+
     /** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
     protected $config;
 
@@ -47,7 +47,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $this->mapper = new FileOperationMapper($this->db);
         $this->config = $this->createMock(IConfig::class);
         $this->logger = $this->createMock(ILogger::class);
-        $this->service = new FileOperationService($this->mapper, 'john');
+        $this->service = new FileOperationService($this->mapper, $this->config, $this->logger, 'john');
 
         // create mock FileOperation
         $fileOperation1 = new FileOperation();
