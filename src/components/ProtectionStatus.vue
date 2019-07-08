@@ -3,7 +3,8 @@
         <div class="card-content">
             <h1>
                 <iron-icon v-if="protection && !detection" icon="verified-user"></iron-icon>
-                <iron-icon v-if="!protection || (protection && detection)" icon="error"></iron-icon>
+                <iron-icon v-if="!protection" icon="error"></iron-icon>
+                <icon-base v-if="(protection && detection)" icon-name="locked" icon-color="white" width="66px" height="66px"><icon-locked/></icon-base>
                 <span v-if="protection && !detection">You are protected.</span>
                 <span v-if="!protection">You are not protected.</span>
                 <span v-if="protection && detection">Ransomware detected.</span>
@@ -19,9 +20,15 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import axios from 'nextcloud-axios'
+import IconBase from '../components/IconBase'
+import IconLocked from '../components/icons/IconLocked'
 
 export default {
     name: 'ProtectionStatus',
+    components: {
+		IconBase,
+        IconLocked
+    },
     props: {
         protectionLink: {
 			type: String,
@@ -107,6 +114,10 @@ export default {
     h1 iron-icon {
         width: 66px;
         height: 66px;
+    }
+
+    h1 span {
+        vertical-align: middle;
     }
     
     .recover-button {
