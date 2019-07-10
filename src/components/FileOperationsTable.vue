@@ -14,6 +14,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-sort-column.js';
 import '@vaadin/vaadin-grid/vaadin-grid-column.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
+import '../webcomponents/ransomware-icons'
 import 'time-elements/dist/time-elements';
 
 export default {
@@ -47,7 +48,7 @@ export default {
             const icon = document.createElement('iron-icon');
             switch (rowData.item.status) {
                 case 0:
-                    icon.setAttribute('icon', 'cached');
+                    icon.setAttribute('icon', 'ransomware:timelapse');
                     icon.style = "color: blue;";
                     break;
                 case 1:
@@ -59,7 +60,7 @@ export default {
                     icon.style = "color: red;";
                     break;
                 default:
-                    icon.setAttribute('icon', 'cached');
+                    icon.setAttribute('icon', 'ransomware:timelapse');
                     icon.style = "color: blue;";
                     break;
             }
