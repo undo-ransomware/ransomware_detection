@@ -11,7 +11,7 @@
                 <FileOperationsTable v-if="detected" id="ransomware-table" :data="fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
                 <span id="message" v-if="!detected">
                     <iron-icon icon="verified-user"></iron-icon>
-                    Nothing found. You are save.
+                    Nothing found. You are safe.
                 </span>
             </div>
 		</iron-pages>
