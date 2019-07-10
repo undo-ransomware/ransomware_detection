@@ -30,13 +30,13 @@ export default {
 					id: 'app-category-protection',
 					classes: [],
 					router: {name: 'protection'},
-					icon: 'icon-category-installed',
+					icon: 'icon-shield',
 					text: t('ransomware_detection', 'Protection'),
 				},
 				{
 					id: 'app-category-recover',
 					classes: [],
-					icon: 'icon-category-enabled',
+					icon: 'icon-undo',
 					router: {name: 'recover'},
 					text: t('ransomware_detection', 'Recover'),
 				}, {

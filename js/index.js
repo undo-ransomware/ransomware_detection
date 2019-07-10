@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "." + {"0":"510e6f6cd1a9843d9c5c","1":"81f800c4856a79a199c8","2":"07dcc63f2127fe9f7068","3":"dcd0ec523a14a9944180","4":"4b07a581d6ae4f152c1b","5":"067ace57cb3dcfd11200","6":"c463e6b02472f15825bf"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + "." + {"0":"ee6e9052917363727601","1":"81f800c4856a79a199c8","2":"07dcc63f2127fe9f7068","3":"dcd0ec523a14a9944180","4":"4b07a581d6ae4f152c1b","5":"067ace57cb3dcfd11200","6":"51070a45d02efae08b97"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2013,12 +2013,12 @@ __webpack_require__.r(__webpack_exports__);
         router: {
           name: 'protection'
         },
-        icon: 'icon-category-installed',
+        icon: 'icon-shield',
         text: t('ransomware_detection', 'Protection')
       }, {
         id: 'app-category-recover',
         classes: [],
-        icon: 'icon-category-enabled',
+        icon: 'icon-undo',
         router: {
           name: 'recover'
         },
@@ -14949,6 +14949,117 @@ module.exports = __webpack_require__(/*! ../internals/path */ "./node_modules/co
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js!./src/css/global.css":
+/*!******************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./src/css/global.css ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
+// Module
+exports.push([module.i, ".icon-shield {\r\n    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgogICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgd2lkdGg9IjI0IgogICBoZWlnaHQ9IjI0IgogICB2aWV3Qm94PSIwIDAgMjQgMjQiCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzYiCiAgIHNvZGlwb2RpOmRvY25hbWU9ImxvY2stc2hpZWxkLnN2ZyIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMC45Mi4zICgyNDA1NTQ2LCAyMDE4LTAzLTExKSI+CiAgPG1ldGFkYXRhCiAgICAgaWQ9Im1ldGFkYXRhMTIiPgogICAgPHJkZjpSREY+CiAgICAgIDxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj4KICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICA8ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+CiAgICAgICAgPGRjOnRpdGxlIC8+CiAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KICA8L21ldGFkYXRhPgogIDxkZWZzCiAgICAgaWQ9ImRlZnMxMCIgLz4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcmNvbG9yPSIjNjY2NjY2IgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgb2JqZWN0dG9sZXJhbmNlPSIxMCIKICAgICBncmlkdG9sZXJhbmNlPSIxMCIKICAgICBndWlkZXRvbGVyYW5jZT0iMTAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjY0MCIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSI0ODAiCiAgICAgaWQ9Im5hbWVkdmlldzgiCiAgICAgc2hvd2dyaWQ9ImZhbHNlIgogICAgIGlua3NjYXBlOnpvb209IjE1LjczMzEyNiIKICAgICBpbmtzY2FwZTpjeD0iMjguNDM2MzgyIgogICAgIGlua3NjYXBlOmN5PSIzNS4wNzIzNzIiCiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ic3ZnNiIgLz4KICA8cGF0aAogICAgIGQ9Ik0wIDBoMjR2MjRIMHoiCiAgICAgZmlsbD0ibm9uZSIKICAgICBpZD0icGF0aDIiIC8+CiAgPHBhdGgKICAgICBkPSJNIDEyIDEgTCAzIDUgTCAzIDExIEMgMyAxNi41NSA2Ljg0IDIxLjc0IDEyIDIzIEMgMTcuMTYgMjEuNzQgMjEgMTYuNTUgMjEgMTEgTCAyMSA1IEwgMTIgMSB6IE0gMTIgMy45NjA5Mzc1IEMgMTMuMTY1NDk1IDMuOTYwOTM3NSAxNC4xNjk1NTcgNC4zNzYwMjU4IDE0Ljc4NTE1NiA1LjE2MDE1NjIgQyAxNS40MDA3NTUgNS45NDQyODY2IDE1LjYxNzE4OCA2Ljk3NjE2NzkgMTUuNjE3MTg4IDguMTQyNTc4MSBMIDE1LjYxNzE4OCA5LjU1NDY4NzUgTCAxNy4zNTE1NjIgOS41NTQ2ODc1IEMgMTcuNTE0MDk2IDkuNTU0Njg3NSAxNy42NDQ1MzEgOS42ODUxMjMgMTcuNjQ0NTMxIDkuODQ3NjU2MiBMIDE3LjY0NDUzMSAxNi4zMTY0MDYgQyAxNy42NDQ1MzEgMTYuNDc4OTM5IDE3LjUxNDA5NiAxNi42MTEzMjggMTcuMzUxNTYyIDE2LjYxMTMyOCBMIDYuNjQ4NDM3NSAxNi42MTEzMjggQyA2LjQ4NTkwNDMgMTYuNjExMzI4IDYuMzU1NDY4OCAxNi40Nzg5MzkgNi4zNTU0Njg4IDE2LjMxNjQwNiBMIDYuMzU1NDY4OCA5Ljg0NzY1NjIgQyA2LjM1NTQ2ODcgOS42ODUxMjMgNi40ODU5MDQzIDkuNTU0Njg3NSA2LjY0ODQzNzUgOS41NTQ2ODc1IEwgOC4zODI4MTI1IDkuNTU0Njg3NSBMIDguMzgyODEyNSA4LjE0MjU3ODEgQyA4LjM4MjgxMjUgNi45NzYxNjc5IDguNTk5MjQ1IDUuOTQ0Mjg2NiA5LjIxNDg0MzggNS4xNjAxNTYyIEMgOS44MzA0NDI1IDQuMzc2MDI1OCAxMC44MzQ1MDYgMy45NjA5Mzc1IDEyIDMuOTYwOTM3NSB6IE0gMTIgNS41NDg4MjgxIEMgMTEuMTY4MzUxIDUuNTQ4ODI4MSAxMC43NjEzIDUuNzYzMDA4OCAxMC40NjQ4NDQgNi4xNDA2MjUgQyAxMC4xNjgzODcgNi41MTgyNDIzIDkuOTcwNzAzMSA3LjE4MTU0MDMgOS45NzA3MDMxIDguMTQyNTc4MSBMIDkuOTcwNzAzMSA5LjU1NDY4NzUgTCAxNC4wMjkyOTcgOS41NTQ2ODc1IEwgMTQuMDI5Mjk3IDguMTQyNTc4MSBDIDE0LjAyOTI5NyA3LjE4MTU0MDMgMTMuODMxNjEzIDYuNTE4MjQyNyAxMy41MzUxNTYgNi4xNDA2MjUgQyAxMy4yMzg3IDUuNzYzMDA5MSAxMi44MzE2NSA1LjU0ODgyODEgMTIgNS41NDg4MjgxIHogTSAxMS42MTcxODggMTAuMTYwMTU2IEwgMTEuNjE3MTg4IDEwLjg3MzA0NyBDIDExLjQyMzQyNCAxMC45MDgyNzYgMTEuMjU2MTUzIDEwLjk2NTY1NSAxMS4xMTUyMzQgMTEuMDQ0OTIyIEMgMTAuOTc0MzE1IDExLjExOTc4NSAxMC44NTk1NTkgMTEuMjEyMTczIDEwLjc3MTQ4NCAxMS4zMjIyNjYgQyAxMC42ODM0MSAxMS40MzIzNTkgMTAuNjE2MzAzIDExLjU1NDg5MSAxMC41NzIyNjYgMTEuNjkxNDA2IEMgMTAuNTMyNjMyIDExLjgyMzUxOCAxMC41MTM2NzIgMTEuOTYyMDk5IDEwLjUxMzY3MiAxMi4xMDc0MjIgQyAxMC41MTM2NzIgMTIuMjk2NzgyIDEwLjU0NzIyNiAxMi40NjExNDEgMTAuNjEzMjgxIDEyLjU5NzY1NiBDIDEwLjY4Mzc0MSAxMi43Mjk3NjggMTAuNzcyNzE5IDEyLjg0MTExNiAxMC44ODI4MTIgMTIuOTMzNTk0IEMgMTAuOTk3MzA5IDEzLjAyNjA3MiAxMS4xMjMyNSAxMy4xMDU4MTkgMTEuMjU5NzY2IDEzLjE3MTg3NSBDIDExLjQwMDY4NSAxMy4yMzM1MjcgMTEuNTQ0MTMgMTMuMjkwOTA1IDExLjY4OTQ1MyAxMy4zNDM3NSBDIDExLjgzOTE3OSAxMy4zOTY1OTQgMTEuOTcxNDQxIDEzLjQ0NTcgMTIuMDg1OTM4IDEzLjQ5NDE0MSBDIDEyLjIwMDQzNCAxMy41MzgxNzggMTIuMjk0Mjc3IDEzLjU4NjMyNSAxMi4zNjkxNDEgMTMuNjM0NzY2IEMgMTIuNDQ0MDA0IDEzLjY4MzIwNiAxMi41MDEzODIgMTMuNzM3MTc1IDEyLjU0MTAxNiAxMy43OTg4MjggQyAxMi41ODA2NDkgMTMuODU2MDc3IDEyLjYwMTU2MiAxMy45MjYwOTUgMTIuNjAxNTYyIDE0LjAwOTc2NiBDIDEyLjYwMTU2MiAxNC4xNDE4NzcgMTIuNTUwNTA0IDE0LjI0NTQ0OSAxMi40NDkyMTkgMTQuMzIwMzEyIEMgMTIuMzUyMzM3IDE0LjM5MDc3MiAxMi4xNjkwMTggMTQuNDI1NzgxIDExLjkwMDM5MSAxNC40MjU3ODEgQyAxMS42NjI1OSAxNC40MjU3ODEgMTEuNDM2NDg2IDE0LjM5NTYzNyAxMS4yMjA3MDMgMTQuMzMzOTg0IEMgMTEuMDA5MzI0IDE0LjI3MjMzMiAxMC44MjYwMDUgMTQuMjAzNzY5IDEwLjY3MTg3NSAxNC4xMjg5MDYgTCAxMC4zODg2NzIgMTQuODg4NjcyIEMgMTAuNDg1NTU0IDE0LjkzNzExNCAxMC42MzE5MTEgMTQuOTk5MzU2IDEwLjgzMDA3OCAxNS4wNzQyMTkgQyAxMS4wMzI2NDkgMTUuMTQ0Njc4IDExLjI5NTcxNiAxNS4xOTIzMjggMTEuNjE3MTg4IDE1LjIxODc1IEwgMTEuNjE3MTg4IDE2LjAwNTg1OSBMIDEyLjQ0OTIxOSAxNi4wMDU4NTkgTCAxMi40NDkyMTkgMTUuMTk5MjE5IEMgMTIuNjY1MDAxIDE1LjE2Mzk4OSAxMi44NDQ5MTEgMTUuMTA2NjExIDEyLjk5MDIzNCAxNS4wMjczNDQgQyAxMy4xMzk5NjEgMTQuOTQ4MDc2IDEzLjI2MTAzOCAxNC44NTQyMzMgMTMuMzUzNTE2IDE0Ljc0NDE0MSBDIDEzLjQ0NTk5NCAxNC42MzQwNDggMTMuNTEzMTAxIDE0LjUxNDQyNyAxMy41NTI3MzQgMTQuMzg2NzE5IEMgMTMuNTkyMzY4IDE0LjI1NDYwNyAxMy42MTEzMjggMTQuMTIyMzQ2IDEzLjYxMTMyOCAxMy45OTAyMzQgQyAxMy42MTEzMjggMTMuNzk2NDcgMTMuNTc2MzE5IDEzLjYyNzc0NCAxMy41MDU4NTkgMTMuNDgyNDIyIEMgMTMuNDM5ODA0IDEzLjMzNzA5OSAxMy4zNDU5NjEgMTMuMjExMTU4IDEzLjIyMjY1NiAxMy4xMDU0NjkgQyAxMy4xMDM3NTYgMTIuOTk1Mzc1IDEyLjk2MDMxIDEyLjg5ODEyNCAxMi43OTI5NjkgMTIuODE0NDUzIEMgMTIuNjMwMDMxIDEyLjczMDc4MyAxMi40NTE1NzYgMTIuNjU0NDQ0IDEyLjI1NzgxMiAxMi41ODM5ODQgQyAxMi4xMzAxMDQgMTIuNTM5OTQ3IDEyLjAyMDIxMiAxMi41MDAwNzMgMTEuOTI3NzM0IDEyLjQ2NDg0NCBDIDExLjgzOTY2IDEyLjQyNTIxIDExLjc2NDc3NyAxMi4zODUzMzcgMTEuNzAzMTI1IDEyLjM0NTcwMyBDIDExLjY0MTQ3MyAxMi4zMDYwNyAxMS41OTUyNzkgMTIuMjYxMzMxIDExLjU2NDQ1MyAxMi4yMTI4OTEgQyAxMS41MzgwMzEgMTIuMTYwMDQ2IDExLjUyNTM5MSAxMi4wOTk3NTYgMTEuNTI1MzkxIDEyLjAyOTI5NyBDIDExLjUyNTM5MSAxMS45MTQ4IDExLjU3MTU4NCAxMS44MjI0MTMgMTEuNjY0MDYyIDExLjc1MTk1MyBDIDExLjc1NjU0MSAxMS42ODE0OTQgMTEuOTA3NzYyIDExLjY0NjQ4NCAxMi4xMTkxNDEgMTEuNjQ2NDg0IEMgMTIuMzMwNTE5IDExLjY0NjQ4NCAxMi41MzEzNDMgMTEuNjY2OSAxMi43MjA3MDMgMTEuNzEwOTM4IEMgMTIuOTE0NDY3IDExLjc1NDk3NSAxMy4wODMxOTMgMTEuODA5NDQyIDEzLjIyODUxNiAxMS44NzEwOTQgTCAxMy40MzM1OTQgMTEuMDc4MTI1IEMgMTMuMzM2NzEyIDExLjAzNDA4OSAxMy4yMDQ0NTEgMTAuOTg5MzUgMTMuMDM3MTA5IDEwLjk0NTMxMiBDIDEyLjg3NDE3MiAxMC45MDEyNzUgMTIuNjc4MjEyIDEwLjg2NzcyMiAxMi40NDkyMTkgMTAuODQ1NzAzIEwgMTIuNDQ5MjE5IDEwLjE2MDE1NiBMIDExLjYxNzE4OCAxMC4xNjAxNTYgeiAiCiAgICAgaWQ9InBhdGg0IiAvPgogIDxnCiAgICAgaWQ9Imc2IgogICAgIHRyYW5zZm9ybT0ibWF0cml4KDAuMTMzMzU1MDYsMCwwLDAuMTMzMzU1MDYsMC40MzE0NTQ3LC04Ljk2ODAwNDEpIj4KICAgIDxnCiAgICAgICBpZD0idGV4dDgyOCIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjQ5LjUzMzc5NDRweDtsaW5lLWhlaWdodDoxMjUlO2ZvbnQtZmFtaWx5OlNhbnM7dGV4dC1hbGlnbjplbmQ7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7dGV4dC1hbmNob3I6ZW5kO2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MTEuMzIyMDA5MDlweDtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgYXJpYS1sYWJlbD0iJCIgLz4KICA8L2c+Cjwvc3ZnPgo=)\r\n}\r\n\r\n.icon-undo {\r\n    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8c3ZnPg0KPGcgaWQ9InVuZG8iPjxwYXRoIGQ9Ik0xMi41IDhjLTIuNjUgMC01LjA1Ljk5LTYuOSAyLjZMMiA3djloOWwtMy42Mi0zLjYyYzEuMzktMS4xNiAzLjE2LTEuODggNS4xMi0xLjg4IDMuNTQgMCA2LjU1IDIuMzEgNy42IDUuNWwyLjM3LS43OEMyMS4wOCAxMS4wMyAxNy4xNSA4IDEyLjUgOHoiPjwvcGF0aD48L2c+DQo8L3N2Zz4=)\r\n}", ""]);
+
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/runtime/api.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/api.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function (useSourceMap) {
+  var list = []; // return the list of modules as css string
+
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item, useSourceMap);
+
+      if (item[2]) {
+        return '@media ' + item[2] + '{' + content + '}';
+      } else {
+        return content;
+      }
+    }).join('');
+  }; // import a list of modules into the list
+
+
+  list.i = function (modules, mediaQuery) {
+    if (typeof modules === 'string') {
+      modules = [[null, modules, '']];
+    }
+
+    var alreadyImportedModules = {};
+
+    for (var i = 0; i < this.length; i++) {
+      var id = this[i][0];
+
+      if (id != null) {
+        alreadyImportedModules[id] = true;
+      }
+    }
+
+    for (i = 0; i < modules.length; i++) {
+      var item = modules[i]; // skip already imported module
+      // this implementation is not 100% perfect for weird media query combinations
+      // when a module is imported multiple times with different media queries.
+      // I hope this will never occur (Hey this way we have smaller bundles)
+
+      if (item[0] == null || !alreadyImportedModules[item[0]]) {
+        if (mediaQuery && !item[2]) {
+          item[2] = mediaQuery;
+        } else if (mediaQuery) {
+          item[2] = '(' + item[2] + ') and (' + mediaQuery + ')';
+        }
+
+        list.push(item);
+      }
+    }
+  };
+
+  return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+  var content = item[1] || '';
+  var cssMapping = item[3];
+
+  if (!cssMapping) {
+    return content;
+  }
+
+  if (useSourceMap && typeof btoa === 'function') {
+    var sourceMapping = toComment(cssMapping);
+    var sourceURLs = cssMapping.sources.map(function (source) {
+      return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */';
+    });
+    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+  }
+
+  return [content].join('\n');
+} // Adapted from convert-source-map (MIT)
+
+
+function toComment(sourceMap) {
+  // eslint-disable-next-line no-undef
+  var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+  var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+  return '/*# ' + data + ' */';
+}
+
+/***/ }),
+
 /***/ "./node_modules/nextcloud-server/dist/router.js":
 /*!******************************************************!*\
   !*** ./node_modules/nextcloud-server/dist/router.js ***!
@@ -24215,6 +24326,284 @@ if (inBrowser && window.Vue) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (VueRouter);
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/lib/addStylesClient.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/vue-style-loader/lib/addStylesClient.js ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return addStylesClient; });
+/* harmony import */ var _listToStyles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./listToStyles */ "./node_modules/vue-style-loader/lib/listToStyles.js");
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+function addStylesClient (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = Object(_listToStyles__WEBPACK_IMPORTED_MODULE_0__["default"])(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = Object(_listToStyles__WEBPACK_IMPORTED_MODULE_0__["default"])(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/lib/listToStyles.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/vue-style-loader/lib/listToStyles.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return listToStyles; });
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
 
 
 /***/ }),
@@ -36378,6 +36767,27 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/css/global.css":
+/*!****************************!*\
+  !*** ./src/css/global.css ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js!./global.css */ "./node_modules/css-loader/dist/cjs.js!./src/css/global.css");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var add = __webpack_require__(/*! ../../node_modules/vue-style-loader/lib/addStylesClient.js */ "./node_modules/vue-style-loader/lib/addStylesClient.js").default
+var update = add("3f1ecfdc", content, false, {});
+// Hot Module Replacement
+if(false) {}
+
+/***/ }),
+
 /***/ "./src/main.js":
 /*!*********************!*\
   !*** ./src/main.js ***!
@@ -36401,6 +36811,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex_router_sync__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vuex_router_sync__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _css_global_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./css/global.css */ "./src/css/global.css");
+/* harmony import */ var _css_global_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_css_global_css__WEBPACK_IMPORTED_MODULE_9__);
 
 
 
@@ -36417,6 +36829,7 @@ __webpack_require__.nc = btoa(OC.requestToken); // Correct the root of the app f
 // eslint-disable-next-line
 
 __webpack_require__.p = OC.linkTo('ransomware_detection', 'js/');
+
 vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.t = t;
 vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.n = n;
 vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.OC = OC;

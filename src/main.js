@@ -19,6 +19,8 @@ __webpack_nonce__ = btoa(OC.requestToken)
 // eslint-disable-next-line
 __webpack_public_path__ = OC.linkTo('ransomware_detection', 'js/')
 
+import "./css/global.css"
+
 Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.OC = OC
