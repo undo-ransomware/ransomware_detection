@@ -125,7 +125,7 @@ class FileOperationService
                 try {
                     $serviceUri = $this->config->getAppValue(Application::APP_ID, 'service_uri', 'http://localhost:5000');
                     try {
-                        RequestTemplate::get($serviceUri . "/file-operation/" . $fileOperation->getId());
+                        $result = RequestTemplate::get($serviceUri . "/file-operation/" . $fileOperation->getId());
                     } catch (ClientException $ex) {
                         if ($ex->getResponse()->getStatusCode() === 404) {
                             // if the detection service doesn't know the file analyze it again.

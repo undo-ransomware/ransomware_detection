@@ -31,6 +31,7 @@ use OCA\RansomwareDetection\Service\DetectionService;
 use OCA\RansomwareDetection\Controller\ServiceController;
 use OCA\RansomwareDetection\Controller\DetectionController;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
+use OCA\RansomwareDetection\Model\DetectionDeserializer;
 use OCP\AppFramework\App;
 use OCP\Files\Storage\IStorage;
 use OCP\Notification\IManager;
@@ -58,6 +59,12 @@ class Application extends App
             );
         });
 
+        $container->registerService('DetectionDeserializer', function ($c) {
+            return new DetectionDeserializer(
+                $c->query('FileOperationMapper'),
+            );
+        });
+
         // services
         $container->registerService('FileOperationService', function ($c) {
             return new FileOperationService(
@@ -76,7 +83,10 @@ class Application extends App
 
         $container->registerService('DetectionService', function ($c) {
             return new DetectionService(
-                $c->query('FileOperationService')
+                $c->query('FileOperationService'),
+                $c->query('DetectionDeserializer'),
+                $c->query('OCP\IConfig'),
+                $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
             );
         });
 

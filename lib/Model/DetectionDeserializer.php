@@ -20,37 +20,28 @@
 
 namespace OCA\RansomwareDetection\Model;
 
-class Detection implements \JsonSerializable {
-    private $id;
-    private $fileOperations = array();
+use OCA\RansomwareDetection\Db\FileOperationMapper;
 
-    public function __construct($id, $fileOperations) {
-        $this->id = $id;
-        $this->fileOperations = $fileOperations;
+class DetectionDeserializer {
+
+    /** @var FileOperationMapper */
+    protected $mapper;
+
+    /**
+     * @param FileOperationMapper $mapper
+     */
+    public function __construct(
+        FileOperationMapper $mapper
+    ) {
+        $this->mapper = $mapper;
     }
 
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function getFileOperations() {
-        return $this->fileOperations;
-    }
-
-    public function setFileOperations($fileOperations) {
-        $this->fileOperations = $fileOperations;
-    }
-
-    public function addFileOperation($fileOperation) {
-        array_push($this->fileOperations, $fileOperation);
-    }
-
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
+    public function deserialize($json) {
+        $detection = new Detection();
+        $detection->setId($json['id']);
+        foreach ($json['fileOperations'] as $fileOperation) {
+            $detection->addFileOperation($this->mapper->find($fileOperation->getId()));
+        }   
+        return $detection;
     }
 }
