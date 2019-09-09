@@ -1,12 +1,12 @@
 <template>
-    <paper-card :heading="serviceName">
-        <div class="card-content">
-            <h1>
-                <iron-icon v-if="serviceStatus" class="good" icon="verified-user"></iron-icon>
-                <iron-icon v-else class="bad" icon="error"></iron-icon>
-            </h1>
-        </div>
-    </paper-card>
+    <div>
+        <h2 class="container">
+            <div class="item name">{{ serviceName }}</div>
+            <div v-if="serviceStatus" class="item status active">Active</div>
+            <div v-if="!serviceStatus" class="item status offline">Offline</div>    
+        </h2>
+        <div v-if="!serviceStatus" class="description">{{description}}</div>
+    </div>
 </template>
 
 <script>
@@ -23,7 +23,12 @@ export default {
 			type: String,
 			default: '',
 			required: true
-		}
+        },
+        description: {
+            type: String,
+            default: '',
+            required: true
+        }
     },
     data() {
         return {
@@ -62,27 +67,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    paper-card {
+    .container {
+        display: flex;
         width: 100%;
-        height: 100%;
-        background-color: #fff;
-        box-shadow: none;
-        .card-content {
-            height: calc(100% - 52px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            iron-icon {
-                width: 66px;
-                height: 66px;
-                &.good {
-                    color: #247209;
-                }
-                &.bad {
-                    color: red;
-                }
-            }
-        }
+        justify-content: space-between;
+    }
+    h2 {
+        margin: 0px;
+    }
+    .item {
+        padding: 5px 10px 5px 10px;
+    }
+    .description {
+        color: #9b9b9b;
+        padding: 0px 10px 0px 10px;
+    }
+    .active {
+        color: #18b977;
+    }
+    .offline {
+        color: #e2523d;
     }
 
 </style>

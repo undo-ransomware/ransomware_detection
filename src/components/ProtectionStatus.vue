@@ -1,21 +1,15 @@
 <template>
-    <paper-card heading="Protection Status" v-bind:class="[protection && !detection? 'good' : 'bad']">
-        <div class="card-content">
+    <div class="container" v-bind:class="[protection && !detection? 'good' : 'bad']">
             <h1>
-                <iron-icon v-if="protection && !detection" icon="ransomware:shield"></iron-icon>
-                <iron-icon v-if="!protection" icon="error"></iron-icon>
-                <iron-icon v-if="(protection && detection)" icon="ransomware:locked"></iron-icon>
-                <span v-if="protection && !detection">You are protected.</span>
-                <span v-if="!protection">You are not protected.</span>
-                <span v-if="protection && detection">Ransomware detected.</span>
+                <span v-if="protection && !detection"><iron-icon icon="ransomware:shield"></iron-icon> Your files are protected against destruction by ransomware.</span>
+                <span v-if="!protection"><iron-icon icon="error"></iron-icon> Your files are not protected. One service is not working properly.</span>
+                <span v-if="protection && detection"><iron-icon icon="ransomware:locked"></iron-icon> Ransomware attack detected.</span>
             </h1>
             <paper-button class="recover-button" @click="$router.push('recover')" v-if="protection && detection"><iron-icon icon="undo"></iron-icon>Recover</paper-button>
-        </div>
-    </paper-card>
+    </div>
 </template>
 
 <script>
-import '@polymer/paper-card/paper-card.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
@@ -81,38 +75,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    paper-card {
-        .card-content {
+    .container {
+        h1 {
             height: calc(100% - 52px);
             color: #fff;
+            line-height: 48px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            flex-direction: column;
+            font-size: 32px;
+            iron-icon {
+                width: 48px;
+                height: 48px;
+            }
+            span {
+                vertical-align: middle;
+            }
         }
+
         width: 100%;
         height: 100%;
         box-shadow: none;
-        --paper-card-header-color: #fff;
+        color: #fff;
+        padding: 0px 10px 0px 10px;
         &.good {
-            --paper-card-background-color: #247209;
+            background-color: #18b977;
         }
         &.bad {
-            --paper-card-background-color: #c00;
+            background-color: #e2523d;
         }
-    }
-    
-    h1 {
-        font-size: 48px;
-    }
-
-    h1 iron-icon {
-        width: 66px;
-        height: 66px;
-    }
-
-    h1 span {
-        vertical-align: middle;
     }
     
     .recover-button {

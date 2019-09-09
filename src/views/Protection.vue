@@ -7,8 +7,8 @@
 			<div>
 				<ProtectionStatus :detection-link="detectionUrl" :protection-link="servicesUrl" id="protection-status" v-on:protection-state-changed="protectionStateChanged"></ProtectionStatus>
 				<div id="services">
-					<ServiceStatus :link="detectionServiceUrl" v-on:service-state-changed="detectionStateChanged" class="service"></ServiceStatus>
-					<ServiceStatus :link="monitorServiceUrl" v-on:service-state-changed="monitorStateChanged" class="service"></ServiceStatus>
+					<ServiceStatus :link="detectionServiceUrl" description="Your files currently cannot be analyzed for ransomware. To enable ransomware detection, contact your system administator." v-on:service-state-changed="detectionStateChanged" class="service"></ServiceStatus>
+					<ServiceStatus :link="monitorServiceUrl" description="There may be a problem with your Nextcloud installation. Please contact your system administator." v-on:service-state-changed="monitorStateChanged" class="service"></ServiceStatus>
 				</div>
 			</div>
 		</iron-pages>
@@ -75,16 +75,6 @@ export default {
 <style scoped>
 	#protection-status {
 		height: 40vh;
-	}
-	#services {
-		height: 50vh;
-		display: flex;
-		align-items: center;
-		justify-content: space-around;
-	}
-	#services .service {
-		width: 40%;
-		height: 40%;
 	}
 	#loading {
 		display: flex;

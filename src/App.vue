@@ -36,13 +36,13 @@ export default {
 				{
 					id: 'app-category-recover',
 					classes: [],
-					icon: 'icon-undo',
+					icon: 'icon-history',
 					router: {name: 'recover'},
 					text: t('ransomware_detection', 'Recover'),
 				}, {
 					id: 'app-category-history',
 					classes: [],
-					icon: 'icon-history',
+					icon: 'icon-hourglass',
 					router: {name: 'history'},
 					text: t('ransomware_detection', 'History'),
 				}
