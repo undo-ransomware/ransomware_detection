@@ -61,7 +61,7 @@ class Application extends App
 
         $container->registerService('DetectionDeserializer', function ($c) {
             return new DetectionDeserializer(
-                $c->query('FileOperationMapper'),
+                $c->query('FileOperationMapper')
             );
         });
 
