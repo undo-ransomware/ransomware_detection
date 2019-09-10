@@ -6,7 +6,7 @@
 			</div>
 			<div class="page">
                 <Header header="History">
-                    <RecoverAction id="recover" label="Recover" v-on:recover="onRecover" primary></RecoverAction>
+                    <RecoverAction id="recover" label="Recover selected files" v-on:recover="onRecover" primary></RecoverAction>
                 </Header>
                 <FileOperationsTable id="ransomware-table" :data="fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
             </div>
@@ -105,7 +105,7 @@ export default {
         height: calc(100% - 50px);
     }
     #recover {
-        background-color: green;
+        background-color: grey;
         color: #fff;
     }
     iron-pages {
