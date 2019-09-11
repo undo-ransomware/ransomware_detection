@@ -237,6 +237,7 @@ class ScanController extends OCSController
     public function scanSequence($sequence) {
         if (sizeof($sequence) > $this->config->getAppValue(Application::APP_ID, 'minimum_sequence_length', 0)) {
             $sequenceResults = array();
+            $fileOperationSequence = array();
             foreach ($sequence as $file) {
                 try {
                     $fileOperation = $this->buildFileOperation($file);
