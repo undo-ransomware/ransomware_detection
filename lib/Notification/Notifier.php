@@ -96,4 +96,24 @@ class Notifier implements INotifier
                 throw new \InvalidArgumentException('Unknown subject');
         }
     }
+
+    /**
+     * Identifier of the notifier, only use [a-z0-9_]
+     *
+     * @return string
+     * @since 17.0.0
+     */
+    public function getID(): string {
+        return Application::APP_ID;
+    }
+    
+    /**
+     * Human readable name describing the notifier
+     *
+     * @return string
+     * @since 17.0.0
+     */
+    public function getName(): string {
+        return $this->l10nFactory->get(Application::APP_ID)->t('Ransomware recovery');
+    }
 }
