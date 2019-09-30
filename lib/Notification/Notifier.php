@@ -74,7 +74,7 @@ class Notifier implements INotifier
      *
      * @return INotification
      */
-    public function prepare(INotification $notification, $languageCode)
+    public function prepare(INotification $notification, string $languageCode): INotification
     {
         if ($notification->getApp() !== Application::APP_ID) {
             // Not my app => throw
