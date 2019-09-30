@@ -5,6 +5,10 @@ env:
     - CORE_BRANCH=stable17
     - APP_NAME=ransomware_detection
 
+services:
+  - mysql
+  - postgresql
+
 branches:
   only:
     - master
