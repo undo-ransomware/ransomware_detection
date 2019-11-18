@@ -27,6 +27,6 @@ This project was created for the
 [Undo Ransomware](https://prototypefund.de/project/undo-von-ransomware-mittels-machine-learning/)
 Prototype Fund project.
 
-[![Sponsored by the Federal Ministry of Education and Research](bmbf.png)](https://www.bmbf.de/)
-[![A Prototype Fund Project](ptf.png)](https://prototypefund.de/)
-[![Prototype Fund is an Open Knowledge Foundation Project](okfn.png)](https://okfn.de/)
+[![Sponsored by the Federal Ministry of Education and Research](img/bmbf.png)](https://www.bmbf.de/)
+[![A Prototype Fund Project](img/ptf.png)](https://prototypefund.de/)
+[![Prototype Fund is an Open Knowledge Foundation Project](img/okfn.png)](https://okfn.de/)
