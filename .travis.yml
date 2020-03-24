@@ -2,7 +2,7 @@ language: php
 
 env:
   global:
-    - CORE_BRANCH=stable17
+    - CORE_BRANCH=stable18
     - APP_NAME=ransomware_detection
 
 services:
