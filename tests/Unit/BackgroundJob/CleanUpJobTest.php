@@ -38,7 +38,7 @@ class CleanUpJobTest extends MapperTestUtility
     /** @var IConfige|\PHPUnit_Framework_MockObject_MockObject */
     protected $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

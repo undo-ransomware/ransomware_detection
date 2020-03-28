@@ -45,7 +45,7 @@ class SequenceAnalyzerTest extends TestCase
     /** @var SequenceSizeAnalyzer */
     protected $sequenceSizeAnalyzer;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

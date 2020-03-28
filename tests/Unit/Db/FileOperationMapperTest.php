@@ -32,7 +32,7 @@ class FileOperationMapperTest extends MapperTestUtility
     /** @var array */
     protected $fileOperations;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -34,7 +34,7 @@ class FileOperationServiceTest extends MapperTestUtility
     /** @var FileOperationMapper */
     protected $mapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

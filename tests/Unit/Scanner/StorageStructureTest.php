@@ -29,7 +29,7 @@ class StorageStructureTest extends TestCase
     /** @var StorageStructure */
     protected $storageStructure;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

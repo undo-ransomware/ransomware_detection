@@ -33,7 +33,7 @@ class FileOperationTest extends TestCase
     /** @var FileOperation */
     protected $entity;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

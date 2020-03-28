@@ -27,7 +27,7 @@ use Test\TestCase;
 
 class FileSignaturesTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

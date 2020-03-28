@@ -35,7 +35,8 @@ class AdminTest extends TestCase {
     /** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
     protected $config;
 
-	public function setUp() {
+    public function setUp(): void
+    {
 		parent::setUp();
 
         $this->config = $this->getMockForAbstractClass( IConfig::class, array(), '', FALSE, TRUE, TRUE, array( 'getAppValue' ) );

@@ -35,7 +35,7 @@ class ApplicationTest extends TestCase
     /** @var \OCP\AppFramework\IAppContainer */
     protected $container;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

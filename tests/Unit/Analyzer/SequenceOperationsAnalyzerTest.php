@@ -31,7 +31,7 @@ class SequenceOperationsAnalyzerTest extends TestCase
     /** @var SequenceOperationsAnalyzer */
     protected $sequenceOperationsAnalyzer;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

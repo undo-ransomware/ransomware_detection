@@ -66,7 +66,7 @@ class RequestPluginTest extends TestCase
     /** @var SequenceAnalyzer|\PHPUnit_Framework_MockObject_MockObject */
     protected $sequenceAnalyzer;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

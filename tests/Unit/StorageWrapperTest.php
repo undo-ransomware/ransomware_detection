@@ -32,7 +32,7 @@ class StorageWrapperTest extends TestCase
     /** @var \OCA\RansomwareDetection\Monitor|\PHPUnit_Framework_MockObject_MockObject */
     protected $monitor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

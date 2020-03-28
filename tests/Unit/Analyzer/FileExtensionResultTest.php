@@ -29,7 +29,7 @@ class FileExtensionResultTest extends TestCase
     /** @var FileExtensionResult */
      protected $fileExtensioneResult;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

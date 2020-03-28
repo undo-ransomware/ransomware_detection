@@ -55,7 +55,7 @@ class NotifierTest extends TestCase
     /** @var Notifier|\PHPUnit_Framework_MockObject_MockObject */
     protected $notifier;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

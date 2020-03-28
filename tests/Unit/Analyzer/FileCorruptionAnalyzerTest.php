@@ -42,7 +42,7 @@ class FileCorruptionAnalyzerTest extends TestCase
     /** @var FileCorruptionAnalyzer */
     protected $fileCorruptionAnalyzer;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

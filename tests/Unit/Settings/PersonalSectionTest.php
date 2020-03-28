@@ -38,7 +38,8 @@ class PersonalSectionTest extends TestCase {
     /** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
     protected $l;
 
-	public function setUp() {
+    public function setUp(): void
+    {
 		parent::setUp();
 
         $this->urlGenerator = $this->getMockForAbstractClass( IURLGenerator::class, array(), '', FALSE, TRUE, TRUE, array( 'imagePath' ) );
