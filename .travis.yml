@@ -2,7 +2,7 @@ language: php
 
 env:
   global:
-    - CORE_BRANCH=stable17
+    - CORE_BRANCH=stable18
     - APP_NAME=ransomware_detection
 
 services:
@@ -30,42 +30,42 @@ jobs:
     - env: "CHECKSTYLE=2"
   include:
     - stage: test
-      php: 7.1
+      php: 7.2
       env: 
         - DB=mysql
       script: 
         - cd apps/$APP_NAME/
         - phpunit --configuration phpunit.xml
     - stage: test
-      php: 7.1
+      php: 7.2
       env: 
         - DB=pgsql
       script: 
         - cd apps/$APP_NAME/
         - phpunit --configuration phpunit.xml
     - stage: test
-      php: 7.1
+      php: 7.2
       env: 
         - DB=mysql
       script: 
         - cd apps/$APP_NAME/
         - phpunit --configuration phpunit.xml
     - stage: test
-      php: 7.1
+      php: 7.2
       env: 
         - DB=mysql
         - CHECKSTYLE=1
       script: 
         - ./occ app:check-code $APP_NAME -c private -c strong-comparison
     - stage: test
-      php: 7.1
+      php: 7.2
       env: 
         - DB=mysql
         - CHECKSTYLE=2
       script: 
         - ./occ app:check-code $APP_NAME -c deprecation
     - stage: report
-      php: 7.1
+      php: 7.2
       env:
         - DB=sqlite
       script:
@@ -73,7 +73,7 @@ jobs:
         - wget https://codecov.io/bash -O codecov.sh
         - bash codecov.sh
     - stage: build
-      php: 7.1
+      php: 7.2
       env: 
         - DB=sqlite
       script:

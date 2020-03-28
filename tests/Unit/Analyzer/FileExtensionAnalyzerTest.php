@@ -36,7 +36,7 @@ class FileExtensionAnalyzerTest extends TestCase
     /** @var FileExtensionAnalyzer */
     protected $fileExtensionAnalyzer;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -43,7 +43,7 @@ abstract class AppTest extends PHPUnit_Framework_TestCase
 
     protected $userId = 'john';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

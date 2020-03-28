@@ -29,7 +29,7 @@ class SequenceResultTest extends TestCase
     /** @var SequenceResult */
     protected $sequenceResult;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

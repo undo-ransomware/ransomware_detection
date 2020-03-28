@@ -45,7 +45,7 @@ class ClassifierTest extends TestCase
     /** @var Classifier */
     protected $classifier;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

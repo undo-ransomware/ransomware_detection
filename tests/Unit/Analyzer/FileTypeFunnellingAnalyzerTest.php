@@ -32,7 +32,7 @@ class FileTypeFunnellingAnalyzerTest extends TestCase
     /** @var FileTypeFunnellingAnalyzer */
     protected $fileTypeFunnellingAnalyzer;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -29,7 +29,7 @@ class FileCorruptionResultTest extends TestCase
     /** @var FileResult */
     protected $fileResult;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

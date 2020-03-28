@@ -33,7 +33,7 @@ class RecoverControllerTest extends TestCase
     /** @var string */
     private $userId = 'john';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

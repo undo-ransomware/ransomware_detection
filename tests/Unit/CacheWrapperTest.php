@@ -35,13 +35,14 @@ class CacheWrapperTest extends TestCase
     /** @var \OCA\RansomwareDetection\Monitor\Operation|\PHPUnit_Framework_MockObject_MockObject */
     protected $monitor;
 
-    protected function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->cache = $this->getMockBuilder('OCP\Files\Cache\ICache')
             ->getMock();
         $this->storage = $this->getMockBuilder('OCP\Files\Storage\IStorage')
+            ->setConstructorArgs([array()])
             ->getMock();
         $this->monitor = $this->getMockBuilder('OCA\RansomwareDetection\Monitor')
             ->disableOriginalConstructor()

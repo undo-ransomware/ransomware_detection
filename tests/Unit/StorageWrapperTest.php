@@ -32,11 +32,12 @@ class StorageWrapperTest extends TestCase
     /** @var \OCA\RansomwareDetection\Monitor|\PHPUnit_Framework_MockObject_MockObject */
     protected $monitor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->storage = $this->getMockBuilder('OCP\Files\Storage\IStorage')
+            ->setConstructorArgs([array()])
             ->getMock();
 
         $this->monitor = $this->getMockBuilder('OCA\RansomwareDetection\Monitor')
