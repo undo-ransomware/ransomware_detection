@@ -29,7 +29,7 @@ class EntropyResultTest extends TestCase
     /** @var EntropyResult */
     protected $entropyResult;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

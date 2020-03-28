@@ -44,7 +44,7 @@ class EntropyAnalyzerTest extends TestCase
     /** @var string */
     protected $userId = 'john';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
