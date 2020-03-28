@@ -35,7 +35,7 @@ class CacheWrapperTest extends TestCase
     /** @var \OCA\RansomwareDetection\Monitor\Operation|\PHPUnit_Framework_MockObject_MockObject */
     protected $monitor;
 
-    protected function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
