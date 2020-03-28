@@ -42,6 +42,7 @@ class CacheWrapperTest extends TestCase
         $this->cache = $this->getMockBuilder('OCP\Files\Cache\ICache')
             ->getMock();
         $this->storage = $this->getMockBuilder('OCP\Files\Storage\IStorage')
+            ->setConstructorArgs([array()])
             ->getMock();
         $this->monitor = $this->getMockBuilder('OCA\RansomwareDetection\Monitor')
             ->disableOriginalConstructor()
