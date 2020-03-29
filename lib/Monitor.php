@@ -138,7 +138,7 @@ class Monitor
         $path = $paths[0];
 
         $storage = $this->rootFolder->getUserFolder($this->userId)->get(dirname($path))->getStorage();
-        if ($this->userId === null || $this->nestingLevel !== 0 /*|| !$this->isUploadedFile($storage, $path)*/ || $this->isCreatingSkeletonFiles()) {
+        if ($this->userId === null || $this->nestingLevel !== 0 || /*!$this->isUploadedFile($storage, $path) ||*/ $this->isCreatingSkeletonFiles()) {
             // check only cloud files and no system files
             return;
         }
@@ -243,34 +243,46 @@ class Monitor
                 return;
             case self::CREATE:
                 $this->logger->error("Create", ['app' =>  Application::APP_ID]);
-                // only folders are created
-
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
-                $fileOperation = new FileOperation();
-                $fileOperation->setUserId($this->userId);
-                $fileOperation->setPath(str_replace('files', '', pathinfo($path)['dirname']));
-                $fileOperation->setOriginalName(pathinfo($path)['basename']);
-                $fileOperation->setType('folder');
-                $fileOperation->setMimeType('httpd/unix-directory');
-                $fileOperation->setSize(0);
-                $fileOperation->setTimestamp(time());
-                $fileOperation->setCorrupted(false);
-                $fileOperation->setCommand(self::CREATE);
-                $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
-                $fileOperation->setSequence($sequenceId);
+                try {
+                    $userRoot = $this->rootFolder->getUserFolder($this->userId);
+                    $node = $userRoot->get($path);
+                } catch (\OCP\Files\NotFoundException $exception) {
+                    $this->logger->error("File Not Found ".$path, ['app' =>  Application::APP_ID]);
+                    return;
+                }
+                if (!($node instanceof File)) {
 
-                // entropy analysis
-                $fileOperation->setEntropy(0.0);
-                $fileOperation->setStandardDeviation(0.0);
-                $fileOperation->setFileClass(EntropyResult::NORMAL);
+                    $fileOperation = new FileOperation();
+                    $fileOperation->setUserId($this->userId);
+                    $fileOperation->setPath(str_replace('files', '', pathinfo($path)['dirname']));
+                    $fileOperation->setOriginalName(pathinfo($path)['basename']);
+                    $fileOperation->setType('folder');
+                    $fileOperation->setMimeType('httpd/unix-directory');
+                    $fileOperation->setSize(0);
+                    $fileOperation->setTimestamp(time());
+                    $fileOperation->setCorrupted(false);
+                    $fileOperation->setCommand(self::CREATE);
+                    $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
+                    $fileOperation->setSequence($sequenceId);
 
-                // file extension analysis
-                $fileOperation->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
+                    // entropy analysis
+                    $fileOperation->setEntropy(0.0);
+                    $fileOperation->setStandardDeviation(0.0);
+                    $fileOperation->setFileClass(EntropyResult::NORMAL);
 
-                $this->mapper->insert($fileOperation);
-                $this->nestingLevel--;
+                    // file extension analysis
+                    $fileOperation->setFileExtensionClass(FileExtensionResult::NOT_SUSPICIOUS);
+
+                    $this->mapper->insert($fileOperation);
+                    $this->nestingLevel--;
+                } else {
+                    $this->addFileOperation($paths, $node, self::CREATE);
+
+                    $this->nestingLevel--;
+                }
 
                 return;
             default:
