@@ -56,7 +56,7 @@ class FilesEvents {
 	 */
 	public function __construct(
         ILogger $logger,
-        $monitor,
+        Monitor $monitor,
         $userId
 
 	) {
@@ -72,8 +72,8 @@ class FilesEvents {
 	 * @throws NotFoundException
 	 */
 	public function onFileUpdate(array $params) {
+        $this->logger->error("Updating ".$params['path'], ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::WRITE);
-		$this->logger->error("Updating ".$params['path'], ['app' =>  Application::APP_ID]);
 	}
 
 
@@ -89,23 +89,28 @@ class FilesEvents {
     }
 
     public function onFileCreate(array $params) {
-		$this->logger->error("Creating ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->error("Creating ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->analyze([$params['path']], Monitor::CREATE);
     }
     
     public function onFileWrite(array $params) {
-		$this->logger->error("Writing ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->error("Writing ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->analyze([$params['path']], Monitor::WRITE);
     }
     
     public function onFileDelete(array $params) {
-		$this->logger->error("Deleting ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->error("Deleting ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->analyze([$params['path']], Monitor::DELETE);
     }
     
     public function onFileCopy(array $params) {
-		$this->logger->error("Copying ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->error("Copying ".$params['oldpath']." to ".$params['newpath'], ['app' =>  Application::APP_ID]);
+        $this->analyze([$params['oldpath'], $params['newpath']], Monitor::RENAME);
     }
     
     public function onFileTouch(array $params) {
-		$this->logger->error("Touching ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->error("Touching ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->analyze([$params['path']], Monitor::WRITE);
     }
     
     /**

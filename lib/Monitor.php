@@ -136,7 +136,8 @@ class Monitor
     public function analyze($paths, $mode)
     {
         $path = $paths[0];
-        $storage = $this->rootFolder->get(dirname($path))->getStorage();
+
+        $storage = $this->rootFolder->getUserFolder($this->userId)->get(dirname($path))->getStorage();
         if ($this->userId === null || $this->nestingLevel !== 0 || !$this->isUploadedFile($storage, $path) || $this->isCreatingSkeletonFiles()) {
             // check only cloud files and no system files
             return;
@@ -353,7 +354,11 @@ class Monitor
         $fullPath = $path;
         if (property_exists($storage, 'mountPoint')) {
             /* @var StorageWrapper $storage */
-            $fullPath = $storage->mountPoint.$path;
+            try {
+                $fullPath = $storage->mountPoint.$path;
+            } catch (\Exception $ex) {
+                return false;
+            }
         }
 
         // ignore transfer files
