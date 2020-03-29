@@ -138,7 +138,7 @@ class Monitor
         $path = $paths[0];
 
         $storage = $this->rootFolder->getUserFolder($this->userId)->get(dirname($path))->getStorage();
-        if ($this->userId === null || $this->nestingLevel !== 0 || !$this->isUploadedFile($storage, $path) || $this->isCreatingSkeletonFiles()) {
+        if ($this->userId === null || $this->nestingLevel !== 0 /*|| !$this->isUploadedFile($storage, $path)*/ || $this->isCreatingSkeletonFiles()) {
             // check only cloud files and no system files
             return;
         }
@@ -156,6 +156,8 @@ class Monitor
 
         switch ($mode) {
             case self::RENAME:
+                $path = $paths[1];
+                $this->logger->error("Rename ".$paths[0]." to ".$paths[1], ['app' =>  Application::APP_ID]);
                 if (preg_match('/.+\.d[0-9]+/', pathinfo($paths[1])['basename']) > 0) {
                     return;
                 }
@@ -163,9 +165,10 @@ class Monitor
                 $this->resetProfindCount();
 
                 try {
-                    $userRoot = $this->rootFolder->getUserFolder($this->userId)->getParent();
+                    $userRoot = $this->rootFolder->getUserFolder($this->userId);
                     $node = $userRoot->get($path);
                 } catch (\OCP\Files\NotFoundException $exception) {
+                    $this->logger->error("File Not Found ".$path, ['app' =>  Application::APP_ID]);
                     return;
                 }
 
@@ -177,23 +180,21 @@ class Monitor
                     return;
                 }
 
-                $node->changeLock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
-
                 $this->addFileOperation($paths, $node, self::RENAME);
-
-                $node->changeLock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
 
                 $this->nestingLevel--;
 
                 return;
             case self::WRITE:
+                $this->logger->error("Write ".$path, ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
                 try {
-                    $userRoot = $this->rootFolder->getUserFolder($this->userId)->getParent();
+                    $userRoot = $this->rootFolder->getUserFolder($this->userId);
                     $node = $userRoot->get($path);
                 } catch (\OCP\Files\NotFoundException $exception) {
+                    $this->logger->error("File Not Found ".$path, ['app' =>  Application::APP_ID]);
                     return;
                 }
 
@@ -215,13 +216,15 @@ class Monitor
 
                 return;
             case self::DELETE:
+                $this->logger->error("Delete", ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
                 try {
-                    $userRoot = $this->rootFolder->getUserFolder($this->userId)->getParent();
+                    $userRoot = $this->rootFolder->getUserFolder($this->userId);
                     $node = $userRoot->get($path);
                 } catch (\OCP\Files\NotFoundException $exception) {
+                    $this->logger->error("File Not Found ".$path, ['app' =>  Application::APP_ID]);
                     return;
                 }
 
@@ -233,15 +236,13 @@ class Monitor
                     return;
                 }
 
-                $node->changeLock(\OCP\Lock\ILockingProvider::LOCK_SHARED);
-
                 $this->addFileOperation($paths, $node, self::DELETE);
 
-                $node->changeLock(\OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
                 $this->nestingLevel--;
 
                 return;
             case self::CREATE:
+                $this->logger->error("Create", ['app' =>  Application::APP_ID]);
                 // only folders are created
 
                 // reset PROPFIND_COUNT
@@ -357,7 +358,7 @@ class Monitor
             try {
                 $fullPath = $storage->mountPoint.$path;
             } catch (\Exception $ex) {
-                return false;
+                return true;
             }
         }
 
@@ -425,6 +426,7 @@ class Monitor
      */
     private function addFileOperation($paths, $node, $operation)
     {
+        $this->logger->error("Add file operation", ['app' =>  Application::APP_ID]);
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
         $fileOperation->setPath(str_replace('files', '', pathinfo($node->getInternalPath())['dirname']));
@@ -457,6 +459,7 @@ class Monitor
         $fileOperation->setStandardDeviation($entropyResult->getStandardDeviation());
         $fileOperation->setFileClass($entropyResult->getFileClass());
 
+        $this->logger->error("Entropy ".$entropyResult->getEntropy(), ['app' =>  Application::APP_ID]);
 
         $entity = $this->mapper->insert($fileOperation);
     }
