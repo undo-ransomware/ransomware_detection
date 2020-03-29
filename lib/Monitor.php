@@ -89,17 +89,17 @@ class Monitor
     protected $nestingLevel = 0;
 
     /**
-     * @param IRequest             $request
-     * @param IConfig              $config
-     * @param ITimeFactory         $time
-     * @param IAppManager          $appManager
-     * @param ILogger              $logger
-     * @param IRootFolder          $rootFolder
-     * @param EntropyAnalyzer      $entropyAnalyzer
-     * @param FileOperationMapper  $mapper
+     * @param IRequest                  $request
+     * @param IConfig                   $config
+     * @param ITimeFactory              $time
+     * @param IAppManager               $appManager
+     * @param ILogger                   $logger
+     * @param IRootFolder               $rootFolder
+     * @param EntropyAnalyzer           $entropyAnalyzer
+     * @param FileOperationMapper       $mapper
      * @param FileExtensionAnalyzer     $fileExtensionAnalyzer
-     * @param FileCorruptionAnalyzer $fileCorruptionAnalyzer
-     * @param string               $userId
+     * @param FileCorruptionAnalyzer    $fileCorruptionAnalyzer
+     * @param string                    $userId
      */
     public function __construct(
         IRequest $request,
@@ -130,13 +130,13 @@ class Monitor
     /**
      * Analyze file.
      *
-     * @param IStorage $storage
      * @param array    $paths
      * @param int      $mode
      */
-    public function analyze(IStorage $storage, $paths, $mode)
+    public function analyze($paths, $mode)
     {
         $path = $paths[0];
+        $storage = $this->rootFolder->get(dirname($path))->getStorage();
         if ($this->userId === null || $this->nestingLevel !== 0 || !$this->isUploadedFile($storage, $path) || $this->isCreatingSkeletonFiles()) {
             // check only cloud files and no system files
             return;

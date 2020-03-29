@@ -23,11 +23,15 @@ namespace OCA\RansomwareDetection\AppInfo;
 
 use OC\Files\Filesystem;
 use OCA\RansomwareDetection\Monitor;
+use OCA\RansomwareDetection\Events\FilesEvents;
+use OCA\RansomwareDetection\FilesHooks;
 use OCA\RansomwareDetection\Classifier;
+use OCA\RansomwareDetection\Analyzer\EntropyAnalyzer;
 use OCA\RansomwareDetection\Analyzer\SequenceAnalyzer;
 use OCA\RansomwareDetection\Analyzer\SequenceSizeAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileTypeFunnellingAnalyzer;
 use OCA\RansomwareDetection\Analyzer\EntropyFunnellingAnalyzer;
+use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
 use OCA\RansomwareDetection\Entropy\Entropy;
 use OCA\RansomwareDetection\Notification\Notifier;
@@ -36,6 +40,9 @@ use OCA\RansomwareDetection\Connector\Sabre\RequestPlugin;
 use OCA\RansomwareDetection\Service\FileOperationService;
 use OCA\RansomwareDetection\Mapper\FileOperationMapper;
 use OCP\AppFramework\App;
+use OCP\App\IAppManager;
+use OCP\Files\IRootFolder;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Storage\IStorage;
 use OCP\Notification\IManager;
 use OCP\Util;
@@ -44,6 +51,7 @@ use OCP\ILogger;
 use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\ISession;
+use OCP\IRequest;
 
 class Application extends App
 {
@@ -65,7 +73,7 @@ class Application extends App
         // services
         $container->registerService('FileOperationService', function ($c) {
             return new FileOperationService(
-                $c->query('FileOperationMapper'),
+                $c->query(FileOperationMapper::class),
                 $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
             );
         });
@@ -116,6 +124,47 @@ class Application extends App
                 $c->query(EntropyFunnellingAnalyzer::class)
             );
         });
+
+        $container->registerService('EntropyAnalyzer', function ($c) {
+            return new EntropyAnalyzer(
+                $c->query(ILogger::class),
+                $c->query(IRootFolder::class),
+                $c->query(Entropy::class),
+                $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
+            );
+        });
+
+        $container->registerService('FileCorruptionAnalyzer', function ($c) {
+            return new FileCorruptionAnalyzer(
+                $c->query(ILogger::class),
+                $c->query(IRootFolder::class),
+                $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
+            );
+        });
+
+        $container->registerService('Monitor', function ($c) {
+            return new Monitor(
+                $c->query(IRequest::class),
+                $c->query(IConfig::class),
+                $c->query(ITimeFactory::class),
+                $c->query(IAppManager::class),
+                $c->query(ILogger::class),
+                $c->query(IRootFolder::class),
+                $c->query(EntropyAnalyzer::class),
+                $c->query(FileOperationMapper::class),
+                $c->query(FileExtensionAnalyzer::class),
+                $c->query(FileCorruptionAnalyzer::class),
+                $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
+            );
+        });
+
+        $container->registerService('FilesEvents', function ($c) {
+            return new FilesEvents(
+                $c->query(ILogger::class),
+                $c->query(Monitor::class),
+                $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
+            );
+        });
     }
 
     /**
@@ -136,7 +185,14 @@ class Application extends App
             $sequenceAnalyzer = $this->getContainer()->query(SequenceAnalyzer::class);
             $event->getServer()->addPlugin(new RequestPlugin($logger, $config, $userSession, $session, $service, $notifications, $classifier, $sequenceAnalyzer));
         });
-        Util::connectHook('OC_Filesystem', 'preSetup', $this, 'addStorageWrapper');
+        //Util::connectHook('OC_Filesystem', 'preSetup', $this, 'addStorageWrapper');
+        Util::connectHook('OC_Filesystem', 'post_create', FilesHooks::class, 'onFileCreate');
+        Util::connectHook('OC_Filesystem', 'post_update', FilesHooks::class, 'onFileUpdate');
+        Util::connectHook('OC_Filesystem', 'post_rename', FilesHooks::class, 'onFileRename');
+        Util::connectHook('OC_Filesystem', 'post_write', FilesHooks::class, 'onFileWrite');
+        Util::connectHook('OC_Filesystem', 'post_delete', FilesHooks::class, 'onFileDelete');
+        Util::connectHook('OC_Filesystem', 'post_touch', FilesHooks::class, 'onFileTouch');
+        Util::connectHook('OC_Filesystem', 'post_copy', FilesHooks::class, 'onFileCopy');
         $this->registerNotificationNotifier();
     }
 
