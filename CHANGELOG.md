@@ -2,11 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.7.1
+
+### Fixed
+
+- Fix deadlock during sync of notes via the Android Notes app by using post file hooks instead of storage wrapper with pre setup hook.
+
 ## 0.7.0
 
 ### Added
 
-- Nextcloud version 17 support.
+- Nextcloud version 18 support.
 
 ## 0.6.0
 
