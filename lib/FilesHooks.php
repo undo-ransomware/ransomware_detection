@@ -1,15 +1,8 @@
 <?php
-declare(strict_types=1);
-
 
 /**
- * Files_FullTextSearch - Index the content of your files
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
- *
- * @author Maxence Lange <maxence@artificial-owl.com>
- * @copyright 2018
+ * @copyright Copyright (c) 2020 Matthias Held <matthias.held@uni-konstanz.de>
+ * @author Matthias Held <matthias.held@uni-konstanz.de>
  * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,28 +16,20 @@ declare(strict_types=1);
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 
 namespace OCA\RansomwareDetection;
 
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Events\FilesEvents;
 
-/**
- * Class FilesHooks
- *
- * @package OCA\Files_FullTextSearch\Hooks
- */
 class FilesHooks {
 
 	/**
-	 * retrieve the FilesEvents' Controller
+	 * Retrieve the FilesEvents' Controller.
 	 *
 	 * @return FilesEvents
-	 * @throws QueryException
 	 */
 	protected static function getController(): FilesEvents {
 		$app = new Application();
@@ -54,13 +39,9 @@ class FilesHooks {
 	}
 
 	/**
-	 * hook events: file is updated
+	 * Hook events: file is updated.
 	 *
 	 * @param array $params
-	 *
-	 * @throws QueryException
-	 * @throws InvalidPathException
-	 * @throws NotFoundException
 	 */
 	public static function onFileUpdate(array $params) {
 		self::getController()
@@ -69,39 +50,60 @@ class FilesHooks {
 
 
 	/**
-	 * hook events: file is renamed
+	 * Hook events: file is renamed.
 	 *
 	 * @param array $params
-	 *
-	 * @throws NotFoundException
-	 * @throws QueryException
-	 * @throws InvalidPathException
 	 */
 	public static function onFileRename(array $params) {
 		self::getController()
 			->onFileRename($params);
     }
-    
+	
+	/**
+	 * Hook events: file is created.
+	 *
+	 * @param array $params
+	 */
     public static function onFileCreate(array $params) {
 		self::getController()
 			->onFileCreate($params);
     }
-    
+	
+	/**
+	 * Hook events: file is written.
+	 *
+	 * @param array $params
+	 */
     public static function onFileWrite(array $params) {
 		self::getController()
 			->onFileWrite($params);
     }
-    
+	
+	/**
+	 * Hook events: file is deleted.
+	 *
+	 * @param array $params
+	 */
     public static function onFileDelete(array $params) {
 		self::getController()
 			->onFileDelete($params);
     }
-    
+	
+	/**
+	 * Hook events: file is touched.
+	 *
+	 * @param array $params
+	 */
     public static function onFileTouch(array $params) {
 		self::getController()
 			->onFileTouch($params);
     }
-    
+	
+	/**
+	 * Hook events: file is copied.
+	 *
+	 * @param array $params
+	 */
     public static function onFileCopy(array $params) {
 		self::getController()
 			->onFileCopy($params);

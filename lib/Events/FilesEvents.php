@@ -1,15 +1,8 @@
 <?php
-declare(strict_types=1);
-
 
 /**
- * Files_FullTextSearch - Index the content of your files
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
- *
- * @author Maxence Lange <maxence@artificial-owl.com>
- * @copyright 2018
+ * @copyright Copyright (c) 2020 Matthias Held <matthias.held@uni-konstanz.de>
+ * @author Matthias Held <matthias.held@uni-konstanz.de>
  * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,10 +16,8 @@ declare(strict_types=1);
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 
 namespace OCA\RansomwareDetection\Events;
 
@@ -34,25 +25,22 @@ use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCP\ILogger;
 
-/**
- * Class FilesEvents
- *
- * @package OCA\Files_FullTextSearch\Events
- */
 class FilesEvents {
 
 	/** @var string */
     private $userId;
     
+    /** @var ILogger */
     private $logger;
 
+    /** @var Monitor */
     private $monitor;
 
 
 	/**
-	 * FilesEvents constructor.
-	 *
-	 * @param string $userId
+     * @param ILogger   $logger
+     * @param Monitor   $monitor
+	 * @param string    $userId
 	 */
 	public function __construct(
         ILogger $logger,
@@ -67,9 +55,6 @@ class FilesEvents {
 
 	/**
 	 * @param array $params
-	 *
-	 * @throws InvalidPathException
-	 * @throws NotFoundException
 	 */
 	public function onFileUpdate(array $params) {
         $this->logger->error("Updating ".$params['path'], ['app' =>  Application::APP_ID]);
@@ -79,35 +64,47 @@ class FilesEvents {
 
 	/**
 	 * @param array $params
-	 *
-	 * @throws NotFoundException
-	 * @throws InvalidPathException
 	 */
 	public function onFileRename(array $params) {
         $this->logger->error("Renaming ".$params['oldpath']." to ".$params['newpath'], ['app' =>  Application::APP_ID]);
         $this->analyze([$params['oldpath'], $params['newpath']], Monitor::RENAME);
     }
 
+    /**
+	 * @param array $params
+	 */
     public function onFileCreate(array $params) {
         $this->logger->error("Creating ".$params['path'], ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::CREATE);
     }
     
+    /**
+	 * @param array $params
+	 */
     public function onFileWrite(array $params) {
-        $this->logger->error("Writing ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->error("Writing ".$params['path']." whole array ".implode($params), ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::WRITE);
     }
     
+    /**
+	 * @param array $params
+	 */
     public function onFileDelete(array $params) {
         $this->logger->error("Deleting ".$params['path'], ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::DELETE);
     }
     
+    /**
+	 * @param array $params
+	 */
     public function onFileCopy(array $params) {
         $this->logger->error("Copying ".$params['oldpath']." to ".$params['newpath'], ['app' =>  Application::APP_ID]);
         $this->analyze([$params['oldpath'], $params['newpath']], Monitor::RENAME);
     }
     
+    /**
+	 * @param array $params
+	 */
     public function onFileTouch(array $params) {
         $this->logger->error("Touching ".$params['path'], ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::WRITE);
