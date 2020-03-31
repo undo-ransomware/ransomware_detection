@@ -185,7 +185,6 @@ class Application extends App
             $sequenceAnalyzer = $this->getContainer()->query(SequenceAnalyzer::class);
             $event->getServer()->addPlugin(new RequestPlugin($logger, $config, $userSession, $session, $service, $notifications, $classifier, $sequenceAnalyzer));
         });
-        //Util::connectHook('OC_Filesystem', 'preSetup', $this, 'addStorageWrapper');
         Util::connectHook('OC_Filesystem', 'post_create', FilesHooks::class, 'onFileCreate');
         Util::connectHook('OC_Filesystem', 'post_update', FilesHooks::class, 'onFileUpdate');
         Util::connectHook('OC_Filesystem', 'post_rename', FilesHooks::class, 'onFileRename');
@@ -194,38 +193,6 @@ class Application extends App
         Util::connectHook('OC_Filesystem', 'post_touch', FilesHooks::class, 'onFileTouch');
         Util::connectHook('OC_Filesystem', 'post_copy', FilesHooks::class, 'onFileCopy');
         $this->registerNotificationNotifier();
-    }
-
-    /**
-     * @internal
-     */
-    public function addStorageWrapper()
-    {
-        Filesystem::addStorageWrapper(self::APP_ID, [$this, 'addStorageWrapperCallback'], -10);
-    }
-
-    /**
-     * @internal
-     *
-     * @param string   $mountPoint
-     * @param IStorage $storage
-     *
-     * @return StorageWrapper|IStorage
-     */
-    public function addStorageWrapperCallback($mountPoint, IStorage $storage)
-    {
-        if (!\OC::$CLI && !$storage->instanceOfStorage('OCA\Files_Sharing\SharedStorage')) {
-            /** @var Monitor $monitor */
-            $monitor = $this->getContainer()->query(Monitor::class);
-
-            return new StorageWrapper([
-                'storage' => $storage,
-                'mountPoint' => $mountPoint,
-                'monitor' => $monitor,
-            ]);
-        }
-
-        return $storage;
     }
 
     protected function registerNotificationNotifier()
