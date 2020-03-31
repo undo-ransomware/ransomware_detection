@@ -65,15 +65,4 @@ class ApplicationTest extends TestCase
     {
         $this->assertTrue($this->container->query($service) instanceof $expected);
     }
-
-    public function testAddStorageWrapperCallback()
-    {
-        $storage = $this->getMockBuilder('OCP\Files\Storage\IStorage')
-                        ->setConstructorArgs([array()])
-                        ->getMock();
-
-        $result = $this->application->addStorageWrapperCallback('mountPoint', $storage);
-        // Request from CLI, so $results is instanceof IStorage and not StorageWrapper
-        $this->assertTrue($result instanceof IStorage);
-    }
 }
