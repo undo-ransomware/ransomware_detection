@@ -120,7 +120,7 @@
                  td = $('<td></td>').append($('<p></p>').attr({"title": "READ"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-book fa-fw"></span>'));
              } else if (fileData.command === 5) {
                  // create
-                 td = $('<td></td>').append($('<p></p>').attr({"title": "CREATE"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-pencil-alt fa-fw"></span>'));
+                 td = $('<td></td>').append($('<p></p>').attr({"title": "CREATE"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-plus-circle fa-fw"></span>'));
              } else {
                  // error
                  td = $('<td></td>').append($('<p></p>').attr({"title": "ERROR"}).tooltip({placement: 'top'}).prepend('<span class="fas fa-times fa-fw"></span>'));
