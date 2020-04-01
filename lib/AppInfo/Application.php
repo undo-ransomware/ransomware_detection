@@ -186,12 +186,12 @@ class Application extends App
             $event->getServer()->addPlugin(new RequestPlugin($logger, $config, $userSession, $session, $service, $notifications, $classifier, $sequenceAnalyzer));
         });
         Util::connectHook('OC_Filesystem', 'post_create', FilesHooks::class, 'onFileCreate');
-        Util::connectHook('OC_Filesystem', 'post_update', FilesHooks::class, 'onFileUpdate');
+        // Util::connectHook('OC_Filesystem', 'post_update', FilesHooks::class, 'onFileUpdate');
         Util::connectHook('OC_Filesystem', 'post_rename', FilesHooks::class, 'onFileRename');
         Util::connectHook('OC_Filesystem', 'post_write', FilesHooks::class, 'onFileWrite');
         Util::connectHook('OC_Filesystem', 'post_delete', FilesHooks::class, 'onFileDelete');
-        Util::connectHook('OC_Filesystem', 'post_touch', FilesHooks::class, 'onFileTouch');
-        Util::connectHook('OC_Filesystem', 'post_copy', FilesHooks::class, 'onFileCopy');
+        // Util::connectHook('OC_Filesystem', 'post_touch', FilesHooks::class, 'onFileTouch');
+        // Util::connectHook('OC_Filesystem', 'post_copy', FilesHooks::class, 'onFileCopy');
         $this->registerNotificationNotifier();
     }
 
