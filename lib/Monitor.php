@@ -157,7 +157,7 @@ class Monitor
         switch ($mode) {
             case self::RENAME:
                 $path = $paths[1];
-                $this->logger->error("Rename ".$paths[0]." to ".$paths[1], ['app' =>  Application::APP_ID]);
+                $this->logger->debug("Rename ".$paths[0]." to ".$paths[1], ['app' =>  Application::APP_ID]);
                 if (preg_match('/.+\.d[0-9]+/', pathinfo($paths[1])['basename']) > 0) {
                     return;
                 }
@@ -186,7 +186,7 @@ class Monitor
 
                 return;
             case self::WRITE:
-                $this->logger->error("Write ".$path, ['app' =>  Application::APP_ID]);
+                $this->logger->debug("Write ".$path, ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
@@ -216,7 +216,7 @@ class Monitor
 
                 return;
             case self::DELETE:
-                $this->logger->error("Delete", ['app' =>  Application::APP_ID]);
+                $this->logger->debug("Delete", ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
@@ -242,7 +242,7 @@ class Monitor
 
                 return;
             case self::CREATE:
-                $this->logger->error("Create", ['app' =>  Application::APP_ID]);
+                $this->logger->debug("Create", ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
@@ -402,6 +402,7 @@ class Monitor
      */
     private function addFolderOperation($paths, $node, $operation)
     {
+        $this->logger->debug("Add folder operation.", ['app' =>  Application::APP_ID]);
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
         $fileOperation->setPath(str_replace('files', '', pathinfo($node->getInternalPath())['dirname']));
@@ -438,7 +439,7 @@ class Monitor
      */
     private function addFileOperation($paths, $node, $operation)
     {
-        $this->logger->error("Add file operation", ['app' =>  Application::APP_ID]);
+        $this->logger->debug("Add file operation.", ['app' =>  Application::APP_ID]);
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
         $fileOperation->setPath(str_replace('files', '', pathinfo($node->getInternalPath())['dirname']));
@@ -470,8 +471,6 @@ class Monitor
         $fileOperation->setEntropy($entropyResult->getEntropy());
         $fileOperation->setStandardDeviation($entropyResult->getStandardDeviation());
         $fileOperation->setFileClass($entropyResult->getFileClass());
-
-        $this->logger->error("Entropy ".$entropyResult->getEntropy(), ['app' =>  Application::APP_ID]);
 
         $entity = $this->mapper->insert($fileOperation);
     }

@@ -163,18 +163,16 @@ class EntropyAnalyzer
     {
         $handle = $node->fopen('r');
         if (!$handle) {
-            $this->logger->debug('calculateEntropyOfFile: Getting data failed.', array('app' => Application::APP_ID));
+            $this->logger->warning('calculateEntropyOfFile: Getting data failed.', array('app' => Application::APP_ID));
 
             return 0.0;
         }
 
         $entropy = 0.0;
         $total = 0;
-        $this->logger->error("Calculate entropy", ['app' =>  Application::APP_ID]);
 
         while (!feof($handle)) {
             $data = fread($handle, 1024);
-            $this->logger->error("Data ".$data, ['app' =>  Application::APP_ID]);
             $total = $total + 1;
             if (strlen($data) === 1024) {
                 $entropy = $entropy + $this->entropy->calculateEntropy($data);

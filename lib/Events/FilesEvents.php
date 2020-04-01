@@ -57,7 +57,7 @@ class FilesEvents {
 	 * @param array $params
 	 */
 	public function onFileUpdate(array $params) {
-        $this->logger->error("Updating ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->debug("Updating ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::WRITE);
 	}
 
@@ -66,7 +66,7 @@ class FilesEvents {
 	 * @param array $params
 	 */
 	public function onFileRename(array $params) {
-        $this->logger->error("Renaming ".$params['oldpath']." to ".$params['newpath'], ['app' =>  Application::APP_ID]);
+        $this->logger->debug("Renaming ".$params['oldpath']." to ".$params['newpath'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
         $this->analyze([$params['oldpath'], $params['newpath']], Monitor::RENAME);
     }
 
@@ -74,7 +74,7 @@ class FilesEvents {
 	 * @param array $params
 	 */
     public function onFileCreate(array $params) {
-        $this->logger->error("Creating ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->debug("Creating ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::CREATE);
     }
     
@@ -82,7 +82,7 @@ class FilesEvents {
 	 * @param array $params
 	 */
     public function onFileWrite(array $params) {
-        $this->logger->error("Writing ".$params['path']." whole array ".implode($params), ['app' =>  Application::APP_ID]);
+        $this->logger->debug("Writing ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::WRITE);
     }
     
@@ -90,7 +90,7 @@ class FilesEvents {
 	 * @param array $params
 	 */
     public function onFileDelete(array $params) {
-        $this->logger->error("Deleting ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->debug("Deleting ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::DELETE);
     }
     
@@ -98,7 +98,7 @@ class FilesEvents {
 	 * @param array $params
 	 */
     public function onFileCopy(array $params) {
-        $this->logger->error("Copying ".$params['oldpath']." to ".$params['newpath'], ['app' =>  Application::APP_ID]);
+        $this->logger->debug("Copying ".$params['oldpath']." to ".$params['newpath'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
         $this->analyze([$params['oldpath'], $params['newpath']], Monitor::RENAME);
     }
     
@@ -106,7 +106,7 @@ class FilesEvents {
 	 * @param array $params
 	 */
     public function onFileTouch(array $params) {
-        $this->logger->error("Touching ".$params['path'], ['app' =>  Application::APP_ID]);
+        $this->logger->debug("Touching ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
         $this->analyze([$params['path']], Monitor::WRITE);
     }
     
