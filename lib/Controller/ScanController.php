@@ -165,7 +165,6 @@ class ScanController extends OCSController
 
             return new JSONResponse(['status' => 'error', 'message' => 'File does not exist.', 'path' => $trashPath, 'name' => $name, 'mtime' => $timestamp], Http::STATUS_OK);
         } else {
-            // wubalubadubdub
             // Scan can only detect WRITE and DELETE this should never happen.
             $this->logger->error('postRecover: RENAME or CREATE operation.', array('app' => Application::APP_ID));
             return new JSONResponse(['status' => 'error', 'message' => 'Wrong command.'], Http::STATUS_BAD_REQUEST);
