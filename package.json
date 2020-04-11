@@ -18,14 +18,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ilovemilk/ransomware_detection.git"
+		"url": "git+https://github.com/undo-ransomware/ransomware_detection.git"
 	},
 	"author": "Matthias Held",
 	"license": "AGPL-3.0-or-later",
 	"bugs": {
-		"url": "https://github.com/ilovemilk/ransomware_detection/issues"
+		"url": "https://github.com/undo-ransomware/ransomware_detection/issues"
 	},
-	"homepage": "https://github.com/ilovemilk/ransomware_detection#readme",
+	"homepage": "https://github.com/undo-ransomware/ransomware_detection#readme",
 	"engines": {
 		"node": ">=10.0.0"
 	},
