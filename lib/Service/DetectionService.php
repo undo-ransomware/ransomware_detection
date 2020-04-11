@@ -59,10 +59,11 @@ class DetectionService {
 
     public function getDetections() {
         $detectionObjects = array();
+        //array_push($detectionObjects, new Detection(1, array()));
         return $detectionObjects;
     }
 
     public function getDetection($id) {
-        return DetectionSerializer::deserialize(json_decode(new Detection()));
+        return DetectionSerializer::deserialize(json_decode(new Detection(1, array())));
     }
 }

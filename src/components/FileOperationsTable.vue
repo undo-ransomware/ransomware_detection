@@ -2,8 +2,9 @@
     <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort :items.prop="fileOperations">
         <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
         <vaadin-grid-column width="5em" flex-grow="0" id="status" header="Status"></vaadin-grid-column>
+        <vaadin-grid-column width="9em" flex-grow="0" id="operation" header="" class="operation"></vaadin-grid-column>
         <vaadin-grid-sort-column width="9em" path="originalName" header="Name"></vaadin-grid-sort-column>
-        <vaadin-grid-sort-column width="9em" path="timestamp" id="time" header="Geändert"></vaadin-grid-sort-column>
+        <vaadin-grid-sort-column width="9em" path="timestamp" id="time" header="File changed"></vaadin-grid-sort-column>
     </vaadin-grid>
 </template>
 
@@ -76,6 +77,49 @@ export default {
             root.innerHTML = '';
             root.appendChild(localTime);
         }
+
+        document.querySelector('#operation').renderer = (root, grid, rowData) => {
+            switch (rowData.item.command) {
+                case 1:
+                    if (rowData.item.type == 'file') {
+                        root.innerHTML = 'File deleted';
+                    } else {
+                        root.innerHTML = 'Folder deleted';
+                    }
+                    break;
+                case 2:
+                    if (rowData.item.type == 'file') {
+                        root.innerHTML = 'File renamed';
+                    } else {
+                        root.innerHTML = 'Folder renamed';
+                    }
+                    break;
+                case 3:
+                    if (rowData.item.type == 'file') {
+                        root.innerHTML = 'File written';
+                    } else {
+                        root.innerHTML = 'Folder written';
+                    }
+                    break;
+                case 4:
+                    if (rowData.item.type == 'file') {
+                        root.innerHTML = 'File read';
+                    } else {
+                        root.innerHTML = 'Folder read';
+                    }
+                    break;
+                case 5:
+                    if (rowData.item.type == 'file') {
+                        root.innerHTML = 'File created';
+                    } else {
+                        root.innerHTML = 'Folder created';
+                    }
+                    break;
+                default:
+                    root.innerHTML = 'No information';
+                    break;
+            }
+        }
     }
 }
 </script>
@@ -83,5 +127,8 @@ export default {
 <style scoped>
     vaadin-grid {
         border: none;
+    }
+    .operation {
+        color: #878787 !important;
     }
 </style>

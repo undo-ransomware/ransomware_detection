@@ -5,6 +5,9 @@
 				<paper-spinner active></paper-spinner>
 			</div>
 			<div class="page">
+                <div class="notification-wrapper">
+                    <Notification text="Test Notification" @on-close="visible = false" :visible="visible"></Notification>
+                </div>
                 <Header header="Recover">
                     <RecoverAction v-if="detected" id="recover" label="Recover" v-on:recover="onRecover" primary></RecoverAction>
                 </Header>
@@ -24,6 +27,7 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import FileOperationsTable from '../components/FileOperationsTable'
+import Notification from '../components/Notification'
 import Header from '../components/Header'
 import RecoverAction from '../components/RecoverAction'
 import AppContent from 'nextcloud-vue/dist/Components/AppContent'
@@ -34,7 +38,13 @@ export default {
 		AppContent,
         FileOperationsTable,
         Header,
-        RecoverAction
+        RecoverAction,
+        Notification
+    },
+    props: {
+        visible: {
+            type: Boolean, default: false
+        }
     },
     data() {
         return {
@@ -150,4 +160,8 @@ export default {
 		height: 90vh;
 		justify-content: center;
 	}
+    .notification-wrapper {
+        display: flex;
+        justify-content: center;
+    }
 </style>
