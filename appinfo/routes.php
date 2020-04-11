@@ -10,22 +10,16 @@
  */
 return [
     'routes' => [
-        ['name' => 'recover#index', 'url' => '/', 'verb' => 'GET'],
-        ['name' => 'recover#scan', 'url' => '/scan', 'verb' => 'GET'],
-    ],
-    'ocs' => [
-        // Basic controller
-        ['name' => 'basic#changeColorMode', 'url' => '/api/{apiVersion}/change-color-mode/{colorMode}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'basic#getColorMode', 'url' => '/api/{apiVersion}/get-color-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'basic#getDebugMode', 'url' => '/api/{apiVersion}/get-debug-mode', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        // Monitoring controller
-        ['name' => 'monitoring#listFileOperations', 'url' => '/api/{apiVersion}/list', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'monitoring#export', 'url' => '/api/{apiVersion}/export', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'monitoring#deleteSequence', 'url' => '/api/{apiVersion}/delete-sequence/{sequence}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'monitoring#recover', 'url' => '/api/{apiVersion}/recover', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']],
-        // Scan controller
-        ['name' => 'scan#recover', 'url' => '/api/{apiVersion}/scan-recover', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'scan#filesToScan', 'url' => '/api/{apiVersion}/files-to-scan', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
-        ['name' => 'scan#scanSequence', 'url' => '/api/{apiVersion}/scan-sequence', 'verb' => 'POST', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+        // File operation controller
+        ['name' => 'fileOperation#findAll', 'url' => '/api/{apiVersion}/file-operation', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'fileOperation#find', 'url' => '/api/{apiVersion}/file-operation/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'fileOperation#recover', 'url' => '/api/{apiVersion}/file-operation/{id}/recover', 'verb' => 'PUT', 'requirements' => ['apiVersion' => 'v1']],
+        // Settings controller
+        ['name' => 'settings#update', 'url' => '/api/{apiVersion}/settings', 'verb' => 'PUT', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'settings#findAll', 'url' => '/api/{apiVersion}/settings', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        // Detection controller
+        ['name' => 'detection#findAll', 'url' => '/api/{apiVersion}/detection', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
+        ['name' => 'detection#find', 'url' => '/api/{apiVersion}/detection/{id}', 'verb' => 'GET', 'requirements' => ['apiVersion' => 'v1']],
     ],
 ];

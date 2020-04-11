@@ -22,26 +22,33 @@
 namespace OCA\RansomwareDetection\Controller;
 
 use OCA\RansomwareDetection\AppInfo\Application;
+use OCA\RansomwareDetection\Service\FileOperationService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
 
-class RecoverController extends Controller
+class PageController extends Controller
 {
+    /** @var FileOperationService */
+    protected $service;
+
     /** @var int */
     private $userId;
 
     /**
      * @param string   $appName
      * @param IRequest $request
+     * @param FileOperationService $service
      * @param string   $userId
      */
     public function __construct(
         $appName,
         IRequest $request,
+        FileOperationService $service,
         $userId
     ) {
         parent::__construct($appName, $request);
+        $this->service = $service;
         $this->userId = $userId;
     }
 
@@ -56,18 +63,5 @@ class RecoverController extends Controller
     public function index()
     {
         return new TemplateResponse(Application::APP_ID, 'index');
-    }
-
-    /**
-     * Scan page.
-     *
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     *
-     * @return TemplateResponse
-     */
-    public function scan()
-    {
-        return new TemplateResponse(Application::APP_ID, 'scan');
     }
 }

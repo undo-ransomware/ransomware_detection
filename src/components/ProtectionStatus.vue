@@ -19,11 +19,6 @@ import axios from 'nextcloud-axios'
 export default {
     name: 'ProtectionStatus',
     props: {
-        protectionLink: {
-			type: String,
-			default: '',
-			required: true
-        },
         detectionLink: {
 			type: String,
 			default: '',
@@ -31,32 +26,15 @@ export default {
 		}
     },
     created() {
-        this.fetchServicesStatus();
         this.fetchDetectionStatus();
     },
     data() {
         return {
             detection: 0,
-            protection: 0
+            protection: 1
         };
     },
     methods: {
-        fetchServicesStatus() {
-            axios({
-				method: 'GET',
-				url: this.protectionLink
-            })
-            .then(json => {
-                this.protection = 1;
-                for (i = 0; i < json.data.length; i++) {
-                    if (json.data[i].status == 0) {
-                        this.protection = 0;
-                    }
-                }
-                this.$emit('protection-state-changed');
-            })
-            .catch( error => { console.error(error); });
-        },
         fetchDetectionStatus() {
             axios({
 				method: 'GET',
@@ -67,6 +45,7 @@ export default {
                 if (json.data.length > 0) {
                     this.detection = 1;
                 }
+                this.$emit('protection-state-changed');
             })
             .catch( error => { console.error(error); });
         }

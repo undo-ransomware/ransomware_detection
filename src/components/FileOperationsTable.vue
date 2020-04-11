@@ -16,6 +16,7 @@ import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 import '../webcomponents/ransomware-icons'
 import 'time-elements/dist/time-elements';
+import moment from 'moment'
 
 export default {
     name: 'FileOperationsTable',
