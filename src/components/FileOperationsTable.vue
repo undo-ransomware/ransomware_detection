@@ -15,6 +15,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-sort-column.js';
 import '@vaadin/vaadin-grid/vaadin-grid-column.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icons/editor-icons.js';
 import '../webcomponents/ransomware-icons'
 import 'time-elements/dist/time-elements';
 import moment from 'moment'
@@ -48,23 +49,25 @@ export default {
     mounted () {
         document.querySelector('#status').renderer = (root, grid, rowData) => {
             const icon = document.createElement('iron-icon');
-            switch (rowData.item.status) {
-                case 0:
-                    icon.setAttribute('icon', 'ransomware:timelapse');
-                    icon.style = "color: blue;";
-                    break;
-                case 1:
-                    icon.setAttribute('icon', 'verified-user');
-                    icon.style = "color: green;";
-                    break;
-                case 2:
-                    icon.setAttribute('icon', 'error');
-                    icon.style = "color: red;";
-                    break;
-                default:
-                    icon.setAttribute('icon', 'ransomware:timelapse');
-                    icon.style = "color: blue;";
-                    break;
+            if (rowData.item.suspicionClass > 1) {
+                icon.setAttribute('icon', 'ransomware:locked');
+                icon.style = "color: #ED0012;"
+            } else if (rowData.item.suspicionClass == 1) {
+                if (rowData.item.type == "folder") {
+                    icon.setAttribute('icon', 'folder');
+                }
+                if (rowData.item.type == "file") {
+                    icon.setAttribute('icon', 'editor:insert-drive-file');
+                }
+                icon.style = "color: #7ED221;"
+            } else {
+                if (rowData.item.type == "folder") {
+                    icon.setAttribute('icon', 'folder');
+                }
+                if (rowData.item.type == "file") {
+                    icon.setAttribute('icon', 'editor:insert-drive-file');
+                }
+                icon.style = "color: #9B9A9B;"
             }
             root.innerHTML = '';
             root.appendChild(icon);
@@ -79,6 +82,7 @@ export default {
         }
 
         document.querySelector('#operation').renderer = (root, grid, rowData) => {
+            root.style = "color: #878787;"
             switch (rowData.item.command) {
                 case 1:
                     if (rowData.item.type == 'file') {
@@ -127,8 +131,5 @@ export default {
 <style scoped>
     vaadin-grid {
         border: none;
-    }
-    .operation {
-        color: #878787 !important;
     }
 </style>

@@ -22,6 +22,7 @@
 namespace OCA\RansomwareDetection\Controller;
 
 use OCA\RansomwareDetection\Monitor;
+use OCA\RansomwareDetection\Classifier;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Service\FileOperationService;
@@ -54,6 +55,9 @@ class FileOperationController extends Controller
     /** @var FileOperationService */
     protected $service;
 
+    /** @var Classifier */
+    protected $classifier;
+
     /** @var string */
     protected $userId;
 
@@ -75,6 +79,7 @@ class FileOperationController extends Controller
         ILogger $logger,
         Folder $userFolder,
         FileOperationService $service,
+        Classifier $classifier,
         $userId
     ) {
         parent::__construct($appName, $request);
@@ -84,6 +89,7 @@ class FileOperationController extends Controller
         $this->userFolder = $userFolder;
         $this->logger = $logger;
         $this->service = $service;
+        $this->classifier = $classifier;
         $this->userId = $userId;
     }
 
@@ -99,6 +105,10 @@ class FileOperationController extends Controller
     {
         $files = $this->service->findAll();
 
+        foreach ($files as $file) {
+            $this->classifier->classifyFile($file);
+        }
+
         return new JSONResponse($files, Http::STATUS_OK);
     }
 
@@ -113,6 +123,8 @@ class FileOperationController extends Controller
     public function find($id)
     {
         $file = $this->service->find($id);
+
+        $this->classifier->classifyFile($file);
 
         return new JSONResponse($file, Http::STATUS_OK);
     }
