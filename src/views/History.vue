@@ -6,7 +6,7 @@
 			</div>
 			<div class="page">
                 <div class="notification-wrapper">
-                    <Notification text="Test Notification" @on-close="visible = false" :visible="visible"></Notification>
+                    <Notification :text.sync="notificationText" @on-close="closeNotification" :visible.sync="visible"></Notification>
                 </div>
                 <Header header="History">
                     <RecoverAction id="recover" label="Recover selected files" v-on:recover="onRecover" primary></RecoverAction>
@@ -35,32 +35,51 @@ export default {
         RecoverAction,
         Notification
     },
-    props: {
-        visible: {
-            type: Boolean, default: false
-        }
-    },
     data() {
         return {
             fileOperations: [],
             page: 0,
-            visibile: true
+            visible: false,
+            notificationText: ""
         };
     },
     mounted() {
         this.page = 0;
         this.fetchData();
-        setInterval(() => this.fetchData(), 3000);
     },
     computed: {
         recoverUrl() {
-            return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operation')
+            return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operations')
         },
         fileOperationsUrl() {
             return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operation')
         }
     },
     methods: {
+        closeNotification() {
+            this.visible = false
+        },
+        notice(text) {
+            this.notificationText = text;
+            this.visible = true;
+
+        },
+        buildNotification(deleted, recovered) {
+            var notificationText = "";
+            if (deleted > 0 && recovered > 0) {
+                notificationText = deleted + " files deleted, " + recovered + " files recovered from backup."
+            }
+            if (recovered > 0 && deleted == 0) {
+                notificationText = deleted + " files recovered from backup."
+            }
+            if (deleted > 0 && recovered == 0) {
+                notificationText = deleted + " files deleted."
+            }
+            if (deleted == 0 && recovered == 0) {
+                notificationText = "No files deleted or recovered."
+            }
+            this.notice(notificationText);
+        },
         tableStateChanged() {
             this.page = 1;
         },
@@ -75,31 +94,42 @@ export default {
             .catch( error => { console.error(error); });
         },
         onRecover() {
+            var itemsToRecover = [];
             const items = document.querySelector('#ransomware-table').items;
             const selected = document.querySelector('#ransomware-table').selectedItems;
             for (var i = 0; i < selected.length; i++) {
-                this.recover(selected[i].id);
-			}
-        },
-        remove(id) {
-            for (var i = 0; i < this.fileOperations.length; i++) {
-                if (this.fileOperations[i].id === id) {
-                    this.fileOperations.splice(i, 1);
-                }
+                itemsToRecover.push(selected[i].id);
             }
+            this.recover(itemsToRecover);
         },
-        async recover(id) {
+        remove(ids) {
+            ids.forEach(id => {
+                for (var i = 0; i < this.fileOperations.length; i++) {
+                    if (this.fileOperations[i].id === id) {
+                        this.fileOperations.splice(i, 1);
+                    }
+                }
+            });
+        },
+        async recover(ids) {
             await this.$axios({
 					method: 'PUT',
-					url: this.recoverUrl + '/' + id + '/recover'
+                    url: this.recoverUrl + '/recover',
+                    data: {
+                        ids: ids
+                    }
 				})
 					.then(response => {
 						switch(response.status) {
-							case 204:
-								this.remove(id);
+							case 200:
+                                this.buildNotification(response.data.deleted, response.data.recovered);
+                                if(response.data.filesRecovered.length > 0)
+								    this.remove(response.data.filesRecovered);
 								break;
 							default:
-								console.log(response);
+								this.buildNotification(response.data.deleted, response.data.recovered);
+								if(response.data.filesRecovered.length > 0)
+								    this.remove(response.data.filesRecovered);
 								break;
 						}
 					})

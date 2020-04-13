@@ -75,7 +75,7 @@ export default {
         height: 100%;
         box-shadow: none;
         color: #fff;
-        padding: 0px 10px 0px 10px;
+        padding: 0px 10px 0px 30px;
         &.good {
             background-color: #18b977;
         }

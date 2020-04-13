@@ -123,81 +123,101 @@ class FileOperationController extends Controller
      * @NoAdminRequired
      * @NoCSRFRequired
      *
-     * @param int $id file operation id
+     * @param array $ids file operation id
      *
      * @return JSONResponse
      */
-    public function recover($id)
+    public function recover($ids)
     {
-        try {
-            $file = $this->service->find($id);
-            switch ($file->getCommand()) {
-                case Monitor::WRITE:
-                    // Recover new created files by deleting them
-                    $filePath = $file->getPath().'/'.$file->getOriginalName();
-                    if ($this->deleteFromStorage($filePath)) {
-                        $this->service->deleteById($id);
+        $deleted = 0;
+        $recovered = 0;
+        $filesRecovered = array();
+        $error = false;
+        $badRequest = false;
 
-                        return new JSONResponse(null, Http::STATUS_NO_CONTENT);
-                    } else {
-                        // File cannot be deleted
-                        return new JSONResponse(null, Http::STATUS_INTERNAL_SERVER_ERROR);
-                    }
-                    break;
-                case Monitor::DELETE:
-                    // Recover deleted files by restoring them from the trashbin
-                    // It's not necessary to use the real path
-                    $dir = '/';
-                    $candidate = $this->findCandidateToRestore($dir, $file->getOriginalName());
-                    if ($candidate !== null) {
-                        $path = $dir.'/'.$candidate['name'].'.d'.$candidate['mtime'];
-                        if (Trashbin::restore($path, $candidate['name'], $candidate['mtime']) !== false) {
+        foreach ($ids as $id) {
+            try {
+                $file = $this->service->find($id);
+                switch ($file->getCommand()) {
+                    case Monitor::WRITE:
+                        // Recover new created files by deleting them
+                        $filePath = $file->getPath().'/'.$file->getOriginalName();
+                        if ($this->deleteFromStorage($filePath)) {
                             $this->service->deleteById($id);
 
-                            return new JSONResponse(null, Http::STATUS_NO_CONTENT);
+                            $deleted++;
+                            array_push($filesRecovered, $id);
+                        } else {
+                            // File cannot be deleted
+                            $error = true;
                         }
-                        // File does not exist
-                        return new JSONResponse(null, Http::STATUS_BAD_REQUEST);
-                    } else {
-                        // No candidate found
-                        return new JSONResponse(null, Http::STATUS_BAD_REQUEST);
-                    }
-                    break;
-                case Monitor::RENAME:
-                    $this->service->deleteById($id);
+                        break;
+                    case Monitor::DELETE:
+                        // Recover deleted files by restoring them from the trashbin
+                        // It's not necessary to use the real path
+                        $dir = '/';
+                        $candidate = $this->findCandidateToRestore($dir, $file->getOriginalName());
+                        if ($candidate !== null) {
+                            $path = $dir.'/'.$candidate['name'].'.d'.$candidate['mtime'];
+                            if (Trashbin::restore($path, $candidate['name'], $candidate['mtime']) !== false) {
+                                $this->service->deleteById($id);
 
-                    return new JSONResponse(null, Http::STATUS_NO_CONTENT);
-                    break;
-                case Monitor::CREATE:
-                    // Recover new created folders
-                    $filePath = $file->getPath().'/'.$file->getOriginalName();
-                    if ($this->deleteFromStorage($filePath)) {
+                                $recovered++;
+                                array_push($filesRecovered, $id);
+                            }
+                            // File does not exist
+                            $badRequest = false;
+                        } else {
+                            // No candidate found
+                            $badRequest = false;
+                        }
+                        break;
+                    case Monitor::RENAME:
                         $this->service->deleteById($id);
 
-                        return new JSONResponse(null, Http::STATUS_NO_CONTENT);
-                    } else {
-                        // File cannot be deleted
-                        return new JSONResponse(null, Http::STATUS_INTERNAL_SERVER_ERROR);
+                        $deleted++;
+                        array_push($filesRecovered, $id);
+                        break;
+                    case Monitor::CREATE:
+                        // Recover new created files/folders
+                        $filePath = $file->getPath().'/'.$file->getOriginalName();
+                        if ($this->deleteFromStorage($filePath)) {
+                            $this->service->deleteById($id);
+
+                            $deleted++;
+                            array_push($filesRecovered, $id);
+                        } else {
+                            // File cannot be deleted
+                            $error = true;
+                        }
+                        break;
+                    default:
+                        // All other commands need no recovery
+                        $this->service->deleteById($id);
+
+                        $deleted++;
+                        array_push($filesRecovered, $id);
+                        break;
                     }
-                    break;
-                default:
-                    // All other commands need no recovery
-                    $this->service->deleteById($id);
+            } catch (\OCP\AppFramework\Db\MultipleObjectsReturnedException $exception) {
+                // Found more than one with the same file name
+                $this->logger->debug('recover: Found more than one with the same file name.', array('app' => Application::APP_ID));
 
-                    return new JSONResponse(null, Http::STATUS_NO_CONTENT);
-                    break;
+                $badRequest = false;
+            } catch (\OCP\AppFramework\Db\DoesNotExistException $exception) {
+                // Nothing found
+                $this->logger->debug('recover: Files does not exist.', array('app' => Application::APP_ID));
+
+                $badRequest = false;
             }
-        } catch (\OCP\AppFramework\Db\MultipleObjectsReturnedException $exception) {
-            // Found more than one with the same file name
-            $this->logger->debug('recover: Found more than one with the same file name.', array('app' => Application::APP_ID));
-
-            return new JSONResponse(null, Http::STATUS_BAD_REQUEST);
-        } catch (\OCP\AppFramework\Db\DoesNotExistException $exception) {
-            // Nothing found
-            $this->logger->debug('recover: Files does not exist.', array('app' => Application::APP_ID));
-
-            return new JSONResponse(null, Http::STATUS_BAD_REQUEST);
         }
+        if ($error) {
+            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_INTERNAL_SERVER_ERROR);
+        }
+        if ($badRequest) {
+            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
+        }
+        return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_OK);
     }
 
     /**

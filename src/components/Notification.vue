@@ -19,14 +19,20 @@ export default {
 			required: true
         },
         visible: {
-            type: Boolean, default: false
+            type: Boolean,
+            default: false
         }
     },
     methods: {
 		onClickCloseButton: function() {
 			this.$emit('on-close');
 		}
-	}
+    },
+    watch: {
+        visible (val) {
+            this.visible = val
+        }
+    }
 }
 </script>
 
