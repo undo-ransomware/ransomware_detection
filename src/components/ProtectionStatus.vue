@@ -69,13 +69,14 @@ export default {
             span {
                 vertical-align: middle;
             }
+            padding: 0px 10px 0px 30px;
         }
 
         width: 100%;
         height: 100%;
         box-shadow: none;
         color: #fff;
-        padding: 0px 10px 0px 30px;
+        padding: 0px 10px 0px 10px;
         &.good {
             background-color: #18b977;
         }

@@ -88,9 +88,11 @@ class Application extends App
 
         $container->registerService('DetectionService', function ($c) {
             return new DetectionService(
+                $c->query(ILogger::class),
                 $c->query('FileOperationService'),
                 $c->query('DetectionDeserializer'),
                 $c->query('OCP\IConfig'),
+                $c->query(Classifier::class),
                 $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
             );
         });

@@ -6,12 +6,14 @@
 			</div>
 			<div class="page">
                 <div class="notification-wrapper">
-                    <Notification text="Test Notification" @on-close="visible = false" :visible="visible"></Notification>
+                    <Notification :text.sync="notificationText" @on-close="closeNotification" :visible.sync="visible"></Notification>
                 </div>
                 <Header header="Recover">
-                    <RecoverAction v-if="detected" id="recover" label="Recover" v-on:recover="onRecover" primary></RecoverAction>
+                    <RecoverAction id="recover" label="Recover selected files" v-on:recover="onRecover" primary></RecoverAction>
                 </Header>
-                <FileOperationsTable v-if="detected" id="ransomware-table" :data="fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
+                <div id="tables" v-if="detected">
+                    <FileOperationsTable v-for="(detection, index) in detections" :key="index" class="ransomware-table" :data="detection.fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
+                </div>
                 <span id="message" v-if="!detected">
                     <iron-icon icon="verified-user"></iron-icon>
                     Nothing found. You are safe.
@@ -41,24 +43,45 @@ export default {
         RecoverAction,
         Notification
     },
-    props: {
-        visible: {
-            type: Boolean, default: false
-        }
-    },
     data() {
         return {
             detected: 0,
-            fileOperations: [],
-            page: 0
+            detections: [],
+            page: 0,
+            visible: false,
+            notificationText: ""
         };
     },
     mounted() {
         this.page = 0;
         this.fetchDetectionStatus();
-        this.fetchData();
+        this.fetchDetections();
     },
     methods: {
+        closeNotification() {
+            this.visible = false
+        },
+        notice(text) {
+            this.notificationText = text;
+            this.visible = true;
+
+        },
+        buildNotification(deleted, recovered) {
+            var notificationText = "";
+            if (deleted > 0 && recovered > 0) {
+                notificationText = deleted + " files deleted, " + recovered + " files recovered from backup."
+            }
+            if (recovered > 0 && deleted == 0) {
+                notificationText = deleted + " files recovered from backup."
+            }
+            if (deleted > 0 && recovered == 0) {
+                notificationText = deleted + " files deleted."
+            }
+            if (deleted == 0 && recovered == 0) {
+                notificationText = "No files deleted or recovered."
+            }
+            this.notice(notificationText);
+        },
         fetchDetectionStatus() {
             this.$axios({
 				method: 'GET',
@@ -76,42 +99,53 @@ export default {
         tableStateChanged() {
             this.page = 1;
         },
-        fetchData() {
+        fetchDetections() {
             this.$axios({
                 method: 'GET',
-                url: this.fileOperationsUrl
+                url: this.detectionsUrl
             })
             .then(json => {
-                this.fileOperations = json.data;
+                this.detections = json.data;
             })
             .catch( error => { console.error(error); });
         },
         onRecover() {
+            var itemsToRecover = [];
             const items = document.querySelector('#ransomware-table').items;
             const selected = document.querySelector('#ransomware-table').selectedItems;
             for (var i = 0; i < selected.length; i++) {
-                this.recover(selected[i].id);
-			}
-        },
-        remove(id) {
-            for (var i = 0; i < this.fileOperations.length; i++) {
-                if (this.fileOperations[i].id === id) {
-                    this.fileOperations.splice(i, 1);
-                }
+                itemsToRecover.push(selected[i].id);
             }
+            this.recover(itemsToRecover);
         },
-        async recover(id) {
+        remove(ids) {
+            ids.forEach(id => {
+                for (var i = 0; i < this.fileOperations.length; i++) {
+                    if (this.fileOperations[i].id === id) {
+                        this.fileOperations.splice(i, 1);
+                    }
+                }
+            });
+        },
+        async recover(ids) {
             await this.$axios({
 					method: 'PUT',
-					url: this.recoverUrl + '/' + id + '/recover'
+                    url: this.recoverUrl + '/recover',
+                    data: {
+                        ids: ids
+                    }
 				})
 					.then(response => {
 						switch(response.status) {
-							case 204:
-								this.remove(id);
+							case 200:
+                                this.buildNotification(response.data.deleted, response.data.recovered);
+                                if(response.data.filesRecovered.length > 0)
+								    this.remove(response.data.filesRecovered);
 								break;
 							default:
-								console.log(response);
+								this.buildNotification(response.data.deleted, response.data.recovered);
+								if(response.data.filesRecovered.length > 0)
+								    this.remove(response.data.filesRecovered);
 								break;
 						}
 					})
@@ -125,7 +159,7 @@ export default {
             return OC.generateUrl('/apps/ransomware_detection/api/v1/detection');
         },
         recoverUrl() {
-            return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operation')
+            return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operations')
         },
         fileOperationsUrl() {
             return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operation')
@@ -134,12 +168,14 @@ export default {
 }
 </script>
 
-<style scoped>
-    #ransomware-table {
-        height: calc(100% - 50px);
+<style lang="scss" scoped>
+    #tables {
+        .ransomware-table {
+            //height: calc(100% - 50px);
+        }
     }
     #recover {
-        background-color: green;
+        background-color: grey;
         color: #fff;
     }
     #message {

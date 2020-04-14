@@ -69,6 +69,7 @@ class FileOperationController extends Controller
      * @param ILogger              $logger
      * @param Folder               $userFolder
      * @param FileOperationService $service
+     * @param Classifier           $classifier
      * @param string               $userId
      */
     public function __construct(
