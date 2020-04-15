@@ -1,10 +1,10 @@
 <template>
-    <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort :items.prop="fileOperations">
+    <vaadin-grid theme="row-dividers" height-by-rows column-reordering-allowed multi-sort :items.prop="fileOperations">
         <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-        <vaadin-grid-column width="5em" flex-grow="0" id="status" header="Status"></vaadin-grid-column>
-        <vaadin-grid-column width="9em" flex-grow="0" id="operation" header="" class="operation"></vaadin-grid-column>
-        <vaadin-grid-sort-column width="9em" path="originalName" header="Name"></vaadin-grid-sort-column>
-        <vaadin-grid-sort-column width="9em" path="timestamp" id="time" header="File changed"></vaadin-grid-sort-column>
+        <vaadin-grid-column width="5em" flex-grow="0" header="Status" ref="status"></vaadin-grid-column>
+        <vaadin-grid-column width="9em" flex-grow="0" ref="operation" header="" class="operation"></vaadin-grid-column>
+        <vaadin-grid-sort-column width="9em" path="originalName" header="Name" ref="name"></vaadin-grid-sort-column>
+        <vaadin-grid-sort-column width="9em" path="timestamp" ref="time" header="File changed"></vaadin-grid-sort-column>
     </vaadin-grid>
 </template>
 
@@ -39,15 +39,11 @@ export default {
             handler (newVal, oldVal) {
                 this.fileOperations = newVal;
                 this.$emit('table-state-changed');
-                if (oldVal !== undefined) {
-                    document.querySelector('vaadin-grid').clearCache();
-                    document.querySelector('vaadin-grid vaadin-grid-selection-column').selectAll = false;
-                }
             }
         }
     },
     mounted () {
-        document.querySelector('#status').renderer = (root, grid, rowData) => {
+        this.$refs.status.renderer = (root, grid, rowData) => {
             const icon = document.createElement('iron-icon');
             if (rowData.item.suspicionClass > 1) {
                 icon.setAttribute('icon', 'ransomware:locked');
@@ -73,7 +69,7 @@ export default {
             root.appendChild(icon);
         }
 
-        document.querySelector('#time').renderer = (root, grid, rowData) => {
+        this.$refs.time.renderer = (root, grid, rowData) => {
             const localTime = document.createElement('local-time');
             localTime.setAttribute('datetime', moment.unix(rowData.item.timestamp).format("YYYY-MM-DDTHH:mm:ss.SSS"));
             localTime.textContent = moment.unix(rowData.item.timestamp).format('dddd, MMMM Do YYYY, HH:mm:ss');
@@ -81,7 +77,7 @@ export default {
             root.appendChild(localTime);
         }
 
-        document.querySelector('#operation').renderer = (root, grid, rowData) => {
+        this.$refs.operation.renderer = (root, grid, rowData) => {
             root.style = "color: #878787;"
             switch (rowData.item.command) {
                 case 1:

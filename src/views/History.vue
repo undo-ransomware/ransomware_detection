@@ -11,7 +11,7 @@
                 <Header header="History">
                     <RecoverAction id="recover" label="Recover selected files" v-on:recover="onRecover" primary></RecoverAction>
                 </Header>
-                <FileOperationsTable id="ransomware-table" :data="fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
+                <FileOperationsTable ref="ransomware-table" id="ransomware-table" :data="fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
             </div>
 		</iron-pages>
     </AppContent>
@@ -95,8 +95,8 @@ export default {
         },
         onRecover() {
             var itemsToRecover = [];
-            const items = document.querySelector('#ransomware-table').items;
-            const selected = document.querySelector('#ransomware-table').selectedItems;
+            const items = this.$refs.ransomware-table.items;
+            const selected = this.$refs.ransomware-table.selectedItems;
             for (var i = 0; i < selected.length; i++) {
                 itemsToRecover.push(selected[i].id);
             }

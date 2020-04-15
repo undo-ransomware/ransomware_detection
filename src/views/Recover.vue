@@ -170,9 +170,7 @@ export default {
 
 <style lang="scss" scoped>
     #tables {
-        .ransomware-table {
-            //height: calc(100% - 50px);
-        }
+        height: calc(100% - 50px);
     }
     #recover {
         background-color: grey;
