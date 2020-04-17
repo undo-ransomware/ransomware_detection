@@ -95,7 +95,6 @@ export default {
         },
         onRecover() {
             var itemsToRecover = [];
-            const items = this.$refs.ransomware-table.items;
             const selected = this.$refs.ransomware-table.selectedItems;
             for (var i = 0; i < selected.length; i++) {
                 itemsToRecover.push(selected[i].id);

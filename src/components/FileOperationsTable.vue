@@ -1,6 +1,6 @@
 <template>
-    <vaadin-grid theme="row-dividers" height-by-rows column-reordering-allowed multi-sort :items.prop="fileOperations">
-        <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
+    <vaadin-grid ref="grid" theme="row-dividers" height-by-rows column-reordering-allowed multi-sort :items.prop="fileOperations">
+        <vaadin-grid-selection-column v-if="selectable" auto-select frozen></vaadin-grid-selection-column>
         <vaadin-grid-column width="5em" flex-grow="0" header="Status" ref="status"></vaadin-grid-column>
         <vaadin-grid-column width="9em" flex-grow="0" ref="operation" header="" class="operation"></vaadin-grid-column>
         <vaadin-grid-sort-column width="9em" path="originalName" header="Name" ref="name"></vaadin-grid-sort-column>
@@ -31,6 +31,10 @@ export default {
         data: {
             type: Array,
             required: true
+        },
+        selectable: {
+            type: Boolean,
+            default: true
         }
     },
     watch: {

@@ -8,11 +8,14 @@
                 <div class="notification-wrapper">
                     <Notification :text.sync="notificationText" @on-close="closeNotification" :visible.sync="visible"></Notification>
                 </div>
-                <Header header="Recover">
-                    <RecoverAction id="recover" label="Recover selected files" v-on:recover="onRecover" primary></RecoverAction>
-                </Header>
-                <div id="tables" v-if="detected">
-                    <FileOperationsTable v-for="(detection, index) in detections" :key="index" class="ransomware-table" :data="detection.fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
+                <Header header="Recover"></Header>
+                <div id="detections" v-if="detected">
+                    <div class="detection" v-for="detection in detections" :key="detection.id">
+                        <Header :header="'Detection ' + detection.id">
+                            <RecoverAction id="recover" label="Recover detected files" v-on:recover="onRecover(detection.id)" primary></RecoverAction>
+                        </Header>
+                        <FileOperationsTable :selectable="false" :ref="'detection' + detection.id" class="ransomware-table" :data="detection.fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
+                    </div>
                 </div>
                 <span id="message" v-if="!detected">
                     <iron-icon icon="verified-user"></iron-icon>
@@ -109,25 +112,23 @@ export default {
             })
             .catch( error => { console.error(error); });
         },
-        onRecover() {
+        onRecover(id) {
             var itemsToRecover = [];
-            const items = document.querySelector('#ransomware-table').items;
-            const selected = document.querySelector('#ransomware-table').selectedItems;
-            for (var i = 0; i < selected.length; i++) {
-                itemsToRecover.push(selected[i].id);
+            const detectionTable = this.$refs['detection' + id];
+            var items = detectionTable[0].$refs.grid.items;
+            for (var i = 0; i < items.length; i++) {
+                itemsToRecover.push(items[i].id);
             }
-            this.recover(itemsToRecover);
+            this.recover(id, itemsToRecover);
         },
-        remove(ids) {
-            ids.forEach(id => {
-                for (var i = 0; i < this.fileOperations.length; i++) {
-                    if (this.fileOperations[i].id === id) {
-                        this.fileOperations.splice(i, 1);
-                    }
+        remove(id) {
+            for (var i = 0; i < this.detections.length; i++) {
+                if (this.detections[i].id === id) {
+                    this.detections.splice(i, 1);
                 }
-            });
+            }
         },
-        async recover(ids) {
+        async recover(id, ids) {
             await this.$axios({
 					method: 'PUT',
                     url: this.recoverUrl + '/recover',
@@ -140,12 +141,12 @@ export default {
 							case 200:
                                 this.buildNotification(response.data.deleted, response.data.recovered);
                                 if(response.data.filesRecovered.length > 0)
-								    this.remove(response.data.filesRecovered);
+								    this.remove(id);
 								break;
 							default:
 								this.buildNotification(response.data.deleted, response.data.recovered);
 								if(response.data.filesRecovered.length > 0)
-								    this.remove(response.data.filesRecovered);
+								    this.remove(id);
 								break;
 						}
 					})
@@ -181,6 +182,9 @@ export default {
         justify-content: center;
         font-size: 1.5em;
         font-weight: bold;
+    }
+    .detection {
+        margin: 10px 0px 0px 0px;
     }
     iron-pages {
         height: 100%;
