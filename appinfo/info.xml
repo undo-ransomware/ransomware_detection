@@ -16,7 +16,9 @@
     <category>monitoring</category>
     <category>security</category>
     <category>tools</category>
+    <website>https://github.com/undo-ransomware/ransomware_detection</website>
     <bugs>https://github.com/undo-ransomware/ransomware_detection/issues</bugs>
+    <repository>https://github.com/undo-ransomware/ransomware_detection.git</repository>
     <screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/monitoring-0.3.0.png</screenshot>
     <screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/scan-files-0.3.0.png</screenshot>
     <dependencies>
