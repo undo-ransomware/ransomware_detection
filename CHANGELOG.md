@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.8.0
+
+### Added
+
+- Nextcloud version 19 support.
+
 ## 0.7.1
 
 ### Fixed
