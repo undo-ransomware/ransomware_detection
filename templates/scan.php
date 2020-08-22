@@ -21,6 +21,7 @@ script('ransomware_detection', 'app');
 script('ransomware_detection', 'utils');
 script('ransomware_detection', 'scan');
 script('ransomware_detection', 'vendor/font-awesome/fontawesome-all');
+script('ransomware_detection', 'vendor/filesize/filesize');
 style('ransomware_detection', 'style');
 ?>
 <div id="app-navigation">
