@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright Copyright (c) 2017 Matthias Held <matthias.held@uni-konstanz.de>
+ * @copyright Copyright (c) 2020 Matthias Held <matthias.held@uni-konstanz.de>
  * @author Matthias Held <matthias.held@uni-konstanz.de>
  * @license GNU AGPL version 3 or any later version
  *
@@ -22,9 +22,9 @@
 namespace OCA\RansomwareDetection\Db;
 
 use OCP\AppFramework\Db\Entity;
-use OCA\RansomwareDetection\Db\RecoveredFileOperation;
+use OCA\RansomwareDetection\Db\FileOperation;
 
-class FileOperation extends Entity
+class RecoveredFileOperation extends Entity
 {
     /** @var string */
     public $userId;
@@ -88,23 +88,23 @@ class FileOperation extends Entity
         $this->addType('fileClass', 'integer');
     }
 
-    public function toRecoveredFileOperation() {
-        $recoveredFileOperation = new RecoveredFileOperation();
-        $recoveredFileOperation->setUserId($this->getUserId());
-        $recoveredFileOperation->setPath($this->getPath());
-        $recoveredFileOperation->setOriginalName($this->getOriginalName());
-        $recoveredFileOperation->setNewName($this->getNewName());
-        $recoveredFileOperation->setType($this->getType());
-        $recoveredFileOperation->setMimeType($this->getMimeType());
-        $recoveredFileOperation->setSize($this->getSize());
-        $recoveredFileOperation->setTimestamp($this->getTimestamp());
-        $recoveredFileOperation->setCorrupted($this->getCorrupted());
-        $recoveredFileOperation->setCommand($this->getCommand());
-        $recoveredFileOperation->setSequence($this->getSequence());
-        $recoveredFileOperation->setEntropy($this->getEntropy());
-        $recoveredFileOperation->setStandardDeviation($this->getStandardDeviation());
-        $recoveredFileOperation->setFileClass($this->getFileClass());
-        $recoveredFileOperation->setFileExtensionClass($this->getFileExtensionClass());
-        return $recoveredFileOperation;
+    public function toFileOperation() {
+        $fileOperation = new FileOperation();
+        $fileOperation->setUserId($this->getUserId());
+        $fileOperation->setPath($this->getPath());
+        $fileOperation->setOriginalName($this->getOriginalName());
+        $fileOperation->setNewName($this->getNewName());
+        $fileOperation->setType($this->getType());
+        $fileOperation->setMimeType($this->getMimeType());
+        $fileOperation->setSize($this->getSize());
+        $fileOperation->setTimestamp($this->getTimestamp());
+        $fileOperation->setCorrupted($this->getCorrupted());
+        $fileOperation->setCommand($this->getCommand());
+        $fileOperation->setSequence($this->getSequence());
+        $fileOperation->setEntropy($this->getEntropy());
+        $fileOperation->setStandardDeviation($this->getStandardDeviation());
+        $fileOperation->setFileClass($this->getFileClass());
+        $fileOperation->setFileExtensionClass($this->getFileExtensionClass());
+        return $fileOperation;
     }
 }

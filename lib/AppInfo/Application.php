@@ -39,8 +39,10 @@ use OCA\RansomwareDetection\Notification\Notifier;
 use OCA\RansomwareDetection\StorageWrapper;
 use OCA\RansomwareDetection\Connector\Sabre\RequestPlugin;
 use OCA\RansomwareDetection\Service\FileOperationService;
+use OCA\RansomwareDetection\Service\RecoveredFileOperationService;
 use OCA\RansomwareDetection\Service\DetectionService;
 use OCA\RansomwareDetection\Mapper\FileOperationMapper;
+use OCA\RansomwareDetection\Mapper\RecoveredFileOperationMapper;
 use OCP\AppFramework\App;
 use OCP\App\IAppManager;
 use OCP\Files\IRootFolder;
@@ -72,6 +74,12 @@ class Application extends App
             );
         });
 
+        $container->registerService('RecoveredFileOperationMapper', function ($c) {
+            return new RecoveredFileOperationMapper(
+                $c->query('ServerContainer')->getDb()
+            );
+        });
+
         $container->registerService('DetectionDeserializer', function ($c) {
             return new DetectionDeserializer(
                 $c->query('FileOperationMapper')
@@ -82,6 +90,14 @@ class Application extends App
         $container->registerService('FileOperationService', function ($c) {
             return new FileOperationService(
                 $c->query(FileOperationMapper::class),
+                $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
+            );
+        });
+
+        $container->registerService('RecoveredFileOperationService', function ($c) {
+            return new RecoveredFileOperationService(
+                $c->query(FileOperationMapper::class),
+                $c->query(RecoveredFileOperationMapper::class),
                 $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
             );
         });

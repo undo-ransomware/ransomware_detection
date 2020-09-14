@@ -49,10 +49,10 @@ export default {
     },
     computed: {
         recoverUrl() {
-            return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operations')
+            return OC.generateUrl('/apps/ransomware_detection/api/v1/recovered/file-operations')
         },
         fileOperationsUrl() {
-            return OC.generateUrl('/apps/ransomware_detection/api/v1/file-operation')
+            return OC.generateUrl('/apps/ransomware_detection/api/v1/recovered/file-operation')
         }
     },
     methods: {

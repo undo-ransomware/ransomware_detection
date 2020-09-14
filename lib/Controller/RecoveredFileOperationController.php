@@ -25,7 +25,7 @@ use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\Classifier;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Db\FileOperation;
-use OCA\RansomwareDetection\Service\FileOperationService;
+use OCA\RansomwareDetection\Service\RecoveredFileOperationService;
 use OCA\Files_Trashbin\Trashbin;
 use OCA\Files_Trashbin\Helper;
 use OCP\AppFramework\Http;
@@ -38,7 +38,7 @@ use OCP\IUserSession;
 use OCP\IRequest;
 use OCP\ILogger;
 
-class FileOperationController extends Controller
+class RecoveredFileOperationController extends Controller
 {
     /** @var IConfig */
     protected $config;
@@ -52,7 +52,7 @@ class FileOperationController extends Controller
     /** @var Folder */
     protected $userFolder;
 
-    /** @var FileOperationService */
+    /** @var RecoveredFileOperationService */
     protected $service;
 
     /** @var Classifier */
@@ -68,7 +68,7 @@ class FileOperationController extends Controller
      * @param IConfig              $config
      * @param ILogger              $logger
      * @param Folder               $userFolder
-     * @param FileOperationService $service
+     * @param RecoveredFileOperationService $service
      * @param Classifier           $classifier
      * @param string               $userId
      */
@@ -79,7 +79,7 @@ class FileOperationController extends Controller
         IConfig $config,
         ILogger $logger,
         Folder $userFolder,
-        FileOperationService $service,
+        RecoveredFileOperationService $service,
         Classifier $classifier,
         $userId
     ) {
@@ -156,7 +156,7 @@ class FileOperationController extends Controller
                         // Recover new created files by deleting them
                         $filePath = $file->getPath().'/'.$file->getOriginalName();
                         if ($this->deleteFromStorage($filePath)) {
-                            $this->service->deleteById($id, true);
+                            $this->service->deleteById($id);
 
                             $deleted++;
                             array_push($filesRecovered, $id);
@@ -173,7 +173,7 @@ class FileOperationController extends Controller
                         if ($candidate !== null) {
                             $path = $dir.'/'.$candidate['name'].'.d'.$candidate['mtime'];
                             if (Trashbin::restore($path, $candidate['name'], $candidate['mtime']) !== false) {
-                                $this->service->deleteById($id, true);
+                                $this->service->deleteById($id);
 
                                 $recovered++;
                                 array_push($filesRecovered, $id);
@@ -186,7 +186,7 @@ class FileOperationController extends Controller
                         }
                         break;
                     case Monitor::RENAME:
-                        $this->service->deleteById($id, true);
+                        $this->service->deleteById($id);
 
                         $deleted++;
                         array_push($filesRecovered, $id);
@@ -195,7 +195,7 @@ class FileOperationController extends Controller
                         // Recover new created files/folders
                         $filePath = $file->getPath().'/'.$file->getOriginalName();
                         if ($this->deleteFromStorage($filePath)) {
-                            $this->service->deleteById($id, true);
+                            $this->service->deleteById($id);
 
                             $deleted++;
                             array_push($filesRecovered, $id);
@@ -206,7 +206,7 @@ class FileOperationController extends Controller
                         break;
                     default:
                         // All other commands need no recovery
-                        $this->service->deleteById($id, false);
+                        $this->service->deleteById($id);
 
                         $deleted++;
                         array_push($filesRecovered, $id);

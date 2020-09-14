@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright Copyright (c) 2017 Matthias Held <matthias.held@uni-konstanz.de>
+ * @copyright Copyright (c) 2020 Matthias Held <matthias.held@uni-konstanz.de>
  * @author Matthias Held <matthias.held@uni-konstanz.de>
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,32 +21,32 @@
 
 namespace OCA\RansomwareDetection\Service;
 
-use OCA\RansomwareDetection\Db\FileOperationMapper;
 use OCA\RansomwareDetection\Db\RecoveredFileOperationMapper;
+use OCA\RansomwareDetection\Db\FileOperationMapper;
 
-class FileOperationService
+class RecoveredFileOperationService
 {
-    /** @var FileOperationMapper */
-    protected $mapper;
-
     /** @var RecoveredFileOperationMapper */
     protected $recoveredMapper;
+
+    /** @var FileOperationMapper */
+    protected $mapper;
 
     /** @var string */
     protected $userId;
 
     /**
-     * @param FileOperationMapper $mapper
      * @param RecoveredFileOperationMapper $recoveredMapper
+     * @param FileOperationMapper $mapper
      * @param string              $userId
      */
     public function __construct(
-        FileOperationMapper $mapper,
         RecoveredFileOperationMapper $recoveredMapper,
+        FileOperationMapper $mapper,
         $userId
     ) {
-        $this->mapper = $mapper;
         $this->recoveredMapper = $recoveredMapper;
+        $this->mapper = $mapper;
         $this->userId = $userId;
     }
 
@@ -62,7 +62,7 @@ class FileOperationService
      */
     public function find($id)
     {
-        return $this->mapper->find($id, $this->userId);
+        return $this->recoveredMapper->find($id, $this->userId);
     }
 
     /**
@@ -77,7 +77,7 @@ class FileOperationService
      */
     public function findOneByFileName($name)
     {
-        return $this->mapper->findOneByFileName($name, $this->userId);
+        return $this->recoveredMapper->findOneByFileName($name, $this->userId);
     }
 
     /**
@@ -90,7 +90,7 @@ class FileOperationService
      */
     public function findOneWithHighestId()
     {
-        return $this->mapper->findOneWithHighestId($this->userId);
+        return $this->recoveredMapper->findOneWithHighestId($this->userId);
     }
 
     /**
@@ -106,7 +106,7 @@ class FileOperationService
     {
         array_push($params, $this->userId);
 
-        return $this->mapper->findAll($params, $limit, $offset);
+        return $this->recoveredMapper->findAll($params, $limit, $offset);
     }
 
     /**
@@ -122,7 +122,7 @@ class FileOperationService
     {
         array_push($params, $this->userId);
 
-        return $this->mapper->findSequenceById($params, $limit, $offset);
+        return $this->recoveredMapper->findSequenceById($params, $limit, $offset);
     }
 
     /**
@@ -130,14 +130,11 @@ class FileOperationService
      *
      * @param int $id
      */
-    public function deleteById($id, $addToHistory = false)
+    public function deleteById($id)
     {
-        $fileOperation = $this->mapper->find($id, $this->userId);
-        $this->mapper->deleteById($id, $this->userId);
-        if ($addToHistory) {
-            $this->recoveredMapper->insert($fileOperation->toRecoveredFileOperation());
-        }
-
+        $fileOperation = $this->recoveredMapper->find($id, $this->userId);
+        $this->recoveredMapper->deleteById($id, $this->userId);
+        $this->mapper->insert($fileOperation->toFileOperation());
     }
 
     /**
@@ -147,15 +144,7 @@ class FileOperationService
      */
     public function deleteSequenceById($sequence)
     {
-        $params = [];
-        array_push($params, $sequence);
-        array_push($params, $this->userId);
-
-        $fileOperations = $this->mapper->findSequenceById($params, null, null);
-        $this->mapper->deleteSequenceById($sequence, $this->userId);
-        foreach ($fileOperations as $fileOperation) {
-            $this->recoveredMapper->insert($fileOperation->toRecoveredFileOperation());
-        }
+        $this->recoveredMapper->deleteSequenceById($sequence, $this->userId);
     }
 
     /**
@@ -165,6 +154,6 @@ class FileOperationService
      */
     public function deleteFileOperationsBefore($timestamp)
     {
-        $this->mapper->deleteFileOperationsBefore($timestamp);
+        $this->recoveredMapper->deleteFileOperationsBefore($timestamp);
     }
 }
