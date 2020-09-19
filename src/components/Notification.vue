@@ -36,7 +36,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .notification {
         background-color: #E7E7E7;
         color: #000;

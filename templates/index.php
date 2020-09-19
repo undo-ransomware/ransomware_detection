@@ -19,5 +19,6 @@
  */
 script('ransomware_detection', 'index');
 style('ransomware_detection', 'style');
+style('ransomware_detection', 'materialdesignicons');
 ?>
 <div id="vue-content"></div>

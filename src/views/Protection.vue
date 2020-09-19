@@ -47,7 +47,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 	#protection-status {
 		height: 40vh;
 	}

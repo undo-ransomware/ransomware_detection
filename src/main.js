@@ -6,8 +6,8 @@ import App from './App'
 import router from './router'
 import VueMoment from 'vue-moment'
 import AsyncComputed from 'vue-async-computed'
-import {sync} from 'vuex-router-sync'
 import axios from "axios";
+import vuetify from './plugins/vuetify'
 
 
 // CSP config for webpack dynamic chunk loading
@@ -19,7 +19,7 @@ __webpack_nonce__ = btoa(OC.requestToken)
 // eslint-disable-next-line
 __webpack_public_path__ = OC.linkTo('ransomware_detection', 'js/')
 
-import "./css/global.css"
+import "./css/global.scss"
 
 Vue.prototype.t = t
 Vue.prototype.n = n
@@ -35,6 +35,7 @@ Vue.config.devtools = true
 /* eslint-disable-next-line no-new */
 new Vue({
 	el: '#content',
+	vuetify,
 	router,
 	render: h => h(App)
 })

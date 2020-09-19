@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
     h2 {
         height: 100%;
         margin: 0px;

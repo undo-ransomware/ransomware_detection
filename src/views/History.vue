@@ -11,7 +11,41 @@
                 <Header header="History">
                     <RecoverAction id="recover" label="Recover selected files" v-on:recover="onRecover" primary></RecoverAction>
                 </Header>
-                <FileOperationsTable ref="ransomware-table" id="ransomware-table" :data="fileOperations" v-on:table-state-changed="tableStateChanged"></FileOperationsTable>
+                <v-data-table
+                    v-model="selected"
+                    ref="ransomwareTable"
+                    class="ransomware-table"
+                    :headers="headers"
+                    :items="fileOperations"
+                    hide-default-footer
+                    show-select
+                    item-key="id"
+                >
+                    <template v-slot:item.timestamp = "{ item }">
+                        <local-time>{{ moment(item.timestamp) }}</local-time>
+                    </template>
+                    <template v-slot:item.suspicionClass = "{ item }">
+                        <iron-icon v-if="item.suspicionClass > 1" style="color: #ED0012;" icon="ransomware:locked"></iron-icon>
+                        <iron-icon v-if="item.suspicionClass == 1 && item.type == 'folder'" style="color: #7ED221;" icon="folder"></iron-icon>
+                        <iron-icon v-if="item.suspicionClass == 1 && item.type == 'file'" style="color: #7ED221;" icon="editor:insert-drive-file"></iron-icon>
+                        <iron-icon v-if="item.suspicionClass < 1 && item.type == 'folder'" style="color: #9B9A9B;" icon="folder"></iron-icon>
+                        <iron-icon v-if="item.suspicionClass < 1 && item.type == 'file'" style="color: #9B9A9B;" icon="editor:insert-drive-file"></iron-icon>
+                    </template>
+                    <template v-slot:item.command = "{ item }">
+                        <span v-if="item.command == 1 && item.type == 'file'">File deleted</span>
+                        <span v-if="item.command == 1 && item.type == 'folder'">Folder deleted</span>
+                        <span v-if="item.command == 2 && item.type == 'file'">File renamed</span>
+                        <span v-if="item.command == 2 && item.type == 'folder'">Folder renamed</span>
+                        <span v-if="item.command == 3 && item.type == 'file'">File written</span>
+                        <span v-if="item.command == 3 && item.type == 'folder'">Folder written</span>
+                        <span v-if="item.command == 4 && item.type == 'file'">File read</span>
+                        <span v-if="item.command == 4 && item.type == 'folder'">Folder read</span>
+                        <span v-if="item.command == 5 && item.type == 'file'">File created</span>
+                        <span v-if="item.command == 5 && item.type == 'folder'">Folder created</span>
+                        <span v-if="item.command > 5 && item.command < 1 && item.type == 'file'">No information</span>
+                        <span v-if="item.command > 5 && item.command < 1 && item.type == 'folder'">No information</span>
+                    </template>
+                </v-data-table>            
             </div>
 		</iron-pages>
     </AppContent>
@@ -20,7 +54,11 @@
 <script>
 import '@polymer/paper-spinner/paper-spinner.js';
 import '@polymer/iron-pages/iron-pages.js';
-import FileOperationsTable from '../components/FileOperationsTable'
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icons/editor-icons.js';
+import '../webcomponents/ransomware-icons'
+import 'time-elements/dist/time-elements';
 import Header from '../components/Header'
 import Notification from '../components/Notification'
 import RecoverAction from '../components/RecoverAction'
@@ -30,7 +68,6 @@ export default {
     name: 'History',
     components: {
 		AppContent,
-        FileOperationsTable,
         Header,
         RecoverAction,
         Notification
@@ -40,7 +77,19 @@ export default {
             fileOperations: [],
             page: 0,
             visible: false,
-            notificationText: ""
+            notificationText: "",
+            selected: [],
+            headers: [
+                {
+                    text: 'Status',
+                    align: 'start',
+                    sortable: false,
+                    value: 'suspicionClass',
+                },
+                { text: 'Operation', value: 'command' },
+                { text: 'Name', value: 'originalName' },
+                { text: 'File Changed', value: 'timestamp' },
+            ],
         };
     },
     mounted() {
@@ -80,9 +129,6 @@ export default {
             }
             this.notice(notificationText);
         },
-        tableStateChanged() {
-            this.page = 1;
-        },
         fetchData() {
             this.$axios({
                 method: 'GET',
@@ -90,14 +136,17 @@ export default {
             })
             .then(json => {
                 this.fileOperations = json.data;
+                this.page = 1;
             })
             .catch( error => { console.error(error); });
         },
         onRecover() {
+            console.log(this.selected);
+        },
+        itemsToRecover(e) {
             var itemsToRecover = [];
-            const selected = this.$refs.ransomware-table.selectedItems;
-            for (var i = 0; i < selected.length; i++) {
-                itemsToRecover.push(selected[i].id);
+            for (var i = 0; i < e.length; i++) {
+                itemsToRecover.push(e[i].id);
             }
             this.recover(itemsToRecover);
         },
@@ -134,13 +183,19 @@ export default {
 					})
 					.catch(error => {
                         console.error(error);
-					});
+                    });
+        },
+        moment: function (date) {
+            return moment.unix(date).format('dddd, MMMM Do YYYY, HH:mm:ss')
+        },
+        datetime: function(date) {
+            return moment.unix(rowData.item.timestamp).format("YYYY-MM-DDTHH:mm:ss.SSS")
         }
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss">
     #ransomware-table {
         height: calc(100% - 50px);
     }
