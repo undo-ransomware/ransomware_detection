@@ -99,11 +99,10 @@ class FileOperationControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
+            $this->classifier,
             'john'
         );
         $file = $this->getMockBuilder(FileOperation::class)
@@ -134,11 +133,10 @@ class FileOperationControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
+            $this->classifier,
             'john'
         );
         $this->service->method('deleteSequenceById')
@@ -190,8 +188,17 @@ class FileOperationControllerTest extends TestCase
     public function testRecover($fileIds, $fileOperation, $deleted, $response)
     {
         $controller = $this->getMockBuilder(FileOperationController::class)
-            ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config, $this->classifier,
-            $this->logger, $this->folder, $this->service, $this->sequenceAnalyzer, 'john', ])
+            ->setConstructorArgs([
+                'ransomware_detection',
+                $this->request,
+                $this->userSession,
+                $this->config,
+                $this->logger,
+                $this->folder,
+                $this->service,
+                $this->classifier,
+                'john'
+            ])
             ->setMethods(['deleteFromStorage', 'getTrashFiles'])
             ->getMock();
 
@@ -216,8 +223,17 @@ class FileOperationControllerTest extends TestCase
     public function testRecoverMultipleObjectsReturnedException()
     {
         $controller = $this->getMockBuilder(FileOperationController::class)
-            ->setConstructorArgs(['ransomware_detection', $this->request, $this->userSession, $this->config, $this->classifier,
-            $this->logger, $this->folder, $this->service, $this->sequenceAnalyzer, 'john', ])
+            ->setConstructorArgs([
+                'ransomware_detection',
+                $this->request,
+                $this->userSession,
+                $this->config,
+                $this->logger,
+                $this->folder,
+                $this->service,
+                $this->classifier,
+                'john'
+            ])
             ->setMethods(['getTrashFiles'])
             ->getMock();
 
@@ -242,15 +258,14 @@ class FileOperationControllerTest extends TestCase
     {
         $controller = new FileOperationController(
             'ransomware_detection',
-            $this->request,
-            $this->userSession,
-            $this->config,
-            $this->classifier,
-            $this->logger,
-            $this->folder,
-            $this->service,
-            $this->sequenceAnalyzer,
-            'john'
+                $this->request,
+                $this->userSession,
+                $this->config,
+                $this->logger,
+                $this->folder,
+                $this->service,
+                $this->classifier,
+                'john'
         );
 
         $fileOperationWrite = new FileOperation();
@@ -273,11 +288,10 @@ class FileOperationControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
+            $this->classifier,
             'john'
         );
         $file = $this->createMock(File::class);
@@ -299,11 +313,10 @@ class FileOperationControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
+            $this->classifier,
             'john'
         );
         $file = $this->createMock(File::class);
@@ -326,11 +339,10 @@ class FileOperationControllerTest extends TestCase
             $this->request,
             $this->userSession,
             $this->config,
-            $this->classifier,
             $this->logger,
             $this->folder,
             $this->service,
-            $this->sequenceAnalyzer,
+            $this->classifier,
             'john'
         );
         $folder = $this->createMock(Folder::class);
