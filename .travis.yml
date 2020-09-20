@@ -74,7 +74,7 @@ jobs:
         - wget https://codecov.io/bash -O codecov.sh
         - bash codecov.sh
     - stage: build
-      php: 7.1
+      php: 7.2
       env: 
         - DB=sqlite
       script:
