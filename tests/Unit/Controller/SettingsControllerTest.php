@@ -21,14 +21,14 @@
 
 namespace OCA\RansomwareDetection\tests\Unit\Controller;
 
-use OCA\RansomwareDetection\Controller\BasicController;
+use OCA\RansomwareDetection\Controller\SettingsController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use Test\TestCase;
 
-class BasicControllerTest extends TestCase
+class SettingsControllerTest extends TestCase
 {
     /** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
@@ -54,9 +54,9 @@ class BasicControllerTest extends TestCase
             ->getMock();
     }
 
-    public function testGetDebugMode()
+    public function testGetSettings()
     {
-        $controller = new BasicController(
+        $controller = new SettingsController(
             'ransomware_detection',
             $this->request,
             $this->userSession,
@@ -64,29 +64,14 @@ class BasicControllerTest extends TestCase
             'john'
         );
 
-        $result = $controller->getDebugMode();
-        $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
-    }
-
-    public function testGetColorMode()
-    {
-        $controller = new BasicController(
-            'ransomware_detection',
-            $this->request,
-            $this->userSession,
-            $this->config,
-            'john'
-        );
-
-        $result = $controller->getColorMode();
+        $result = $controller->findAll();
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
     }
 
     public function testChangeColorMode()
     {
-        $controller = new BasicController(
+        $controller = new SettingsController(
             'ransomware_detection',
             $this->request,
             $this->userSession,
@@ -94,7 +79,7 @@ class BasicControllerTest extends TestCase
             'john'
         );
 
-        $result = $controller->changeColorMode(1);
+        $result = $controller->update(1, 0);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
     }

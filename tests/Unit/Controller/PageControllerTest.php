@@ -21,17 +21,17 @@
 
 namespace OCA\RansomwareDetection\tests\Unit\Controller;
 
-use OCA\RansomwareDetection\Controller\RecoverController;
+use OCA\RansomwareDetection\Controller\PageController;
+use OCA\RansomwareDetection\Db\FileOperationMapper;
+use OCA\RansomwareDetection\Db\RecoveredFileOperationMapper;
+use OCA\RansomwareDetection\Service\FileOperationService;
 use OCP\AppFramework\Http\TemplateResponse;
 use Test\TestCase;
 
-class RecoverControllerTest extends TestCase
+class PageControllerTest extends TestCase
 {
     /** @var RecoverController */
     protected $controller;
-
-    /** @var string */
-    private $userId = 'john';
 
     public function setUp(): void
     {
@@ -39,10 +39,9 @@ class RecoverControllerTest extends TestCase
 
         $request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
-        $this->controller = new RecoverController(
+        $this->controller = new PageController(
             'ransomware_detection',
-            $request,
-            $this->userId
+            $request
         );
     }
 

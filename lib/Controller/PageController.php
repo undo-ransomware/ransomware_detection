@@ -29,27 +29,16 @@ use OCP\IRequest;
 
 class PageController extends Controller
 {
-    /** @var FileOperationService */
-    protected $service;
-
-    /** @var int */
-    private $userId;
 
     /**
      * @param string   $appName
      * @param IRequest $request
-     * @param FileOperationService $service
-     * @param string   $userId
      */
     public function __construct(
         $appName,
-        IRequest $request,
-        FileOperationService $service,
-        $userId
+        IRequest $request
     ) {
         parent::__construct($appName, $request);
-        $this->service = $service;
-        $this->userId = $userId;
     }
 
     /**
