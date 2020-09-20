@@ -104,7 +104,7 @@
         </declaration>
     </table>
     <table>
-        <name>*dbprefix*ransomware_detection_recovered</name>
+        <name>*dbprefix*ransomware_detection_recov</name>
         <declaration>
             <field>
                 <name>id</name>
