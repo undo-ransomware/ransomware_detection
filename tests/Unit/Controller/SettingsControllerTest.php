@@ -66,7 +66,7 @@ class SettingsControllerTest extends TestCase
 
         $result = $controller->findAll();
         $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STAUTS_OK);
+        $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }
 
     public function testChangeColorMode()
@@ -81,6 +81,6 @@ class SettingsControllerTest extends TestCase
 
         $result = $controller->update(1, 0);
         $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STAUTS_OK);
+        $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }
 }
