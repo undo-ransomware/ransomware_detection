@@ -24,6 +24,7 @@ namespace OCA\RansomwareDetection\tests\Unit\Service;
 use OCA\RansomwareDetection\Service\FileOperationService;
 use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
+use OCA\RansomwareDetection\Db\RecoveredFileOperationMapper;
 use OCA\RansomwareDetection\Tests\Unit\Db\MapperTestUtility;
 
 class FileOperationServiceTest extends MapperTestUtility
@@ -34,12 +35,16 @@ class FileOperationServiceTest extends MapperTestUtility
     /** @var FileOperationMapper */
     protected $mapper;
 
+    /** @var RecoveredFileOperationMapper */
+    protected $recoveredMapper;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->mapper = new FileOperationMapper($this->db);
-        $this->service = new FileOperationService($this->mapper, 'john');
+        $this->recoveredMapper = new RecoveredFileOperationMapper($this->db);
+        $this->service = new FileOperationService($this->mapper, $this->recoveredMapper, 'john');
 
         // create mock FileOperation
         $fileOperation1 = new FileOperation();
