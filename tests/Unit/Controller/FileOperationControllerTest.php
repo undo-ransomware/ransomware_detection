@@ -92,7 +92,7 @@ class FileOperationControllerTest extends TestCase
         $this->sequenceAnalyzer = $this->createMock(SequenceAnalyzer::class);
     }
 
-    public function testListFileOperations()
+    public function testFindAll()
     {
         $controller = new FileOperationController(
             'ransomware_detection',
@@ -121,29 +121,7 @@ class FileOperationControllerTest extends TestCase
         $this->sequenceAnalyzer->method('analyze')
             ->willReturn($sequenceResult);
 
-        $result = $controller->listFileOperations();
-        $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
-    }
-
-    public function testDeleteSequence()
-    {
-        $controller = new FileOperationController(
-            'ransomware_detection',
-            $this->request,
-            $this->userSession,
-            $this->config,
-            $this->logger,
-            $this->folder,
-            $this->service,
-            $this->classifier,
-            'john'
-        );
-        $this->service->method('deleteSequenceById')
-            ->with(1)
-            ->will($this->returnValue([]));
-
-        $result = $controller->deleteSequence(1);
+        $result = $controller->findAll();
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_ACCEPTED);
     }
