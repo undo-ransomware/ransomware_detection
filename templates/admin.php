@@ -21,12 +21,11 @@ style('ransomware_detection', 'style');
 script('ransomware_detection', 'admin');
 ?>
 <div id="ransomware_detection_service" class="section">
-    <h2 class="inlineblock"><?php p($l->t('Service')); ?></h2>
-    <div class="ransomware_detection_service">
+    <h2 class="inlineblock"><?php p($l->t('Recovery')); ?></h2>
+    <div class="ransomware_detection_cronjob">
         <h3>
-            <?php p($l->t('URI to the ransomware detection service:')); ?>
+            <?php p($l->t('Number of days until a sequence will be deleted')); ?>
         </h3>
-        <input id="service-uri" type="text" name="service-uri" value="<?php p($_['service_uri']); ?>"/>
-        <button id="save"><?php p($l->t('Save')); ?></button>
+        <input id="expire_days" type="text" name="expire_days" value="<?php p($_['expire_days']); ?>"/>
     </div>
 </div>
