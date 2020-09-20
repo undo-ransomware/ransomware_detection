@@ -48,6 +48,8 @@ class FileOperationServiceTest extends MapperTestUtility
         $this->recoveredMapper = $this->getMockBuilder('OCA\RansomwareDetection\Db\RecoveredFileOperationMapper')
             ->setConstructorArgs([$connection])
             ->getMock();
+        $this->recoveredMapper->method('insert')
+            ->willReturn(true);
         $this->service = new FileOperationService($this->mapper, $this->recoveredMapper, 'john');
 
         // create mock FileOperation
@@ -223,7 +225,6 @@ class FileOperationServiceTest extends MapperTestUtility
         $this->setMapperResult($sql, [$fileOperation->getId(), $userId], $rows);
 
         $sql2 = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `id` = ? AND `user_id` = ?';
-
         $this->setMapperResult($sql2, [$fileOperation->getId(), $userId], [], null, null, true);
 
         $this->service->deleteById($fileOperation->getId());
@@ -242,7 +243,6 @@ class FileOperationServiceTest extends MapperTestUtility
         $this->setMapperResult($sql, [$fileOperation->getSequence(), $userId], $rows);
 
         $sql2 = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `sequence` = ? AND `user_id` = ?';
-
         $this->setMapperResult($sql2, [$fileOperation->getSequence(), $userId], [], null, null, true);
 
         $this->service->deleteSequenceById($fileOperation->getSequence());
