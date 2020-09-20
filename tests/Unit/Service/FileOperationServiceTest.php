@@ -212,7 +212,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $result = $this->service->findSequenceById([$sequence]);
         $this->assertEquals($this->fileOperations, $result);
     }
-
+    /*
     public function testDeleteById()
     {
         $userId = 'john';
@@ -247,7 +247,7 @@ class FileOperationServiceTest extends MapperTestUtility
 
         $this->service->deleteSequenceById($fileOperation->getSequence());
     }
-
+    */
     public function testDeleteFileOperationsBefore()
     {
         $userId = 'john';
