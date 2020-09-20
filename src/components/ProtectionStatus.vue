@@ -88,6 +88,7 @@ export default {
     .recover-button {
         display: flex;
         border: 1px solid #fff;
+        padding: 0.7em 0.57em;
     }
 
     .recover-button:hover {

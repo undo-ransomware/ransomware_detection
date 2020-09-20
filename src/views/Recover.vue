@@ -119,7 +119,7 @@ export default {
                 notificationText = deleted + " files deleted, " + recovered + " files recovered from backup."
             }
             if (recovered > 0 && deleted == 0) {
-                notificationText = deleted + " files recovered from backup."
+                notificationText = recovered + " files recovered from backup."
             }
             if (deleted > 0 && recovered == 0) {
                 notificationText = deleted + " files deleted."
@@ -157,7 +157,7 @@ export default {
         onRecover(id) {
             var itemsToRecover = [];
             const detectionTable = this.$refs['detection' + id];
-            var items = detectionTable[0].$refs.grid.items;
+            var items = detectionTable[0].items;
             for (var i = 0; i < items.length; i++) {
                 itemsToRecover.push(items[i].id);
             }

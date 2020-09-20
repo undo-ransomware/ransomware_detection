@@ -100,7 +100,9 @@ class DetectionService {
                 }
             }
         }
-        
+        usort($detectionObjects, function ($a, $b) {
+            return $b->getId() - $a->getId();
+        });
         return $detectionObjects;
     }
 

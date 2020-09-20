@@ -152,7 +152,7 @@ class RecoveredFileOperationController extends Controller
             try {
                 $file = $this->service->find($id);
                 switch ($file->getCommand()) {
-                    case Monitor::WRITE:
+                    case Monitor::DELETE:
                         // Recover new created files by deleting them
                         $filePath = $file->getPath().'/'.$file->getOriginalName();
                         if ($this->deleteFromStorage($filePath)) {
@@ -165,7 +165,7 @@ class RecoveredFileOperationController extends Controller
                             $error = true;
                         }
                         break;
-                    case Monitor::DELETE:
+                    case Monitor::WRITE:
                         // Recover deleted files by restoring them from the trashbin
                         // It's not necessary to use the real path
                         $dir = '/';
@@ -192,16 +192,23 @@ class RecoveredFileOperationController extends Controller
                         array_push($filesRecovered, $id);
                         break;
                     case Monitor::CREATE:
-                        // Recover new created files/folders
-                        $filePath = $file->getPath().'/'.$file->getOriginalName();
-                        if ($this->deleteFromStorage($filePath)) {
-                            $this->service->deleteById($id);
+                        // Recover deleted files by restoring them from the trashbin
+                        // It's not necessary to use the real path
+                        $dir = '/';
+                        $candidate = $this->findCandidateToRestore($dir, $file->getOriginalName());
+                        if ($candidate !== null) {
+                            $path = $dir.'/'.$candidate['name'].'.d'.$candidate['mtime'];
+                            if (Trashbin::restore($path, $candidate['name'], $candidate['mtime']) !== false) {
+                                $this->service->deleteById($id);
 
-                            $deleted++;
-                            array_push($filesRecovered, $id);
+                                $recovered++;
+                                array_push($filesRecovered, $id);
+                            }
+                            // File does not exist
+                            $badRequest = false;
                         } else {
-                            // File cannot be deleted
-                            $error = true;
+                            // No candidate found
+                            $badRequest = false;
                         }
                         break;
                     default:

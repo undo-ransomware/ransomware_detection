@@ -119,7 +119,7 @@ export default {
                 notificationText = deleted + " files deleted, " + recovered + " files recovered from backup."
             }
             if (recovered > 0 && deleted == 0) {
-                notificationText = deleted + " files recovered from backup."
+                notificationText = recovered + " files recovered from backup."
             }
             if (deleted > 0 && recovered == 0) {
                 notificationText = deleted + " files deleted."
@@ -141,12 +141,10 @@ export default {
             .catch( error => { console.error(error); });
         },
         onRecover() {
-            console.log(this.selected);
-        },
-        itemsToRecover(e) {
             var itemsToRecover = [];
-            for (var i = 0; i < e.length; i++) {
-                itemsToRecover.push(e[i].id);
+            var items = this.selected
+            for (var i = 0; i < items.length; i++) {
+                itemsToRecover.push(items[i]['id']);
             }
             this.recover(itemsToRecover);
         },
