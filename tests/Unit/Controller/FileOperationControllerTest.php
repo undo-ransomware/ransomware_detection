@@ -256,7 +256,7 @@ class FileOperationControllerTest extends TestCase
 
         $result = $controller->recover([1]);
         $this->assertTrue($result instanceof JSONResponse);
-        $this->assertEquals($result->getStatus(), Http::STATUS_BAD_REQUEST);
+        $this->assertEquals($result->getStatus(), Http::STATUS_OK);
     }
 
     public function testDeleteFromStorage()

@@ -43,7 +43,9 @@ class FileOperationServiceTest extends MapperTestUtility
         parent::setUp();
 
         $this->mapper = new FileOperationMapper($this->db);
-        $this->recoveredMapper = new RecoveredFileOperationMapper($this->db);
+        $recoveredMapper = $this->getMockBuilder('OCA\RansomwareDetection\Db\RecoveredFileOperationMapper')
+            ->setConstructorArgs([$connection])
+            ->getMock();
         $this->service = new FileOperationService($this->mapper, $this->recoveredMapper, 'john');
 
         // create mock FileOperation
