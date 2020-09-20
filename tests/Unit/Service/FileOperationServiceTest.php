@@ -214,7 +214,7 @@ class FileOperationServiceTest extends MapperTestUtility
         $fileOperation->setUserId($userId);
         $fileOperation->setId(3);
 
-        $sql = 'SELECT *  FROM `*PREFIX*ransomware_detection` WHERE `id` = ? AND `user_id` = ?';
+        $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `id` = ? AND `user_id` = ?';
         $arguments = [$fileOperation->getId(), $userId];
 
         $this->setMapperResult($sql, $arguments, [], null, null, true);
