@@ -227,7 +227,7 @@ class FileOperationControllerTest extends TestCase
         $this->service->method('find')
             ->will($this->throwException(new \OCP\AppFramework\Db\MultipleObjectsReturnedException('test')));
 
-        $result = $controller->recover(1);
+        $result = $controller->recover([1]);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_BAD_REQUEST);
     }
@@ -254,7 +254,7 @@ class FileOperationControllerTest extends TestCase
         $this->service->method('find')
             ->will($this->throwException(new \OCP\AppFramework\Db\DoesNotExistException('test')));
 
-        $result = $controller->recover(1);
+        $result = $controller->recover([1]);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), Http::STATUS_BAD_REQUEST);
     }
