@@ -32,7 +32,7 @@ class RecoveredFileOperationMapper extends Mapper
     public function __construct(
         IDBConnection $db
     ) {
-        parent::__construct($db, 'ransomware_detection');
+        parent::__construct($db, 'rd_recovery');
     }
 
     /**
