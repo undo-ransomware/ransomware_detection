@@ -219,14 +219,12 @@ class FileOperationServiceTest extends MapperTestUtility
         $fileOperation->setId(3);
 
         $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `id` = ? AND `user_id` = ?';
-        $arguments = [$fileOperation->getId(), $userId];
         $rows = [['id' => $fileOperation->getId()]];
-        $this->setMapperResult($sql, $arguments, $rows);
+        $this->setMapperResult($sql, [$fileOperation->getId(), $userId], $rows);
 
-        $sql = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `id` = ? AND `user_id` = ?';
-        $arguments = [$fileOperation->getId(), $userId];
+        $sql2 = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `id` = ? AND `user_id` = ?';
 
-        $this->setMapperResult($sql, $arguments, [], null, null, true);
+        $this->setMapperResult($sql2, [$fileOperation->getId(), $userId], [], null, null, true);
 
         $this->service->deleteById($fileOperation->getId());
     }
@@ -240,14 +238,12 @@ class FileOperationServiceTest extends MapperTestUtility
         $fileOperation->setSequence(1);
 
         $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `sequence` = ? AND `user_id` = ?';
-        $arguments = [$fileOperation->getSequence(), $userId];
         $rows = [['id' => $fileOperation->getId()]];
-        $this->setMapperResult($sql, $arguments, $rows);
+        $this->setMapperResult($sql, [$fileOperation->getSequence(), $userId], $rows);
 
-        $sql = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `sequence` = ? AND `user_id` = ?';
-        $arguments = [$fileOperation->getSequence(), $userId];
+        $sql2 = 'DELETE FROM `*PREFIX*ransomware_detection` WHERE `sequence` = ? AND `user_id` = ?';
 
-        $this->setMapperResult($sql, $arguments, [], null, null, true);
+        $this->setMapperResult($sql2, [$fileOperation->getSequence(), $userId], [], null, null, true);
 
         $this->service->deleteSequenceById($fileOperation->getSequence());
     }
