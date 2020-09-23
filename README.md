@@ -23,10 +23,10 @@ Then open the Ransomware recovery app from the app menu.
 
 ## Frequently Asked Questions
 
-* *Can the Ransomware Recovery app used together with the Nextcloud official Ransomware Protection app?*
+* *Can the Ransomware Recovery app used together with the Nextcloud official Ransomware Protection app?*  
 Yes, it can be used together with the Nextloud official Ransomware Protection app.
 
-* *What's the difference between the Ransomware Recovery app and the Nextcloud official Ransomware Protection app?*
+* *What's the difference between the Ransomware Recovery app and the Nextcloud official Ransomware Protection app?*  
 The difference between this apps is pretty simple: The Nextcloud official Ransomware Protection app uses white- and blacklisting of file extensions to protect you against ransomware files, this only works for already known ransomware families.
 In contrast, the Ransomware Recovery app utilises the ransomware behaviour to mark possible ransomware attacks with an user-controlled recovery to give an easy-to-use mechanism to recover from unknown ransomware families.
 
