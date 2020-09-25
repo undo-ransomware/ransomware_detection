@@ -76,6 +76,8 @@ jobs:
         - bash codecov.sh
     - stage: release
       php: 7.2
+      env:
+        - DB=sqlite
       script:
         - wget https://github.com/ChristophWurst/krankerl/releases/download/v${KRANKERL_VERSION}/krankerl_${KRANKERL_VERSION}_amd64.deb
         - sudo dpkg -i krankerl_${KRANKERL_VERSION}_amd64.deb
