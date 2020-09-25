@@ -16,6 +16,9 @@ branches:
     - /^feature.*$/
 
 before_install:
+  - wget https://github.com/ChristophWurst/krankerl/releases/download/v0.12.3/krankerl_0.12.3_amd64.deb
+  - sudo dpkg -i krankerl_0.12.3_amd64.deb
+  - krankerl --version
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
   - . ./before_install.sh $APP_NAME $CORE_BRANCH $DB
   - cd ../server
