@@ -19,7 +19,6 @@ branches:
 before_install:
   - wget https://github.com/ChristophWurst/krankerl/releases/download/v${KRANKERL_VERSION}/krankerl_${KRANKERL_VERSION}_amd64.deb
   - sudo dpkg -i krankerl_${KRANKERL_VERSION}_amd64.deb
-  - krankerl --version
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
   - . ./before_install.sh $APP_NAME $CORE_BRANCH $DB
   - cd ../server
@@ -83,7 +82,7 @@ jobs:
         - DB=sqlite
       script:
         - cd apps/$APP_NAME/
-        - make appstore
+        - krankerl package
 
 stages:
   - test
