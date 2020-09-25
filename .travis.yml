@@ -83,10 +83,16 @@ jobs:
       script:
         - cd apps/$APP_NAME/
         - krankerl package
+    - stage: deploy
+      deploy:
+        provider: releases
+        api_key: $GITHUB_TOKEN
+        file: apps/$APP_NAME/build/artifacts/ransomware_detection.tar.gz
+        skip_cleanup: true
+        draft: true
 
 stages:
   - test
   - report
   - build
-  - name: deploy
-    if: tag =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$
+  - deploy
