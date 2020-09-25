@@ -76,8 +76,6 @@ jobs:
         - bash codecov.sh
     - stage: release
       php: 7.2
-      env: 
-        - DB=sqlite
       script:
         - wget https://github.com/ChristophWurst/krankerl/releases/download/v${KRANKERL_VERSION}/krankerl_${KRANKERL_VERSION}_amd64.deb
         - sudo dpkg -i krankerl_${KRANKERL_VERSION}_amd64.deb
@@ -89,6 +87,8 @@ jobs:
         file: apps/$APP_NAME/build/artifacts/ransomware_detection.tar.gz
         skip_cleanup: true
         draft: true
+        on:
+          all_branches: true
 
 stages:
   - test
