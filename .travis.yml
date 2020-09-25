@@ -4,6 +4,7 @@ env:
   global:
     - CORE_BRANCH=stable19
     - APP_NAME=ransomware_detection
+    - KRANKERL_VERSION=0.12.3
 
 services:
   - mysql
@@ -16,8 +17,8 @@ branches:
     - /^feature.*$/
 
 before_install:
-  - wget https://github.com/ChristophWurst/krankerl/releases/download/v0.12.3/krankerl_0.12.3_amd64.deb
-  - sudo dpkg -i krankerl_0.12.3_amd64.deb
+  - wget https://github.com/ChristophWurst/krankerl/releases/download/v$KRANKERL_VERSION/krankerl_$KRANKERL_VERSION_amd64.deb
+  - sudo dpkg -i krankerl_$KRANKERL_VERSION_amd64.deb
   - krankerl --version
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
   - . ./before_install.sh $APP_NAME $CORE_BRANCH $DB
