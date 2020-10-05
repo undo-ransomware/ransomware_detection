@@ -79,6 +79,9 @@ jobs:
       env:
         - DB=sqlite
       script:
+        - mkdir -p $HOME/.nextcloud/certificates
+        - curl --output $HOME/.nextcloud/certificates/ransomware_detection.crt -L https://raw.githubusercontent.com/nextcloud/app-certificate-requests/master/ransomware_detection/ransomware_detection.crt
+        - echo $PRIVATE_KEY > $HOME/.nextcloud/certificates/ransomware_detection.key
         - wget https://github.com/ChristophWurst/krankerl/releases/download/v${KRANKERL_VERSION}/krankerl_${KRANKERL_VERSION}_amd64.deb
         - sudo dpkg -i krankerl_${KRANKERL_VERSION}_amd64.deb
         - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -87,6 +90,11 @@ jobs:
         - sudo apt install gh
         - cd apps/$APP_NAME/
         - krankerl package
+        - php /var/www/html/occ integrity:sign-app --privateKey="$HOME/.nextcloud/certificates/ransomware_detection.key" --certificate="$HOME/.nextcloud/certificates/ransomware_detection.crt" --path="$(pwd)/build/artifacts/ransomware_detection"
+        - gh auth login --with-token $GITHUB_TOKEN
+        #- gh release create $TRAVIS_TAG build/artifacts/ransomware_detection.tar.gz -t $TRAVIS_TAG
+        - krankerl login --appstore $NEXTCLOUD_APPS_TOKEN
+        #- krankerl publish https://github.com/undo-ransomware/ransomware_detection/releases/download/$TRAVIS_TAG/ransomware_detection.tar.gz
 
 stages:
   - test
