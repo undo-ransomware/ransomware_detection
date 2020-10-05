@@ -81,16 +81,12 @@ jobs:
       script:
         - wget https://github.com/ChristophWurst/krankerl/releases/download/v${KRANKERL_VERSION}/krankerl_${KRANKERL_VERSION}_amd64.deb
         - sudo dpkg -i krankerl_${KRANKERL_VERSION}_amd64.deb
+        - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+        - sudo apt-add-repository https://cli.github.com/packages
+        - sudo apt update
+        - sudo apt install gh
         - cd apps/$APP_NAME/
         - krankerl package
-      deploy:
-        provider: releases
-        api_key: $GITHUB_TOKEN
-        file: apps/$APP_NAME/build/artifacts/ransomware_detection.tar.gz
-        skip_cleanup: true
-        draft: true
-        on:
-          all_branches: true
 
 stages:
   - test
