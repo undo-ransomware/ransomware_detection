@@ -91,7 +91,7 @@ jobs:
         - cd apps/$APP_NAME/
         - krankerl package
         #- php /var/www/html/occ integrity:sign-app --privateKey="$HOME/.nextcloud/certificates/ransomware_detection.key" --certificate="$HOME/.nextcloud/certificates/ransomware_detection.crt" --path="$(pwd)/build/artifacts/ransomware_detection"
-        - gh auth login --with-token $GITHUB_TOKEN
+        - gh auth login --with-token <$GITHUB_TOKEN
         #- gh release create $TRAVIS_TAG build/artifacts/ransomware_detection.tar.gz -t $TRAVIS_TAG
         - krankerl login --appstore $NEXTCLOUD_APPS_TOKEN
         #- krankerl publish https://github.com/undo-ransomware/ransomware_detection/releases/download/$TRAVIS_TAG/ransomware_detection.tar.gz
