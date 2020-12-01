@@ -96,8 +96,7 @@ jobs:
         - gh release create $TRAVIS_TAG build/artifacts/ransomware_detection.tar.gz -t $TRAVIS_TAG
         - krankerl login --appstore $NEXTCLOUD_APPS_TOKEN
         #- krankerl publish https://github.com/undo-ransomware/ransomware_detection/releases/download/$TRAVIS_TAG/ransomware_detection.tar.gz
-    on:
-        tags: true
+    if: tag IS present
 
 stages:
 #  - test
