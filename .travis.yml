@@ -90,7 +90,8 @@ jobs:
         - sudo apt install gh
         - cd apps/$APP_NAME/
         - krankerl package
-        - ./occ integrity:sign-app --privateKey="$HOME/.nextcloud/certificates/ransomware_detection.key" --certificate="$HOME/.nextcloud/certificates/ransomware_detection.crt" --path="$(pwd)/build/artifacts/ransomware_detection"
+        - cd ../..
+        - ./occ integrity:sign-app --privateKey="$HOME/.nextcloud/certificates/ransomware_detection.key" --certificate="$HOME/.nextcloud/certificates/ransomware_detection.crt" --path="$(pwd)/apps/$APP_NAME/build/artifacts/ransomware_detection"
         - gh auth login --with-token <<< $GITHUB_TOKEN
         #- gh release create $TRAVIS_TAG build/artifacts/ransomware_detection.tar.gz -t $TRAVIS_TAG
         - krankerl login --appstore $NEXTCLOUD_APPS_TOKEN
