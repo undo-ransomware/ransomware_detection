@@ -90,6 +90,7 @@ jobs:
         - sudo apt install gh
         - cd apps/$APP_NAME/
         - krankerl package
+        - chmod -R 777 build
         - cd ../..
         - ls -la
         - ./occ integrity:sign-app --privateKey="$HOME/.nextcloud/certificates/ransomware_detection.key" --certificate="$HOME/.nextcloud/certificates/ransomware_detection.crt" --path="$(pwd)/apps/$APP_NAME/build/artifacts/ransomware_detection"
