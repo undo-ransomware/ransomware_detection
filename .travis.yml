@@ -10,12 +10,6 @@ services:
   - mysql
   - postgresql
 
-branches:
-  only:
-    - master
-    - develop
-    - /^feature.*$/
-
 before_install:
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
   - . ./before_install.sh $APP_NAME $CORE_BRANCH $DB
