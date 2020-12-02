@@ -5,7 +5,7 @@
     <name>Ransomware recovery</name>
     <summary><![CDATA[This app offers synchronization monitoring and a file storage scanner for a guided user-controlled one-step ransomare recovery.]]></summary>
     <description><![CDATA[This app monitors file operations during the synchronization to detect ransomware attacks and also offers a post infection file storage scanner, which works even if it happend that you didn't have this app installed during an attack. This is done by using generic indicators for a guided user-controlled one-step recovery utilizing the integrated file versioning methods. Sponsored by the German Federal Ministry of Education and Research, and Prototype Fund.]]></description>
-    <version>0.8.4</version>
+    <version>0.9.0</version>
     <licence>agpl</licence>
     <author mail="matthias.held@uni-konstanz.de">Matthias Held</author>
     <namespace>RansomwareDetection</namespace>
@@ -19,10 +19,12 @@
     <website>https://github.com/undo-ransomware/ransomware_detection</website>
     <bugs>https://github.com/undo-ransomware/ransomware_detection/issues</bugs>
     <repository>https://github.com/undo-ransomware/ransomware_detection.git</repository>
-    <screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/monitoring-0.3.0.png</screenshot>
-    <screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/scan-files-0.3.0.png</screenshot>
+    <screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/ransomware-recovery-0.9.0-1.png</screenshot>
+    <screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/ransomware-recovery-0.9.0-2.png</screenshot>
+	<screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/ransomware-recovery-0.9.0-3.png</screenshot>
+	<screenshot>https://github.com/undo-ransomware/ransomware_detection/raw/master/screenshots/ransomware-recovery-0.9.0-4.png</screenshot>
     <dependencies>
-        <nextcloud min-version="19" max-version="19"/>
+        <nextcloud min-version="19" max-version="20"/>
     </dependencies>
 
     <background-jobs>
