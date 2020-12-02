@@ -34,11 +34,15 @@ use OCA\RansomwareDetection\Analyzer\EntropyFunnellingAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileCorruptionAnalyzer;
 use OCA\RansomwareDetection\Analyzer\FileExtensionAnalyzer;
 use OCA\RansomwareDetection\Entropy\Entropy;
+use OCA\RansomwareDetection\Controller\DetectionController;
 use OCA\RansomwareDetection\Notification\Notifier;
 use OCA\RansomwareDetection\StorageWrapper;
 use OCA\RansomwareDetection\Connector\Sabre\RequestPlugin;
 use OCA\RansomwareDetection\Service\FileOperationService;
+use OCA\RansomwareDetection\Service\RecoveredFileOperationService;
+use OCA\RansomwareDetection\Service\DetectionService;
 use OCA\RansomwareDetection\Mapper\FileOperationMapper;
+use OCA\RansomwareDetection\Mapper\RecoveredFileOperationMapper;
 use OCP\AppFramework\App;
 use OCP\App\IAppManager;
 use OCP\Files\IRootFolder;
@@ -70,10 +74,41 @@ class Application extends App
             );
         });
 
+        $container->registerService('RecoveredFileOperationMapper', function ($c) {
+            return new RecoveredFileOperationMapper(
+                $c->query('ServerContainer')->getDb()
+            );
+        });
+
+        $container->registerService('DetectionDeserializer', function ($c) {
+            return new DetectionDeserializer(
+                $c->query('FileOperationMapper')
+            );
+        });
+
         // services
         $container->registerService('FileOperationService', function ($c) {
             return new FileOperationService(
                 $c->query(FileOperationMapper::class),
+                $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
+            );
+        });
+
+        $container->registerService('RecoveredFileOperationService', function ($c) {
+            return new RecoveredFileOperationService(
+                $c->query(FileOperationMapper::class),
+                $c->query(RecoveredFileOperationMapper::class),
+                $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
+            );
+        });
+
+        $container->registerService('DetectionService', function ($c) {
+            return new DetectionService(
+                $c->query(ILogger::class),
+                $c->query('FileOperationService'),
+                $c->query('DetectionDeserializer'),
+                $c->query('OCP\IConfig'),
+                $c->query(Classifier::class),
                 $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
             );
         });
@@ -84,6 +119,15 @@ class Application extends App
                 $c->query(ILogger::class),
                 $c->query(FileOperationMapper::class),
                 $c->query(FileOperationService::class)
+            );
+        });
+
+        // controller
+        $container->registerService('DetectionController', function ($c) {
+            return new DetectionController(
+                $c->query('AppName'),
+                $c->query('Request'),
+                $c->query('DetectionService')
             );
         });
 

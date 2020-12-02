@@ -4,16 +4,11 @@ env:
   global:
     - CORE_BRANCH=stable19
     - APP_NAME=ransomware_detection
+    - KRANKERL_VERSION=0.12.3
 
 services:
   - mysql
   - postgresql
-
-branches:
-  only:
-    - master
-    - develop
-    - /^feature.*$/
 
 before_install:
   - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
@@ -23,6 +18,7 @@ before_install:
   - ./occ status
   - ./occ app:enable $APP_NAME
   - ./occ app:list
+  - composer install
 
 jobs:
   fast_finish: true
@@ -72,17 +68,30 @@ jobs:
         - cd tests
         - wget https://codecov.io/bash -O codecov.sh
         - bash codecov.sh
-    - stage: build
+    - stage: release
       php: 7.2
-      env: 
+      env:
         - DB=sqlite
       script:
+        - mkdir -p $HOME/.nextcloud/certificates
+        - curl --output $HOME/.nextcloud/certificates/ransomware_detection.crt -L https://raw.githubusercontent.com/nextcloud/app-certificate-requests/master/ransomware_detection/ransomware_detection.crt
+        - echo $PRIVATE_KEY > $HOME/.nextcloud/certificates/ransomware_detection.key
+        - wget https://github.com/ChristophWurst/krankerl/releases/download/v${KRANKERL_VERSION}/krankerl_${KRANKERL_VERSION}_amd64.deb
+        - sudo dpkg -i krankerl_${KRANKERL_VERSION}_amd64.deb
+        - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+        - sudo apt-add-repository https://cli.github.com/packages
+        - sudo apt update
+        - sudo apt install gh
+        - ./occ integrity:sign-app --privateKey="$HOME/.nextcloud/certificates/ransomware_detection.key" --certificate="$HOME/.nextcloud/certificates/ransomware_detection.crt" --path="$(pwd)/apps/$APP_NAME"
         - cd apps/$APP_NAME/
-        - make appstore
+        - krankerl package
+        - gh auth login --with-token <<< $GITHUB_TOKEN
+        - gh release create $TRAVIS_TAG build/artifacts/ransomware_detection.tar.gz -t $TRAVIS_TAG
+        - krankerl login --appstore $NEXTCLOUD_APPS_TOKEN
+        - krankerl publish https://github.com/undo-ransomware/ransomware_detection/releases/download/$TRAVIS_TAG/ransomware_detection.tar.gz
 
 stages:
   - test
   - report
-  - build
-  - name: deploy
-    if: tag =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$
+  - name: release
+    if: tag IS present

@@ -1,0 +1,14 @@
+.git
+.gitignore
+.travis.yml
+.tx
+krankerl.toml
+node_modules
+screenshots
+src
+Makefile
+package.json
+package-lock.json
+.eslintrc.js
+.babelrc.js
+.nextcloudignore

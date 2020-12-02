@@ -17,34 +17,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-script('ransomware_detection', 'app');
-script('ransomware_detection', 'utils');
-script('ransomware_detection', 'filelist');
-script('ransomware_detection', 'vendor/font-awesome/fontawesome-all');
-script('ransomware_detection', 'vendor/filesize/filesize');
+script('ransomware_detection', 'index');
 style('ransomware_detection', 'style');
+style('ransomware_detection', 'materialdesignicons');
 ?>
-<div id="app-navigation">
-    <ul>
-        <li class="active">
-            <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('ransomware_detection.recover.index', [])); ?>">
-                <img alt="" src="<?php print_unescaped(\OC::$server->getURLGenerator()->imagePath('core', 'actions/history.svg')); ?>">
-                <span>Monitoring</span>
-            </a>
-        </li>
-        <li>
-            <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('ransomware_detection.recover.scan', [])); ?>">
-                <img alt="" src="<?php print_unescaped(\OC::$server->getURLGenerator()->imagePath('core', 'actions/search.svg')); ?>">
-                <span>Scan files</span>
-            </a>
-        </li>
-    </ul>
-</div>
-<div id="app-content">
-    <div id="app-content-ransomware-detection-filelist">
-        <!-- Tables -->
-        <div class="section" id="section-loading">
-    	       <div class="icon-loading-dark"></div>
-    	</div>
-    </div>
-</div>
+<div id="vue-content"></div>
