@@ -1,18 +1,18 @@
 # Nextcloud Ransomware Recovery
+
 [![Build Status](https://travis-ci.com/undo-ransomware/ransomware_detection.svg?branch=master)](https://travis-ci.com/undo-ransomware/ransomware_detection)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/undo-ransomware/ransomware_detection/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/undo-ransomware/ransomware_detection/?branch=master)
 [![codecov](https://codecov.io/gh/undo-ransomware/ransomware_detection/branch/master/graph/badge.svg)](https://codecov.io/gh/undo-ransomware/ransomware_detection)
 
 **Ransomware detection with a guided user-controlled one-step recovery.**
 
-![](screenshots/scan-files-0.3.0.png)
+![Ransomware Recovery App](screenshots/ransomware-recovery-0.9.0-4.png)
 
-This app monitors file operations during the synchronization to detect ransomware attacks and also offers a post infection file storage scanner, which works even if it happend that you didn't have this app installed during an attack. This is done by using generic indicators for a guided user-controlled one-step recovery utilizing the integrated file versioning methods.
+This app monitors file operations during the synchronization to detect ransomware attacks. This is done by using generic indicators for a guided user-controlled one-step recovery utilizing the integrated file versioning methods.
 
 ## Features
 
 * :exclamation:**Ransomware Detection:** Monitoring the file operations, analysing and classifying the collected data by using generic indicators allows a reliable detection.
-* :mag_right:**Ransomware Scanner:** Scan your file storage after a ransomware attack - which even works without the app being installed during the infection - to easily recover your data and clean up your storage. This may take some time depending on how many files you have stored on your cloud storage.
 * :computer:**Recovery Interface:**  The color coded results of the classification offer an easy-to-use recovery interface giving the user full control of the recovery process.
 * :relaxed:**Guided Undo:** The guided user-controlled one-step recovery allows the user to quick and savely restore all - by ransomware - encrypted files without being affected by any false positives.
 
@@ -21,7 +21,16 @@ This app monitors file operations during the synchronization to detect ransomwar
 In your Nextcloud, simply navigate to »Apps«, choose the category »Security«, find the Ransomware recovery app and enable it.
 Then open the Ransomware recovery app from the app menu.
 
-# Acknowledgements
+## Frequently Asked Questions
+
+* *Can the Ransomware Recovery app used together with the Nextcloud official Ransomware Protection app?*  
+Yes, it can be used together with the Nextloud official Ransomware Protection app.
+
+* *What's the difference between the Ransomware Recovery app and the Nextcloud official Ransomware Protection app?*  
+The difference between this apps is pretty simple: The Nextcloud official Ransomware Protection app uses white- and blacklisting of file extensions to protect you against ransomware files, this only works for already known ransomware families.
+In contrast, the Ransomware Recovery app utilises the ransomware behaviour to mark possible ransomware attacks with an user-controlled recovery to give an easy-to-use mechanism to recover from unknown ransomware families.
+
+## Acknowledgements
 
 This project was created for the
 [Undo Ransomware](https://prototypefund.de/project/undo-von-ransomware-mittels-machine-learning/)

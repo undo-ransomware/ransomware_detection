@@ -22,24 +22,31 @@
 namespace OCA\RansomwareDetection\Service;
 
 use OCA\RansomwareDetection\Db\FileOperationMapper;
+use OCA\RansomwareDetection\Db\RecoveredFileOperationMapper;
 
 class FileOperationService
 {
     /** @var FileOperationMapper */
     protected $mapper;
 
+    /** @var RecoveredFileOperationMapper */
+    protected $recoveredMapper;
+
     /** @var string */
     protected $userId;
 
     /**
      * @param FileOperationMapper $mapper
+     * @param RecoveredFileOperationMapper $recoveredMapper
      * @param string              $userId
      */
     public function __construct(
         FileOperationMapper $mapper,
+        RecoveredFileOperationMapper $recoveredMapper,
         $userId
     ) {
         $this->mapper = $mapper;
+        $this->recoveredMapper = $recoveredMapper;
         $this->userId = $userId;
     }
 
@@ -123,9 +130,14 @@ class FileOperationService
      *
      * @param int $id
      */
-    public function deleteById($id)
+    public function deleteById($id, $addToHistory = false)
     {
+        $fileOperation = $this->mapper->find($id, $this->userId);
         $this->mapper->deleteById($id, $this->userId);
+        if ($addToHistory) {
+            $this->recoveredMapper->insert($fileOperation->toRecoveredFileOperation());
+        }
+
     }
 
     /**
@@ -135,7 +147,15 @@ class FileOperationService
      */
     public function deleteSequenceById($sequence)
     {
+        $params = [];
+        array_push($params, $sequence);
+        array_push($params, $this->userId);
+
+        $fileOperations = $this->mapper->findSequenceById($params, null, null);
         $this->mapper->deleteSequenceById($sequence, $this->userId);
+        foreach ($fileOperations as $fileOperation) {
+            $this->recoveredMapper->insert($fileOperation->toRecoveredFileOperation());
+        }
     }
 
     /**

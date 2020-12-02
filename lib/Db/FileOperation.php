@@ -22,6 +22,7 @@
 namespace OCA\RansomwareDetection\Db;
 
 use OCP\AppFramework\Db\Entity;
+use OCA\RansomwareDetection\Db\RecoveredFileOperation;
 
 class FileOperation extends Entity
 {
@@ -85,5 +86,25 @@ class FileOperation extends Entity
         $this->addType('suspicionClass', 'integer');
         $this->addType('fileExtensionClass', 'integer');
         $this->addType('fileClass', 'integer');
+    }
+
+    public function toRecoveredFileOperation() {
+        $recoveredFileOperation = new RecoveredFileOperation();
+        $recoveredFileOperation->setUserId($this->getUserId());
+        $recoveredFileOperation->setPath($this->getPath());
+        $recoveredFileOperation->setOriginalName($this->getOriginalName());
+        $recoveredFileOperation->setNewName($this->getNewName());
+        $recoveredFileOperation->setType($this->getType());
+        $recoveredFileOperation->setMimeType($this->getMimeType());
+        $recoveredFileOperation->setSize($this->getSize());
+        $recoveredFileOperation->setTimestamp($this->getTimestamp());
+        $recoveredFileOperation->setCorrupted($this->getCorrupted());
+        $recoveredFileOperation->setCommand($this->getCommand());
+        $recoveredFileOperation->setSequence($this->getSequence());
+        $recoveredFileOperation->setEntropy($this->getEntropy());
+        $recoveredFileOperation->setStandardDeviation($this->getStandardDeviation());
+        $recoveredFileOperation->setFileClass($this->getFileClass());
+        $recoveredFileOperation->setFileExtensionClass($this->getFileExtensionClass());
+        return $recoveredFileOperation;
     }
 }

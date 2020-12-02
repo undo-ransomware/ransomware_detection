@@ -23,6 +23,7 @@ namespace OCA\RansomwareDetection\tests\Unit\BackgroundJob;
 
 use OCA\RansomwareDetection\BackgroundJob\CleanUpJob;
 use OCA\RansomwareDetection\Db\FileOperationMapper;
+use OCA\RansomwareDetection\Db\RecoveredFileOperationMapper;
 use OCA\RansomwareDetection\Service\FileOperationService;
 use OCA\RansomwareDetection\Tests\Unit\Db\MapperTestUtility;
 use OCP\IConfig;
@@ -46,8 +47,12 @@ class CleanUpJobTest extends MapperTestUtility
             ->setMethods(['deleteFileOperationsBefore'])
             ->setConstructorArgs([$this->db])
             ->getMock();
+        $recoveredFileOperationMapper = $this->getMockBuilder(RecoveredFileOperationMapper::class)
+            ->setMethods(['deleteFileOperationsBefore'])
+            ->setConstructorArgs([$this->db])
+            ->getMock();
         $this->fileOperationService = $this->getMockBuilder(FileOperationService::class)
-            ->setConstructorArgs([$fileOperationMapper, 'john'])
+            ->setConstructorArgs([$fileOperationMapper, $recoveredFileOperationMapper, 'john'])
             ->getMock();
         $this->config = $this->createMock(IConfig::class);
         $this->cleanUpJob = new CleanUpJob($this->fileOperationService, $this->config);
