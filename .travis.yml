@@ -2,7 +2,7 @@ language: php
 
 env:
   global:
-    - CORE_BRANCH=stable19
+    - CORE_BRANCH=stable20
     - APP_NAME=ransomware_detection
     - KRANKERL_VERSION=0.12.3
 
