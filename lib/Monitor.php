@@ -136,6 +136,11 @@ class Monitor
     public function analyze($paths, $mode)
     {
         $path = $paths[0];
+		
+		if ($path === '') {
+			$this->logger->debug("Path is empty.");
+			return;
+		}
 
         $storage = $this->rootFolder->getUserFolder($this->userId)->get(dirname($path))->getStorage();
         if ($this->userId === null || $this->nestingLevel !== 0 || /*!$this->isUploadedFile($storage, $path) ||*/ $this->isCreatingSkeletonFiles()) {
@@ -216,7 +221,7 @@ class Monitor
 
                 return;
             case self::DELETE:
-                $this->logger->debug("Delete", ['app' =>  Application::APP_ID]);
+                $this->logger->debug("Delete ".$path, ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
@@ -242,7 +247,7 @@ class Monitor
 
                 return;
             case self::CREATE:
-                $this->logger->debug("Create", ['app' =>  Application::APP_ID]);
+                $this->logger->debug("Create ".$path, ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
