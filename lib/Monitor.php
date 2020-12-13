@@ -143,7 +143,7 @@ class Monitor
 		}
 
         $storage = $this->rootFolder->getUserFolder($this->userId)->get(dirname($path))->getStorage();
-        if ($this->userId === null || $this->nestingLevel !== 0 || /*!$this->isUploadedFile($storage, $path) ||*/ $this->isCreatingSkeletonFiles()) {
+        if ($this->userId === null || $this->nestingLevel !== 0 || !$this->isUploadedFile($storage, $path) || $this->isCreatingSkeletonFiles()) {
             // check only cloud files and no system files
             return;
         }
@@ -408,6 +408,10 @@ class Monitor
     private function addFolderOperation($paths, $node, $operation)
     {
         $this->logger->debug("Add folder operation.", ['app' =>  Application::APP_ID]);
+        if (is_null($paths)) {
+            $this->logger->debug("Add folder operation: Paths are empty.", ['app' =>  Application::APP_ID]);
+            return;
+        }
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
         $fileOperation->setPath(str_replace('files', '', pathinfo($node->getInternalPath())['dirname']));
@@ -445,6 +449,10 @@ class Monitor
     private function addFileOperation($paths, $node, $operation)
     {
         $this->logger->debug("Add file operation.", ['app' =>  Application::APP_ID]);
+        if (is_null($paths)) {
+            $this->logger->debug("Add file operation: Paths are empty.", ['app' =>  Application::APP_ID]);
+            return;
+        }
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
         $fileOperation->setPath(str_replace('files', '', pathinfo($node->getInternalPath())['dirname']));

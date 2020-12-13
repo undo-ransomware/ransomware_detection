@@ -151,6 +151,10 @@ class FileOperationController extends Controller
         foreach ($ids as $id) {
             try {
                 $file = $this->service->find($id);
+                if (is_null($file->getPath()) || is_null($file->getOriginalName())) {
+                    $this->logger->warning('recover: File path or name is null.', array('app' => Application::APP_ID));
+                    return;
+                }
                 switch ($file->getCommand()) {
                     case Monitor::WRITE:
                         // Recover new created files by deleting them
