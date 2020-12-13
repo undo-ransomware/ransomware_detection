@@ -44,7 +44,7 @@
         "time-elements": "^2.0.2",
         "vue": "^2.6.10",
         "vue-async-computed": "^3.7.0",
-        "vue-moment": "^4.0.0",
+        "vue-moment": "^4.1.0",
         "vue-router": "^3.0.6",
         "vuetify": "^2.3.10",
         "vuetify-loader": "^1.6.0",
