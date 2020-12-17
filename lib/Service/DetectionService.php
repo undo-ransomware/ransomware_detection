@@ -88,16 +88,14 @@ class DetectionService {
         }
 
         foreach ($sequences as $id => $sequence) {
-            if (sizeof($sequence) >= $this->config->getAppValue(Application::APP_ID, 'minimum_sequence_length', 0)) {
-                usort($sequence, function ($a, $b) {
-                    return $b->getId() - $a->getId();
-                });
-                $result = $this->sequenceAnalyzer->analyze($id, $sequence);
-                $this->logger->debug('detection: suspicion score of sequence ' . $id . ' is ' . $result->getSuspicionScore() . '.', array('app' => Application::APP_ID));
-                if ($result->getSuspicionScore() >= 0.5) {
-                    $detection = new Detection($id, $sequence);
-                    array_push($detectionObjects, $detection);
-                }
+            usort($sequence, function ($a, $b) {
+                return $b->getId() - $a->getId();
+            });
+            $result = $this->sequenceAnalyzer->analyze($id, $sequence);
+            $this->logger->debug('detection: suspicion score of sequence ' . $id . ' is ' . $result->getSuspicionScore() . '.', array('app' => Application::APP_ID));
+            if ($result->getSuspicionScore() >= 0.5) {
+                $detection = new Detection($id, $sequence);
+                array_push($detectionObjects, $detection);
             }
         }
         usort($detectionObjects, function ($a, $b) {

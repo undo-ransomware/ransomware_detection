@@ -130,20 +130,29 @@ class Monitor
     /**
      * Analyze file.
      *
-     * @param array    $paths
+     * @param Node     $source
+     * @param Node     $target
      * @param int      $mode
      */
-    public function analyze($paths, $mode)
+    public function analyze($source, $target = null, $mode)
     {
-        $path = $paths[0];
-		
-		if ($path === '') {
-			$this->logger->debug("Path is empty.");
+		if (is_null($source)) {
+			$this->logger->warning("Source is null.", ['app' =>  Application::APP_ID]);
 			return;
-		}
+        }
 
-        $storage = $this->rootFolder->getUserFolder($this->userId)->get(dirname($path))->getStorage();
-        if ($this->userId === null || $this->nestingLevel !== 0 || !$this->isUploadedFile($storage, $path) || $this->isCreatingSkeletonFiles()) {
+        if (is_null($target) && $mode === self::RENAME) {
+            $this->logger->warning("Target should not be null during a rename operation.", ['app' =>  Application::APP_ID]);
+			return;
+        }
+
+        if (!is_null($target) && $mode !== self::RENAME) {
+            $this->logger->warning("Only if it's a rename operation there should be a target node.", ['app' =>  Application::APP_ID]);
+			return;
+        }
+        
+        $storage = $source->getStorage();
+        if (is_null($this->userId) || $this->nestingLevel !== 0 || !$this->isUploadedFile($storage, $source->getInternalPath()) || $this->isCreatingSkeletonFiles()) {
             // check only cloud files and no system files
             return;
         }
@@ -161,57 +170,40 @@ class Monitor
 
         switch ($mode) {
             case self::RENAME:
-                $path = $paths[1];
-                $this->logger->debug("Rename ".$paths[0]." to ".$paths[1], ['app' =>  Application::APP_ID]);
-                if (preg_match('/.+\.d[0-9]+/', pathinfo($paths[1])['basename']) > 0) {
+                $this->logger->debug("Rename ".$source->getPath()." to ".$target->getPath(), ['app' =>  Application::APP_ID]);
+                if (preg_match('/.+\.d[0-9]+/', pathinfo($target->getPath())['basename']) > 0) {
                     return;
                 }
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
-                try {
-                    $userRoot = $this->rootFolder->getUserFolder($this->userId);
-                    $node = $userRoot->get($path);
-                } catch (\OCP\Files\NotFoundException $exception) {
-                    $this->logger->error("File Not Found ".$path, ['app' =>  Application::APP_ID]);
-                    return;
-                }
-
                 // not a file no need to analyze
-                if (!($node instanceof File)) {
-                    $this->addFolderOperation($paths, $node, self::RENAME);
+                if (!($source instanceof File)) {
+                    $this->addFolderOperation($source, $target, self::RENAME);
                     $this->nestingLevel--;
 
                     return;
                 }
 
-                $this->addFileOperation($paths, $node, self::RENAME);
+                $this->addFileOperation($source, $target, self::RENAME);
 
                 $this->nestingLevel--;
 
                 return;
             case self::WRITE:
-                $this->logger->debug("Write ".$path, ['app' =>  Application::APP_ID]);
+                $this->logger->debug("Write ".$source->getPath(), ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
-                try {
-                    $userRoot = $this->rootFolder->getUserFolder($this->userId);
-                    $node = $userRoot->get($path);
-                } catch (\OCP\Files\NotFoundException $exception) {
-                    $this->logger->error("File Not Found ".$path, ['app' =>  Application::APP_ID]);
-                    return;
-                }
-
                 // not a file no need to analyze
-                if (!($node instanceof File)) {
-                    $this->addFolderOperation($paths, $node, self::WRITE);
+                if (!($source instanceof File)) {
+                    $this->addFolderOperation($source->getPath(), null, self::WRITE);
                     $this->nestingLevel--;
 
                     return;
                 }
 
-                $this->addFileOperation($paths, $node, self::WRITE);
+                $this->addFileOperation($source, null, self::WRITE);
 
                 $this->nestingLevel--;
 
@@ -221,55 +213,40 @@ class Monitor
 
                 return;
             case self::DELETE:
-                $this->logger->debug("Delete ".$path, ['app' =>  Application::APP_ID]);
+                $this->logger->warning("Delete ".$source->getPath(), ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
-                try {
-                    $userRoot = $this->rootFolder->getUserFolder($this->userId);
-                    $node = $userRoot->get($path);
-                } catch (\OCP\Files\NotFoundException $exception) {
-                    $this->logger->error("File Not Found ".$path, ['app' =>  Application::APP_ID]);
-                    return;
-                }
-
                 // not a file no need to analyze
-                if (!($node instanceof File)) {
-                    $this->addFolderOperation($paths, $node, self::DELETE);
+                if (!($source instanceof File)) {
+                    $this->addFolderOperation($source, null, self::DELETE);
                     $this->nestingLevel--;
 
                     return;
                 }
 
-                $this->addFileOperation($paths, $node, self::DELETE);
+                $this->addFileOperation($source, null, self::DELETE);
 
                 $this->nestingLevel--;
 
                 return;
             case self::CREATE:
-                $this->logger->debug("Create ".$path, ['app' =>  Application::APP_ID]);
+                $this->logger->debug("Create ".$source->getPath(), ['app' =>  Application::APP_ID]);
                 // reset PROPFIND_COUNT
                 $this->resetProfindCount();
 
-                try {
-                    $userRoot = $this->rootFolder->getUserFolder($this->userId);
-                    $node = $userRoot->get($path);
-                } catch (\OCP\Files\NotFoundException $exception) {
-                    $this->logger->error("File Not Found ".$path, ['app' =>  Application::APP_ID]);
-                    return;
-                }
-                if (!($node instanceof File)) {
-
+                if (!($source instanceof File)) {
                     $fileOperation = new FileOperation();
                     $fileOperation->setUserId($this->userId);
-                    $fileOperation->setPath(str_replace('files', '', pathinfo($path)['dirname']));
-                    $fileOperation->setOriginalName(pathinfo($path)['basename']);
+                    $fileOperation->setPath(str_replace('files', '', pathinfo($source->getPath())['dirname']));
+                    $fileOperation->setOriginalName(pathinfo($source->getPath())['basename']);
                     $fileOperation->setType('folder');
                     $fileOperation->setMimeType('httpd/unix-directory');
                     $fileOperation->setSize(0);
                     $fileOperation->setTimestamp(time());
                     $fileOperation->setCorrupted(false);
                     $fileOperation->setCommand(self::CREATE);
+                    $fileOperation->setFileId($source->getId());
                     $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
                     $fileOperation->setSequence($sequenceId);
 
@@ -284,7 +261,7 @@ class Monitor
                     $this->mapper->insert($fileOperation);
                     $this->nestingLevel--;
                 } else {
-                    $this->addFileOperation($paths, $node, self::CREATE);
+                    $this->addFileOperation([$source->getPath()], $source, self::CREATE);
 
                     $this->nestingLevel--;
                 }
@@ -331,35 +308,6 @@ class Monitor
     }
 
     /**
-     * Return file size of a path.
-     *
-     * @param string $path
-     *
-     * @return int
-     */
-    private function getFileSize($path)
-    {
-        if (strpos($path, 'files_trashbin') !== false) {
-            $node = $this->rootFolder->get($path);
-
-            if (!($node instanceof File)) {
-                throw new NotFoundException();
-            }
-
-            return $node->getSize();
-        } else {
-            $userRoot = $this->rootFolder->getUserFolder($this->userId)->getParent();
-            $node = $userRoot->get($path);
-
-            if (!($node instanceof File)) {
-                throw new NotFoundException();
-            }
-
-            return $node->getSize();
-        }
-    }
-
-    /**
      * Check if file is a uploaded file.
      *
      * @param IStorage $storage
@@ -369,7 +317,6 @@ class Monitor
      */
     private function isUploadedFile(IStorage $storage, $path)
     {
-        $fullPath = $path;
         if (property_exists($storage, 'mountPoint')) {
             /* @var StorageWrapper $storage */
             try {
@@ -401,26 +348,40 @@ class Monitor
     /**
      * Add a folder to the operations.
      *
-     * @param array $paths
-     * @param INode $node
+     * @param Node  $source
+     * @param Node  $target
      * @param int   $operation
      */
-    private function addFolderOperation($paths, $node, $operation)
+    private function addFolderOperation($source, $target = null, $operation)
     {
         $this->logger->debug("Add folder operation.", ['app' =>  Application::APP_ID]);
-        if (is_null($paths)) {
-            $this->logger->debug("Add folder operation: Paths are empty.", ['app' =>  Application::APP_ID]);
+        if (is_null($source)) {
+            $this->logger->warning("Source node is null.", ['app' =>  Application::APP_ID]);
             return;
+        }
+
+        if (is_null($target) && $operation === self::RENAME) {
+            $this->logger->warning("Target should not be null during a rename operation.", ['app' =>  Application::APP_ID]);
+			return;
+        }
+
+        if (!is_null($target) && $operation !== self::RENAME) {
+            $this->logger->warning("Only if it's a rename operation there should be a target node.", ['app' =>  Application::APP_ID]);
+			return;
         }
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
-        $fileOperation->setPath(str_replace('files', '', pathinfo($node->getInternalPath())['dirname']));
-        $fileOperation->setOriginalName($node->getName());
+        $fileOperation->setPath(str_replace('files', '', pathinfo($source->getInternalPath())['dirname']));
+        $fileOperation->setOriginalName($source->getName());
         if ($operation === self::RENAME) {
-            $fileOperation->setNewName(pathinfo($paths[1])['basename']);
+            $fileOperation->setNewName(pathinfo($target->getInternalPath())['basename']);
+            $fileOperation->setMimeType($target->getMimeType());
+            $fileOperation->setFileId($target->getId());
+        } else {
+            $fileOperation->setMimeType($source->getMimeType());
+            $fileOperation->setFileId($source->getId());
         }
         $fileOperation->setType('folder');
-        $fileOperation->setMimeType($node->getMimeType());
         $fileOperation->setSize(0);
         $fileOperation->setTimestamp(time());
         $fileOperation->setCorrupted(false);
@@ -442,37 +403,55 @@ class Monitor
     /**
      * Add a file to the operations.
      *
-     * @param array $paths
-     * @param INode $node
+     * @param Node  $source
+     * @param Node  $target
      * @param int   $operation
      */
-    private function addFileOperation($paths, $node, $operation)
+    private function addFileOperation($source, $target = null, $operation)
     {
         $this->logger->debug("Add file operation.", ['app' =>  Application::APP_ID]);
-        if (is_null($paths)) {
-            $this->logger->debug("Add file operation: Paths are empty.", ['app' =>  Application::APP_ID]);
+        if (is_null($source)) {
+            $this->logger->warning("Source node is null.", ['app' =>  Application::APP_ID]);
             return;
+        }
+
+        if (is_null($target) && $operation === self::RENAME) {
+            $this->logger->warning("Target should not be null during a rename operation.", ['app' =>  Application::APP_ID]);
+			return;
+        }
+
+        if (!is_null($target) && $operation !== self::RENAME) {
+            $this->logger->warning("Only if it's a rename operation there should be a target node.", ['app' =>  Application::APP_ID]);
+			return;
         }
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
-        $fileOperation->setPath(str_replace('files', '', pathinfo($node->getInternalPath())['dirname']));
-        $fileOperation->setOriginalName($node->getName());
+        $fileOperation->setPath(str_replace('files', '', pathinfo($source->getInternalPath())['dirname']));
+        $fileOperation->setOriginalName($source->getName());
         if ($operation === self::RENAME) {
-            $fileOperation->setNewName(pathinfo($paths[1])['basename']);
+            $fileOperation->setNewName(pathinfo($target->getInternalPath())['basename']);
+            $fileOperation->setMimeType($target->getMimeType());
+            $fileOperation->setFileId($target->getId());
+            $fileOperation->setSize($target->getSize());
+            $fileCorruptionResult = $this->fileCorruptionAnalyzer->analyze($target);
+            $entropyResult = $this->entropyAnalyzer->analyze($target);
+        } else {
+            $fileOperation->setMimeType($source->getMimeType());
+            $fileOperation->setFileId($source->getId());
+            $fileOperation->setSize($source->getSize());
+            $fileCorruptionResult = $this->fileCorruptionAnalyzer->analyze($source);
+            $entropyResult = $this->entropyAnalyzer->analyze($source);
         }
         $fileOperation->setType('file');
-        $fileOperation->setMimeType($node->getMimeType());
-        $fileOperation->setSize($node->getSize());
         $fileOperation->setTimestamp(time());
         $fileOperation->setCommand($operation);
         $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
         $fileOperation->setSequence($sequenceId);
 
         // file extension analysis
-        $fileExtensionResult = $this->fileExtensionAnalyzer->analyze($node->getInternalPath());
+        $fileExtensionResult = $this->fileExtensionAnalyzer->analyze($source->getInternalPath());
         $fileOperation->setFileExtensionClass($fileExtensionResult->getFileExtensionClass());
 
-        $fileCorruptionResult = $this->fileCorruptionAnalyzer->analyze($node);
         $isCorrupted = $fileCorruptionResult->isCorrupted();
         $fileOperation->setCorrupted($isCorrupted);
         if ($isCorrupted) {
@@ -480,7 +459,6 @@ class Monitor
         }
 
         // entropy analysis
-        $entropyResult = $this->entropyAnalyzer->analyze($node);
         $fileOperation->setEntropy($entropyResult->getEntropy());
         $fileOperation->setStandardDeviation($entropyResult->getStandardDeviation());
         $fileOperation->setFileClass($entropyResult->getFileClass());

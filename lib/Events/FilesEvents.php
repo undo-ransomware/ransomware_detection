@@ -23,6 +23,8 @@ namespace OCA\RansomwareDetection\Events;
 
 use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\AppInfo\Application;
+use OCP\Files\IRootFolder;
+use OCP\Files\Node;
 use OCP\ILogger;
 
 class FilesEvents {
@@ -32,6 +34,9 @@ class FilesEvents {
     
     /** @var ILogger */
     private $logger;
+
+    /** @var IRootFolder */
+    private $rootFolder;
 
     /** @var Monitor */
     private $monitor;
@@ -44,81 +49,67 @@ class FilesEvents {
 	 */
 	public function __construct(
         ILogger $logger,
+        IRootFolder $rootFolder, 
         Monitor $monitor,
         $userId
 
 	) {
         $this->logger = $logger;
+        $this->rootFolder = $rootFolder;
         $this->monitor = $monitor;
 		$this->userId = $userId;
+    }
+    
+    public function register() {
+        $this->rootFolder->listen('\OC\Files', 'postWrite', [$this, 'onFileWrite']);
+        $this->rootFolder->listen('\OC\Files', 'postRename', [$this, 'onFileRename']);
+        $this->rootFolder->listen('\OC\Files', 'preDelete', [$this, 'onFileDelete']);
+        $this->rootFolder->listen('\OC\Files', 'postCreate ', [$this, 'onFileCreate']);
 	}
+
 
 	/**
 	 * @param array $params
 	 */
-	public function onFileUpdate(array $params) {
-        $this->logger->debug("Updating ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
-        $this->analyze([$params['path']], Monitor::WRITE);
-	}
-
-
-	/**
-	 * @param array $params
-	 */
-	public function onFileRename(array $params) {
-        $this->logger->debug("Renaming ".$params['oldpath']." to ".$params['newpath'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
-        $this->analyze([$params['oldpath'], $params['newpath']], Monitor::RENAME);
+	public function onFileRename(Node $source, Node $target) {
+        $this->logger->warning($target->getId());
+        $this->logger->debug("Renaming ".$source->getPath()." to ".$target->getPath(), ['app' =>  Application::APP_ID]);
+        $this->analyze($source, $target, Monitor::RENAME);
     }
 
     /**
 	 * @param array $params
 	 */
-    public function onFileCreate(array $params) {
-        $this->logger->debug("Creating ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
-        $this->analyze([$params['path']], Monitor::CREATE);
+    public function onFileCreate(Node $node) {
+        $this->logger->debug("Creating ".$node->getPath(), ['app' =>  Application::APP_ID]);
+        $this->analyze($node, null, Monitor::CREATE);
     }
     
     /**
 	 * @param array $params
 	 */
-    public function onFileWrite(array $params) {
-        $this->logger->debug("Writing ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
-        $this->analyze([$params['path']], Monitor::WRITE);
+    public function onFileWrite(Node $node) {
+        $this->logger->debug("Writing ".$node->getPath(), ['app' =>  Application::APP_ID]);
+        $this->analyze($node, null, Monitor::WRITE);
     }
     
     /**
 	 * @param array $params
 	 */
-    public function onFileDelete(array $params) {
-        $this->logger->debug("Deleting ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
-        $this->analyze([$params['path']], Monitor::DELETE);
-    }
-    
-    /**
-	 * @param array $params
-	 */
-    public function onFileCopy(array $params) {
-        $this->logger->debug("Copying ".$params['oldpath']." to ".$params['newpath'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
-        $this->analyze([$params['oldpath'], $params['newpath']], Monitor::RENAME);
-    }
-    
-    /**
-	 * @param array $params
-	 */
-    public function onFileTouch(array $params) {
-        $this->logger->debug("Touching ".$params['path'].": Params: ".print_r($params, true), ['app' =>  Application::APP_ID]);
-        $this->analyze([$params['path']], Monitor::WRITE);
+    public function onFileDelete(Node $node) {
+        $this->logger->debug("Deleting ".$node->getPath(), ['app' =>  Application::APP_ID]);
+        $this->analyze($node, null, Monitor::DELETE);
     }
     
     /**
      * Makes it easier to test.
      *
-     * @param IStorage $storage
-     * @param string   $path
+     * @param Node     $source
+     * @param Node     $target
      * @param int      $mode
      */
-    protected function analyze($path, $mode)
+    protected function analyze($source, $target, $mode)
     {
-        return $this->monitor->analyze($path, $mode);
+        return $this->monitor->analyze($source, $target, $mode);
     }
 }

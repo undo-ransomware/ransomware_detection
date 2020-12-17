@@ -30,6 +30,9 @@ class RecoveredFileOperation extends Entity
     public $userId;
 
     /** @var string */
+    public $fileId;
+
+    /** @var string */
     public $path;
 
     /** @var string */
@@ -91,6 +94,7 @@ class RecoveredFileOperation extends Entity
     public function toFileOperation() {
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->getUserId());
+        $fileOperation->setFileId($this->getFileId());
         $fileOperation->setPath($this->getPath());
         $fileOperation->setOriginalName($this->getOriginalName());
         $fileOperation->setNewName($this->getNewName());

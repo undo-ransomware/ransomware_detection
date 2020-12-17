@@ -28,6 +28,7 @@ use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Service\FileOperationService;
 use OCA\Files_Trashbin\Trashbin;
 use OCA\Files_Trashbin\Helper;
+use OCA\Files_Trashbin\Trash\ITrashManager;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
@@ -37,6 +38,7 @@ use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\IRequest;
 use OCP\ILogger;
+use OCP\IUserManager;
 
 class FileOperationController extends Controller
 {
@@ -57,6 +59,10 @@ class FileOperationController extends Controller
 
     /** @var Classifier */
     protected $classifier;
+
+    protected $trashManager;
+
+    protected $userManager;
 
     /** @var string */
     protected $userId;
@@ -81,6 +87,8 @@ class FileOperationController extends Controller
         Folder $userFolder,
         FileOperationService $service,
         Classifier $classifier,
+        ITrashManager $trashManager,
+        IUserManager $userManager,
         $userId
     ) {
         parent::__construct($appName, $request);
@@ -91,6 +99,8 @@ class FileOperationController extends Controller
         $this->logger = $logger;
         $this->service = $service;
         $this->classifier = $classifier;
+        $this->trashManager = $trashManager;
+        $this->userManager = $userManager;
         $this->userId = $userId;
     }
 
@@ -157,9 +167,7 @@ class FileOperationController extends Controller
                 }
                 switch ($file->getCommand()) {
                     case Monitor::WRITE:
-                        // Recover new created files by deleting them
-                        $filePath = $file->getPath().'/'.$file->getOriginalName();
-                        if ($this->deleteFromStorage($filePath)) {
+                        if ($this->deleteFromStorage($file->getFileId())) {
                             $this->service->deleteById($id, true);
 
                             $deleted++;
@@ -172,22 +180,18 @@ class FileOperationController extends Controller
                     case Monitor::DELETE:
                         // Recover deleted files by restoring them from the trashbin
                         // It's not necessary to use the real path
-                        $dir = '/';
-                        $candidate = $this->findCandidateToRestore($dir, $file->getOriginalName());
-                        if ($candidate !== null) {
-                            $path = $dir.'/'.$candidate['name'].'.d'.$candidate['mtime'];
-                            if (Trashbin::restore($path, $candidate['name'], $candidate['mtime']) !== false) {
-                                $this->service->deleteById($id, true);
+                        $trashItem = $this->trashManager->getTrashNodeById($this->userManager->get($this->userId), $file->getFileId());
+                        $name = substr($trashItem->getName(), 0, strrpos($trashItem->getName(), "."));
+                        $path = str_replace("files_trashbin/files/", "", $trashItem->getInternalPath());
+                        $time = str_replace($name.".d", "", $path);
+                        if (Trashbin::restore($path, $name, $time) !== false) {
+                            $this->service->deleteById($id, true);
 
-                                $recovered++;
-                                array_push($filesRecovered, $id);
-                            }
-                            // File does not exist
-                            $badRequest = false;
-                        } else {
-                            // No candidate found
-                            $badRequest = false;
+                            $recovered++;
+                            array_push($filesRecovered, $id);
                         }
+                        // File does not exist
+                        $badRequest = false;
                         break;
                     case Monitor::RENAME:
                         $this->service->deleteById($id, true);
@@ -197,8 +201,7 @@ class FileOperationController extends Controller
                         break;
                     case Monitor::CREATE:
                         // Recover new created files/folders
-                        $filePath = $file->getPath().'/'.$file->getOriginalName();
-                        if ($this->deleteFromStorage($filePath)) {
+                        if ($this->deleteFromStorage($file->getFileId())) {
                             $this->service->deleteById($id, true);
 
                             $deleted++;
@@ -240,14 +243,18 @@ class FileOperationController extends Controller
     /**
      * Deletes a file from the storage.
      *
-     * @param string $path
+     * @param string $id
      *
      * @return bool
      */
-    private function deleteFromStorage($path)
+    private function deleteFromStorage($id)
     {
         try {
-            $node = $this->userFolder->get($path);
+            $nodes = $this->userFolder->getById($id);
+            if (sizeof($nodes) > 1) {
+                return false;
+            }
+            $node = array_pop($nodes);
             if ($node->isDeletable()) {
                 $node->delete();
             } else {
@@ -261,40 +268,6 @@ class FileOperationController extends Controller
 
             return true;
         }
-    }
-
-    /**
-     * Finds a candidate to restore if a file with the specific does not exist.
-     *
-     * @param string $dir
-     * @param string $fileName
-     *
-     * @return FileInfo
-     */
-    private function findCandidateToRestore($dir, $fileName)
-    {
-        $files = array();
-        $trashBinFiles = $this->getTrashFiles($dir);
-
-        foreach ($trashBinFiles as $trashBinFile) {
-            if (strcmp($trashBinFile['name'], $fileName) === 0) {
-                $files[] = $trashBinFile;
-            }
-        }
-
-        return array_pop($files);
-    }
-
-    /**
-     * Workaround for testing.
-     *
-     * @param string $dir
-     *
-     * @return array
-     */
-    private function getTrashFiles($dir)
-    {
-        return Helper::getTrashFiles($dir, $this->userId, 'mtime', false);
     }
 
 }

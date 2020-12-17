@@ -205,6 +205,7 @@ class Application extends App
         $container->registerService('FilesEvents', function ($c) {
             return new FilesEvents(
                 $c->query(ILogger::class),
+                $c->query(IRootFolder::class),
                 $c->query(Monitor::class),
                 $c->query('ServerContainer')->getUserSession()->getUser()->getUID()
             );
@@ -229,13 +230,10 @@ class Application extends App
             $sequenceAnalyzer = $this->getContainer()->query(SequenceAnalyzer::class);
             $event->getServer()->addPlugin(new RequestPlugin($logger, $config, $userSession, $session, $service, $notifications, $classifier, $sequenceAnalyzer));
         });
-        Util::connectHook('OC_Filesystem', 'post_create', FilesHooks::class, 'onFileCreate');
-        // Util::connectHook('OC_Filesystem', 'post_update', FilesHooks::class, 'onFileUpdate');
-        Util::connectHook('OC_Filesystem', 'post_rename', FilesHooks::class, 'onFileRename');
-        Util::connectHook('OC_Filesystem', 'post_write', FilesHooks::class, 'onFileWrite');
-        Util::connectHook('OC_Filesystem', 'post_delete', FilesHooks::class, 'onFileDelete');
-        // Util::connectHook('OC_Filesystem', 'post_touch', FilesHooks::class, 'onFileTouch');
-        // Util::connectHook('OC_Filesystem', 'post_copy', FilesHooks::class, 'onFileCopy');
+
+        $container = $this->getContainer();
+        $container->query(FilesEvents::class)->register();
+
         $this->registerNotificationNotifier();
     }
 
