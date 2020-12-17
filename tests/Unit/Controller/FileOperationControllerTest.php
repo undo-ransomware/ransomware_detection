@@ -28,14 +28,22 @@ use OCA\RansomwareDetection\Db\FileOperation;
 use OCA\RansomwareDetection\Controller\FileOperationController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
+use OCA\Files_Trashbin\Trash\ITrashManager;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\IUserManager;
 use Test\TestCase;
 
 class FileOperationControllerTest extends TestCase
 {
     /** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
+
+    /** @var ITrashManager|\PHPUnit_Framework_MockObject_MockObject */
+    protected $trashManager;
+
+    /** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
+    protected $userManager;
 
     /** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
     protected $userSession;
@@ -75,6 +83,10 @@ class FileOperationControllerTest extends TestCase
             ->getMock();
         $this->folder = $this->getMockBuilder('OCP\Files\Folder')
             ->getMock();
+        $this->trashManager = $this->getMockBuilder('OCA\Files_Trashbin\Trash\ITrashManager')
+            ->getMock();
+        $this->userManager = $this->getMockBuilder('OCP\IUserManager')
+            ->getMock();
         $connection = $this->getMockBuilder('OCP\IDBConnection')
             ->getMock();
         $mapper = $this->getMockBuilder('OCA\RansomwareDetection\Db\FileOperationMapper')
@@ -103,6 +115,8 @@ class FileOperationControllerTest extends TestCase
             $this->folder,
             $this->service,
             $this->classifier,
+            $this->trashManager,
+            $this->userManager,
             'john'
         );
         $file = $this->getMockBuilder(FileOperation::class)
@@ -175,14 +189,12 @@ class FileOperationControllerTest extends TestCase
                 $this->folder,
                 $this->service,
                 $this->classifier,
+                $this->trashManager,
+                $this->userManager,
                 'john'
             ])
-            ->setMethods(['deleteFromStorage', 'getTrashFiles'])
+            ->setMethods(['deleteFromStorage'])
             ->getMock();
-
-        $controller->expects($this->any())
-            ->method('getTrashFiles')
-            ->willReturn([]);
 
         $this->service->method('find')
             ->willReturn($fileOperation);
@@ -210,19 +222,17 @@ class FileOperationControllerTest extends TestCase
                 $this->folder,
                 $this->service,
                 $this->classifier,
+                $this->trashManager,
+                $this->userManager,
                 'john'
             ])
-            ->setMethods(['getTrashFiles'])
+            ->setMethods([])
             ->getMock();
 
         $fileOperationWrite = new FileOperation();
         $fileOperationWrite->setCommand(Monitor::WRITE);
         $fileOperationWrite->setPath('/admin/files');
         $fileOperationWrite->setOriginalName('test.jpg');
-
-        $controller->expects($this->any())
-            ->method('getTrashFiles')
-            ->willReturn([]);
 
         $this->service->method('find')
             ->will($this->throwException(new \OCP\AppFramework\Db\MultipleObjectsReturnedException('test')));
@@ -243,6 +253,8 @@ class FileOperationControllerTest extends TestCase
                 $this->folder,
                 $this->service,
                 $this->classifier,
+                $this->trashManager,
+                $this->userManager,
                 'john'
         );
 
@@ -270,6 +282,8 @@ class FileOperationControllerTest extends TestCase
             $this->folder,
             $this->service,
             $this->classifier,
+            $this->trashManager,
+            $this->userManager,
             'john'
         );
         $file = $this->createMock(File::class);
@@ -295,6 +309,8 @@ class FileOperationControllerTest extends TestCase
             $this->folder,
             $this->service,
             $this->classifier,
+            $this->trashManager,
+            $this->userManager,
             'john'
         );
         $file = $this->createMock(File::class);
@@ -321,6 +337,8 @@ class FileOperationControllerTest extends TestCase
             $this->folder,
             $this->service,
             $this->classifier,
+            $this->trashManager,
+            $this->userManager,
             'john'
         );
         $folder = $this->createMock(Folder::class);

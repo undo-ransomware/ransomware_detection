@@ -60,8 +60,10 @@ class FileOperationController extends Controller
     /** @var Classifier */
     protected $classifier;
 
+    /** @var ITrashManager */
     protected $trashManager;
 
+    /** @var IUserManager */
     protected $userManager;
 
     /** @var string */
@@ -76,6 +78,8 @@ class FileOperationController extends Controller
      * @param Folder               $userFolder
      * @param FileOperationService $service
      * @param Classifier           $classifier
+     * @param ITrashManager        $trashManager
+     * @param IUserManager         $userManager
      * @param string               $userId
      */
     public function __construct(
@@ -161,8 +165,8 @@ class FileOperationController extends Controller
         foreach ($ids as $id) {
             try {
                 $file = $this->service->find($id);
-                if (is_null($file->getPath()) || is_null($file->getOriginalName())) {
-                    $this->logger->warning('recover: File path or name is null.', array('app' => Application::APP_ID));
+                if (is_null($file->getPath()) || $file->getPath() === '/' || is_null($file->getOriginalName())) {
+                    $this->logger->warning('recover: File path or name is null or user root folder.', array('app' => Application::APP_ID));
                     return;
                 }
                 switch ($file->getCommand()) {
@@ -182,16 +186,21 @@ class FileOperationController extends Controller
                         // It's not necessary to use the real path
                         $trashItem = $this->trashManager->getTrashNodeById($this->userManager->get($this->userId), $file->getFileId());
                         $name = substr($trashItem->getName(), 0, strrpos($trashItem->getName(), "."));
-                        $path = str_replace("files_trashbin/files/", "", $trashItem->getInternalPath());
-                        $time = str_replace($name.".d", "", $path);
-                        if (Trashbin::restore($path, $name, $time) !== false) {
-                            $this->service->deleteById($id, true);
+                        if (strpos($trashItem->getInternalPath(), "files_trashbin/files/") !== false) {
+                            $path = str_replace("files_trashbin/files/", "", $trashItem->getInternalPath());
+                            $time = str_replace($name.".d", "", $path);
+                            if (Trashbin::restore($path, $name, $time) !== false) {
+                                $this->service->deleteById($id, true);
 
-                            $recovered++;
-                            array_push($filesRecovered, $id);
+                                $recovered++;
+                                array_push($filesRecovered, $id);
+                            }
+                            // File does not exist
+                            $badRequest = false;
+                        } else {
+                            $this->logger->warning('recover: File or folder is not located in the trashbin.', array('app' => Application::APP_ID));
+                            return;
                         }
-                        // File does not exist
-                        $badRequest = false;
                         break;
                     case Monitor::RENAME:
                         $this->service->deleteById($id, true);
