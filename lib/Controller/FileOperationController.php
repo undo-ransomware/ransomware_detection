@@ -256,7 +256,7 @@ class FileOperationController extends Controller
      *
      * @return bool
      */
-    private function deleteFromStorage($id)
+    protected function deleteFromStorage($id)
     {
         if ($this->userFolder->getId() === $id) {
             $this->logger->warning('deleteFromStorage: Tried to delete user folder. Access denied.', array('app' => Application::APP_ID));
