@@ -172,12 +172,12 @@ class FileOperationControllerTest extends TestCase
     /**
      * @dataProvider dataRecover
      *
-     * @param array         $fileIds
+     * @param array         $id
      * @param FileOperation $fileOperation
      * @param bool          $deleted
      * @param HttpResponse  $response
      */
-    public function testRecover($fileIds, $fileOperation, $deleted, $response)
+    public function testRecover($id, $fileOperation, $deleted, $response)
     {
         $controller = $this->getMockBuilder(FileOperationController::class)
             ->setConstructorArgs([
@@ -205,7 +205,7 @@ class FileOperationControllerTest extends TestCase
 
         $this->service->method('deleteById');
 
-        $result = $controller->recover($fileIds);
+        $result = $controller->recover([$id]);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), $response);
     }
