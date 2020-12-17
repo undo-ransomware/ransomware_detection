@@ -25,9 +25,10 @@ use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\Classifier;
 use OCA\RansomwareDetection\AppInfo\Application;
 use OCA\RansomwareDetection\Db\FileOperation;
-use OCA\RansomwareDetection\Service\RecoveredFileOperationService;
+use OCA\RansomwareDetection\Service\FileOperationService;
 use OCA\Files_Trashbin\Trashbin;
 use OCA\Files_Trashbin\Helper;
+use OCA\Files_Trashbin\Trash\ITrashManager;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
@@ -37,6 +38,7 @@ use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\IRequest;
 use OCP\ILogger;
+use OCP\IUserManager;
 
 class RecoveredFileOperationController extends Controller
 {
@@ -52,11 +54,17 @@ class RecoveredFileOperationController extends Controller
     /** @var Folder */
     protected $userFolder;
 
-    /** @var RecoveredFileOperationService */
+    /** @var FileOperationService */
     protected $service;
 
     /** @var Classifier */
     protected $classifier;
+
+    /** @var ITrashManager */
+    protected $trashManager;
+
+    /** @var IUserManager */
+    protected $userManager;
 
     /** @var string */
     protected $userId;
@@ -68,8 +76,10 @@ class RecoveredFileOperationController extends Controller
      * @param IConfig              $config
      * @param ILogger              $logger
      * @param Folder               $userFolder
-     * @param RecoveredFileOperationService $service
+     * @param FileOperationService $service
      * @param Classifier           $classifier
+     * @param ITrashManager        $trashManager
+     * @param IUserManager         $userManager
      * @param string               $userId
      */
     public function __construct(
@@ -79,8 +89,10 @@ class RecoveredFileOperationController extends Controller
         IConfig $config,
         ILogger $logger,
         Folder $userFolder,
-        RecoveredFileOperationService $service,
+        FileOperationService $service,
         Classifier $classifier,
+        ITrashManager $trashManager,
+        IUserManager $userManager,
         $userId
     ) {
         parent::__construct($appName, $request);
@@ -91,6 +103,8 @@ class RecoveredFileOperationController extends Controller
         $this->logger = $logger;
         $this->service = $service;
         $this->classifier = $classifier;
+        $this->trashManager = $trashManager;
+        $this->userManager = $userManager;
         $this->userId = $userId;
     }
 
@@ -151,12 +165,14 @@ class RecoveredFileOperationController extends Controller
         foreach ($ids as $id) {
             try {
                 $file = $this->service->find($id);
+                if (is_null($file->getPath()) || $file->getId() === $userFolder->getId() || is_null($file->getOriginalName())) {
+                    $this->logger->warning('recover: File path or name is null or user folder.', array('app' => Application::APP_ID));
+                    return;
+                }
                 switch ($file->getCommand()) {
-                    case Monitor::DELETE:
-                        // Recover new created files by deleting them
-                        $filePath = $file->getPath().'/'.$file->getOriginalName();
-                        if ($this->deleteFromStorage($filePath)) {
-                            $this->service->deleteById($id);
+                    case Monitor::WRITE:
+                        if ($this->deleteFromStorage($file->getFileId())) {
+                            $this->service->deleteById($id, true);
 
                             $deleted++;
                             array_push($filesRecovered, $id);
@@ -165,15 +181,16 @@ class RecoveredFileOperationController extends Controller
                             $error = true;
                         }
                         break;
-                    case Monitor::WRITE:
+                    case Monitor::DELETE:
                         // Recover deleted files by restoring them from the trashbin
                         // It's not necessary to use the real path
-                        $dir = '/';
-                        $candidate = $this->findCandidateToRestore($dir, $file->getOriginalName());
-                        if ($candidate !== null) {
-                            $path = $dir.'/'.$candidate['name'].'.d'.$candidate['mtime'];
-                            if (Trashbin::restore($path, $candidate['name'], $candidate['mtime']) !== false) {
-                                $this->service->deleteById($id);
+                        $trashItem = $this->trashManager->getTrashNodeById($this->userManager->get($this->userId), $file->getFileId());
+                        $name = substr($trashItem->getName(), 0, strrpos($trashItem->getName(), "."));
+                        if (strpos($trashItem->getInternalPath(), "files_trashbin/files/") !== false) {
+                            $path = str_replace("files_trashbin/files/", "", $trashItem->getInternalPath());
+                            $time = str_replace($name.".d", "", $path);
+                            if (Trashbin::restore($path, $name, $time) !== false) {
+                                $this->service->deleteById($id, true);
 
                                 $recovered++;
                                 array_push($filesRecovered, $id);
@@ -181,39 +198,31 @@ class RecoveredFileOperationController extends Controller
                             // File does not exist
                             $badRequest = false;
                         } else {
-                            // No candidate found
-                            $badRequest = false;
+                            $this->logger->warning('recover: File or folder is not located in the trashbin.', array('app' => Application::APP_ID));
+                            return;
                         }
                         break;
                     case Monitor::RENAME:
-                        $this->service->deleteById($id);
+                        $this->service->deleteById($id, true);
 
                         $deleted++;
                         array_push($filesRecovered, $id);
                         break;
                     case Monitor::CREATE:
-                        // Recover deleted files by restoring them from the trashbin
-                        // It's not necessary to use the real path
-                        $dir = '/';
-                        $candidate = $this->findCandidateToRestore($dir, $file->getOriginalName());
-                        if ($candidate !== null) {
-                            $path = $dir.'/'.$candidate['name'].'.d'.$candidate['mtime'];
-                            if (Trashbin::restore($path, $candidate['name'], $candidate['mtime']) !== false) {
-                                $this->service->deleteById($id);
+                        // Recover new created files/folders
+                        if ($this->deleteFromStorage($file->getFileId())) {
+                            $this->service->deleteById($id, true);
 
-                                $recovered++;
-                                array_push($filesRecovered, $id);
-                            }
-                            // File does not exist
-                            $badRequest = false;
+                            $deleted++;
+                            array_push($filesRecovered, $id);
                         } else {
-                            // No candidate found
-                            $badRequest = false;
+                            // File cannot be deleted
+                            $error = true;
                         }
                         break;
                     default:
                         // All other commands need no recovery
-                        $this->service->deleteById($id);
+                        $this->service->deleteById($id, false);
 
                         $deleted++;
                         array_push($filesRecovered, $id);
@@ -243,14 +252,18 @@ class RecoveredFileOperationController extends Controller
     /**
      * Deletes a file from the storage.
      *
-     * @param string $path
+     * @param string $id
      *
      * @return bool
      */
-    private function deleteFromStorage($path)
+    private function deleteFromStorage($id)
     {
         try {
-            $node = $this->userFolder->get($path);
+            $nodes = $this->userFolder->getById($id);
+            if (sizeof($nodes) > 1) {
+                return false;
+            }
+            $node = array_pop($nodes);
             if ($node->isDeletable()) {
                 $node->delete();
             } else {
@@ -265,39 +278,4 @@ class RecoveredFileOperationController extends Controller
             return true;
         }
     }
-
-    /**
-     * Finds a candidate to restore if a file with the specific does not exist.
-     *
-     * @param string $dir
-     * @param string $fileName
-     *
-     * @return FileInfo
-     */
-    private function findCandidateToRestore($dir, $fileName)
-    {
-        $files = array();
-        $trashBinFiles = $this->getTrashFiles($dir);
-
-        foreach ($trashBinFiles as $trashBinFile) {
-            if (strcmp($trashBinFile['name'], $fileName) === 0) {
-                $files[] = $trashBinFile;
-            }
-        }
-
-        return array_pop($files);
-    }
-
-    /**
-     * Workaround for testing.
-     *
-     * @param string $dir
-     *
-     * @return array
-     */
-    private function getTrashFiles($dir)
-    {
-        return Helper::getTrashFiles($dir, $this->userId, 'mtime', false);
-    }
-
 }

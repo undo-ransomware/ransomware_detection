@@ -165,8 +165,8 @@ class FileOperationController extends Controller
         foreach ($ids as $id) {
             try {
                 $file = $this->service->find($id);
-                if (is_null($file->getPath()) || $file->getPath() === '/' || is_null($file->getOriginalName())) {
-                    $this->logger->warning('recover: File path or name is null or user root folder.', array('app' => Application::APP_ID));
+                if (is_null($file->getPath()) || $file->getId() === $userFolder->getId() || is_null($file->getOriginalName())) {
+                    $this->logger->warning('recover: File path or name is null or user folder.', array('app' => Application::APP_ID));
                     return;
                 }
                 switch ($file->getCommand()) {

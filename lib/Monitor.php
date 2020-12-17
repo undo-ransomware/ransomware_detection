@@ -150,6 +150,11 @@ class Monitor
             $this->logger->warning("Only if it's a rename operation there should be a target node.", ['app' =>  Application::APP_ID]);
 			return;
         }
+
+        if ($source->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
+            $this->logger->warning("The source node is the user folder.", ['app' =>  Application::APP_ID]);
+			return;
+        }
         
         $storage = $source->getStorage();
         if (is_null($this->userId) || $this->nestingLevel !== 0 || !$this->isUploadedFile($storage, $source->getInternalPath()) || $this->isCreatingSkeletonFiles()) {
@@ -171,6 +176,8 @@ class Monitor
         switch ($mode) {
             case self::RENAME:
                 $this->logger->debug("Rename ".$source->getPath()." to ".$target->getPath(), ['app' =>  Application::APP_ID]);
+
+                // ignore files in the trashbin
                 if (preg_match('/.+\.d[0-9]+/', pathinfo($target->getPath())['basename']) > 0) {
                     return;
                 }
@@ -350,23 +357,28 @@ class Monitor
      *
      * @param Node  $source
      * @param Node  $target
-     * @param int   $operation
+     * @param int   $mode
      */
-    private function addFolderOperation($source, $target = null, $operation)
+    private function addFolderOperation($source, $target = null, $mode)
     {
         $this->logger->debug("Add folder operation.", ['app' =>  Application::APP_ID]);
         if (is_null($source)) {
-            $this->logger->warning("Source node is null.", ['app' =>  Application::APP_ID]);
-            return;
+			$this->logger->warning("Source is null.", ['app' =>  Application::APP_ID]);
+			return;
         }
 
-        if (is_null($target) && $operation === self::RENAME) {
+        if (is_null($target) && $mode === self::RENAME) {
             $this->logger->warning("Target should not be null during a rename operation.", ['app' =>  Application::APP_ID]);
 			return;
         }
 
-        if (!is_null($target) && $operation !== self::RENAME) {
+        if (!is_null($target) && $mode !== self::RENAME) {
             $this->logger->warning("Only if it's a rename operation there should be a target node.", ['app' =>  Application::APP_ID]);
+			return;
+        }
+
+        if ($source->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
+            $this->logger->warning("The source node is the user folder.", ['app' =>  Application::APP_ID]);
 			return;
         }
         $fileOperation = new FileOperation();
@@ -385,7 +397,7 @@ class Monitor
         $fileOperation->setSize(0);
         $fileOperation->setTimestamp(time());
         $fileOperation->setCorrupted(false);
-        $fileOperation->setCommand($operation);
+        $fileOperation->setCommand($mode);
         $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
         $fileOperation->setSequence($sequenceId);
 
@@ -405,23 +417,28 @@ class Monitor
      *
      * @param Node  $source
      * @param Node  $target
-     * @param int   $operation
+     * @param int   $mode
      */
-    private function addFileOperation($source, $target = null, $operation)
+    private function addFileOperation($source, $target = null, $mode)
     {
         $this->logger->debug("Add file operation.", ['app' =>  Application::APP_ID]);
         if (is_null($source)) {
-            $this->logger->warning("Source node is null.", ['app' =>  Application::APP_ID]);
-            return;
+			$this->logger->warning("Source is null.", ['app' =>  Application::APP_ID]);
+			return;
         }
 
-        if (is_null($target) && $operation === self::RENAME) {
+        if (is_null($target) && $mode === self::RENAME) {
             $this->logger->warning("Target should not be null during a rename operation.", ['app' =>  Application::APP_ID]);
 			return;
         }
 
-        if (!is_null($target) && $operation !== self::RENAME) {
+        if (!is_null($target) && $mode !== self::RENAME) {
             $this->logger->warning("Only if it's a rename operation there should be a target node.", ['app' =>  Application::APP_ID]);
+			return;
+        }
+
+        if ($source->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
+            $this->logger->warning("The source node is the user folder.", ['app' =>  Application::APP_ID]);
 			return;
         }
         $fileOperation = new FileOperation();
@@ -444,7 +461,7 @@ class Monitor
         }
         $fileOperation->setType('file');
         $fileOperation->setTimestamp(time());
-        $fileOperation->setCommand($operation);
+        $fileOperation->setCommand($mode);
         $sequenceId = $this->config->getUserValue($this->userId, Application::APP_ID, 'sequence_id', 0);
         $fileOperation->setSequence($sequenceId);
 
