@@ -324,6 +324,7 @@ class Monitor
      */
     private function isUploadedFile(IStorage $storage, $path)
     {
+        $fullPath = $path;
         if (property_exists($storage, 'mountPoint')) {
             /* @var StorageWrapper $storage */
             try {
