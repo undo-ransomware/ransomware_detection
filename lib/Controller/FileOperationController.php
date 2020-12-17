@@ -258,25 +258,28 @@ class FileOperationController extends Controller
      */
     private function deleteFromStorage($id)
     {
-        try {
-            $nodes = $this->userFolder->getById($id);
-            if (sizeof($nodes) > 1) {
-                return false;
-            }
-            $node = array_pop($nodes);
-            if ($node->isDeletable()) {
-                $node->delete();
-            } else {
-                return false;
-            }
-
-            return true;
-        } catch (\OCP\Files\NotFoundException $exception) {
+        if ($this->userFolder->getId() === $id) {
+            $this->logger->warning('deleteFromStorage: Tried to delete user folder. Access denied.', array('app' => Application::APP_ID));
+            return;
+        }
+        $nodes = $this->userFolder->getById($id);
+        if (sizeof($nodes) > 1) {
+            // To many files found
+            return false;
+        }
+        if (sizeof($nodes) === 0) {
             // Nothing found
             $this->logger->debug('deleteFromStorage: Not found exception.', array('app' => Application::APP_ID));
-
             return true;
         }
+        $node = array_pop($nodes);
+        if ($node->isDeletable()) {
+            $node->delete();
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
 }

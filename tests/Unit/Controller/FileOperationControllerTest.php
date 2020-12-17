@@ -292,10 +292,13 @@ class FileOperationControllerTest extends TestCase
 
         $file->method('delete');
 
-        $this->folder->expects($this->once())
-            ->method('get')
-            ->willReturn($file);
-        $this->assertTrue($this->invokePrivate($controller, 'deleteFromStorage', ['/admin/files/test.jpg']));
+        $this->folder->method('getId')
+            ->willReturn(3);
+
+        $this->folder->method('getById')
+            ->willReturn([$file]);
+
+        $this->assertTrue($this->invokePrivate($controller, 'deleteFromStorage', [2]));
     }
 
     public function testDeleteFromStorageNotPossible()
@@ -320,10 +323,12 @@ class FileOperationControllerTest extends TestCase
 
         $file->method('delete');
 
-        $this->folder->expects($this->once())
-            ->method('get')
-            ->willReturn($file);
-        $this->assertFalse($this->invokePrivate($controller, 'deleteFromStorage', ['/admin/files/test.jpg']));
+        $this->folder->method('getId')
+            ->willReturn(3);
+
+        $this->folder->method('getById')
+            ->willReturn([$file]);
+        $this->assertFalse($this->invokePrivate($controller, 'deleteFromStorage', [1]));
     }
 
     public function testDeleteFromStorageNotFoundException()
@@ -341,12 +346,19 @@ class FileOperationControllerTest extends TestCase
             $this->userManager,
             'john'
         );
-        $folder = $this->createMock(Folder::class);
+        $file = $this->createMock(File::class);
 
-        $this->folder->expects($this->once())
-            ->method('get')
-            ->will($this->throwException(new \OCP\Files\NotFoundException('test')));
+        $file->method('isDeletable')
+            ->willReturn(false);
 
-        $this->assertTrue($this->invokePrivate($controller, 'deleteFromStorage', ['/admin/files']));
+        $file->method('delete');
+
+        $this->folder->method('getId')
+            ->willReturn(3);
+
+        $this->folder->method('getById')
+            ->willReturn([$file]);
+
+        $this->assertTrue($this->invokePrivate($controller, 'deleteFromStorage', [1]));
     }
 }
