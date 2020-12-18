@@ -209,6 +209,9 @@ class FileOperationControllerTest extends TestCase
 
         $this->service->method('deleteById');
 
+        $this->folder->method('getId')
+            ->willReturn(3);
+
         $result = $controller->recover([$id]);
         $this->assertTrue($result instanceof JSONResponse);
         $this->assertEquals($result->getStatus(), $response);
@@ -236,6 +239,7 @@ class FileOperationControllerTest extends TestCase
         $fileOperationWrite = new FileOperation();
         $fileOperationWrite->setCommand(Monitor::WRITE);
         $fileOperationWrite->setPath('/admin/files');
+        $fileOperationWrite->setId(1);
         $fileOperationWrite->setOriginalName('test.jpg');
 
         $this->service->method('find')
