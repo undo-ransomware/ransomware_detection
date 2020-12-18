@@ -167,7 +167,7 @@ class FileOperationController extends Controller
                 $file = $this->service->find($id);
                 if (is_null($file->getPath()) || $file->getId() === $this->userFolder->getId() || is_null($file->getOriginalName())) {
                     $this->logger->warning('recover: File path or name is null or user folder.', array('app' => Application::APP_ID));
-                    return;
+                    return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
                 }
                 switch ($file->getCommand()) {
                     case Monitor::WRITE:
