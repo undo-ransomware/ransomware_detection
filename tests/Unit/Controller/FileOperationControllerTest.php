@@ -359,7 +359,7 @@ class FileOperationControllerTest extends TestCase
             ->willReturn(3);
 
         $this->folder->method('getById')
-            ->willReturn([$file]);
+            ->willReturn([]);
 
         $this->assertTrue($this->invokePrivate($controller, 'deleteFromStorage', [1]));
     }
