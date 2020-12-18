@@ -232,12 +232,12 @@ class FileOperationController extends Controller
                 // Found more than one with the same file name
                 $this->logger->debug('recover: Found more than one with the same file name.', array('app' => Application::APP_ID));
 
-                $badRequest = false;
+                $badRequest = true;
             } catch (\OCP\AppFramework\Db\DoesNotExistException $exception) {
                 // Nothing found
                 $this->logger->debug('recover: Files does not exist.', array('app' => Application::APP_ID));
 
-                $badRequest = false;
+                $badRequest = true;
             }
         }
         if ($error) {

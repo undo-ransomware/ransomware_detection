@@ -236,12 +236,6 @@ class FileOperationControllerTest extends TestCase
             ->setMethods([])
             ->getMock();
 
-        $fileOperationWrite = new FileOperation();
-        $fileOperationWrite->setCommand(Monitor::WRITE);
-        $fileOperationWrite->setPath('/admin/files');
-        $fileOperationWrite->setId(1);
-        $fileOperationWrite->setOriginalName('test.jpg');
-
         $this->service->method('find')
             ->will($this->throwException(new \OCP\AppFramework\Db\MultipleObjectsReturnedException('test')));
 
