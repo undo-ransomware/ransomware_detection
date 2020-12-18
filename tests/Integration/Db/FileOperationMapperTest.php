@@ -38,11 +38,9 @@ class FileOperationMapperTest extends AppTest
         $this->assertEquals($fileOperation->getOriginalName(), $fetched->getOriginalName());
     }
 
-    /**
-     * @expectedException OCP\AppFramework\Db\DoesNotExistException
-     */
     public function testFindNotExisting()
     {
+        $this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
         $this->fileOperationMapper->find(0, $this->userId);
     }
 
@@ -57,11 +55,9 @@ class FileOperationMapperTest extends AppTest
         $this->assertEquals($fileOperation->getOriginalName(), $fetched->getOriginalName());
     }
 
-    /**
-     * @expectedException OCP\AppFramework\Db\DoesNotExistException
-     */
     public function testFindOneByFileNameNotExisting()
     {
+        $this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
         $this->fileOperationMapper->findOneByFileName('notthedruidwearelookingfor', $this->userId);
     }
 
@@ -76,11 +72,9 @@ class FileOperationMapperTest extends AppTest
         $this->assertEquals($fileOperation->getOriginalName(), $fetched->getOriginalName());
     }
 
-    /**
-     * @expectedException OCP\AppFramework\Db\DoesNotExistException
-     */
     public function testFindOneWithHighestIdNotExisting()
     {
+        $this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
         $this->fileOperationMapper->findOneWithHighestId($this->userId);
     }
 

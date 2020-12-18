@@ -77,12 +77,10 @@ class NotifierTest extends TestCase
         $this->notifier = new Notifier($this->config, $this->l10nFactory, $this->userManager, $this->notificationManager, $this->urlGenerator, 'john');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown app
-     */
     public function testPrepareWrongApp()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Unknown app");
         /** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
         $notification = $this->createMock(INotification::class);
 
@@ -95,12 +93,10 @@ class NotifierTest extends TestCase
         $this->notifier->prepare($notification, 'en');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown subject
-     */
     public function testPrepareWrongSubject()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Unknown subject");
         /** @var INotification|\PHPUnit_Framework_MockObject_MockObject $notification */
         $notification = $this->createMock(INotification::class);
 

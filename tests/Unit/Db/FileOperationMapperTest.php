@@ -64,11 +64,10 @@ class FileOperationMapperTest extends MapperTestUtility
         $this->assertEquals($this->fileOperations[0], $result);
     }
 
-    /**
-     * @expectedException \OCP\AppFramework\Db\DoesNotExistException
-     */
     public function testFindNotFound()
     {
+
+        $this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
         $userId = 'john';
         $id = 3;
         $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` '.
@@ -78,11 +77,9 @@ class FileOperationMapperTest extends MapperTestUtility
         $this->mapper->find($id, $userId);
     }
 
-    /**
-     * @expectedException \OCP\AppFramework\Db\MultipleObjectsReturnedException
-     */
     public function testFindMoreThanOneResultFound()
     {
+        $this->expectException(\OCP\AppFramework\Db\MultipleObjectsReturnedException::class);
         $userId = 'john';
         $id = 3;
         $rows = $this->twoRows;
@@ -107,11 +104,9 @@ class FileOperationMapperTest extends MapperTestUtility
         $this->assertEquals($this->fileOperations[0], $result);
     }
 
-    /**
-     * @expectedException \OCP\AppFramework\Db\DoesNotExistException
-     */
     public function testFindOneByFileNameNotFound()
     {
+        $this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
         $userId = 'john';
         $name = 'test';
         $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` '.
@@ -121,11 +116,9 @@ class FileOperationMapperTest extends MapperTestUtility
         $this->mapper->findOneByFileName($name, $userId);
     }
 
-    /**
-     * @expectedException \OCP\AppFramework\Db\MultipleObjectsReturnedException
-     */
     public function testFindOneByFileNameMoreThanOneResultFound()
     {
+        $this->expectException(\OCP\AppFramework\Db\MultipleObjectsReturnedException::class);
         $userId = 'john';
         $name = 'test';
         $rows = $this->twoRows;
@@ -149,11 +142,9 @@ class FileOperationMapperTest extends MapperTestUtility
         $this->assertEquals($this->fileOperations[0], $result);
     }
 
-    /**
-     * @expectedException \OCP\AppFramework\Db\DoesNotExistException
-     */
     public function testFindOneWithHighestIdNotFound()
     {
+        $this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
         $userId = 'john';
         $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `user_id` = ?'.
             'ORDER BY id DESC LIMIT 1';
@@ -162,11 +153,9 @@ class FileOperationMapperTest extends MapperTestUtility
         $this->mapper->findOneWithHighestId($userId);
     }
 
-    /**
-     * @expectedException \OCP\AppFramework\Db\MultipleObjectsReturnedException
-     */
     public function testFindOneWithHighestIdMoreThanOneResultFound()
     {
+        $this->expectException(\OCP\AppFramework\Db\MultipleObjectsReturnedException::class);
         $userId = 'john';
         $rows = $this->twoRows;
         $sql = 'SELECT * FROM `*PREFIX*ransomware_detection` WHERE `user_id` = ?'.
