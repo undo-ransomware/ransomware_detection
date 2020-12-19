@@ -24,8 +24,8 @@ namespace OCA\RansomwareDetection\Controller;
 use OCA\RansomwareDetection\Monitor;
 use OCA\RansomwareDetection\Classifier;
 use OCA\RansomwareDetection\AppInfo\Application;
-use OCA\RansomwareDetection\Db\FileOperation;
-use OCA\RansomwareDetection\Service\FileOperationService;
+use OCA\RansomwareDetection\Db\RecoveredFileOperation;
+use OCA\RansomwareDetection\Service\RecoveredFileOperationService;
 use OCA\Files_Trashbin\Trashbin;
 use OCA\Files_Trashbin\Helper;
 use OCA\Files_Trashbin\Trash\ITrashManager;
@@ -54,7 +54,7 @@ class RecoveredFileOperationController extends Controller
     /** @var Folder */
     protected $userFolder;
 
-    /** @var FileOperationService */
+    /** @var RecoveredFileOperationService */
     protected $service;
 
     /** @var Classifier */
@@ -76,7 +76,7 @@ class RecoveredFileOperationController extends Controller
      * @param IConfig              $config
      * @param ILogger              $logger
      * @param Folder               $userFolder
-     * @param FileOperationService $service
+     * @param RecoveredFileOperationService $service
      * @param Classifier           $classifier
      * @param ITrashManager        $trashManager
      * @param IUserManager         $userManager
@@ -89,7 +89,7 @@ class RecoveredFileOperationController extends Controller
         IConfig $config,
         ILogger $logger,
         Folder $userFolder,
-        FileOperationService $service,
+        RecoveredFileOperationService $service,
         Classifier $classifier,
         ITrashManager $trashManager,
         IUserManager $userManager,
@@ -159,15 +159,17 @@ class RecoveredFileOperationController extends Controller
         $deleted = 0;
         $recovered = 0;
         $filesRecovered = array();
-        $error = false;
-        $badRequest = false;
 
         foreach ($ids as $id) {
             try {
                 $file = $this->service->find($id);
-                if (is_null($file->getPath()) || $file->getId() === $userFolder->getId() || is_null($file->getOriginalName())) {
+                if (is_null($file->getPath()) || $file->getFileId() === $this->userFolder->getId() || is_null($file->getOriginalName())) {
                     $this->logger->warning('recover: File path or name is null or user folder.', array('app' => Application::APP_ID));
-                    return;
+
+                    // clean up file operation cause it will never be recovered
+                    $this->service->deleteById($id, false);
+
+                    return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
                 }
                 switch ($file->getCommand()) {
                     case Monitor::WRITE:
@@ -178,7 +180,7 @@ class RecoveredFileOperationController extends Controller
                             array_push($filesRecovered, $id);
                         } else {
                             // File cannot be deleted
-                            $error = true;
+                            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_INTERNAL_SERVER_ERROR);
                         }
                         break;
                     case Monitor::DELETE:
@@ -195,11 +197,13 @@ class RecoveredFileOperationController extends Controller
                                 $recovered++;
                                 array_push($filesRecovered, $id);
                             }
-                            // File does not exist
-                            $badRequest = false;
                         } else {
                             $this->logger->warning('recover: File or folder is not located in the trashbin.', array('app' => Application::APP_ID));
-                            return;
+
+                            // clean up file operation cause it will never be recovered
+                            $this->service->deleteById($id, false);
+
+                            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
                         }
                         break;
                     case Monitor::RENAME:
@@ -217,7 +221,7 @@ class RecoveredFileOperationController extends Controller
                             array_push($filesRecovered, $id);
                         } else {
                             // File cannot be deleted
-                            $error = true;
+                            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_INTERNAL_SERVER_ERROR);
                         }
                         break;
                     default:
@@ -232,19 +236,13 @@ class RecoveredFileOperationController extends Controller
                 // Found more than one with the same file name
                 $this->logger->debug('recover: Found more than one with the same file name.', array('app' => Application::APP_ID));
 
-                $badRequest = false;
+                return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
             } catch (\OCP\AppFramework\Db\DoesNotExistException $exception) {
                 // Nothing found
                 $this->logger->debug('recover: Files does not exist.', array('app' => Application::APP_ID));
 
-                $badRequest = false;
+                return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
             }
-        }
-        if ($error) {
-            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_INTERNAL_SERVER_ERROR);
-        }
-        if ($badRequest) {
-            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
         }
         return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_OK);
     }
@@ -256,26 +254,30 @@ class RecoveredFileOperationController extends Controller
      *
      * @return bool
      */
-    private function deleteFromStorage($id)
+    protected function deleteFromStorage($id)
     {
-        try {
-            $nodes = $this->userFolder->getById($id);
-            if (sizeof($nodes) > 1) {
-                return false;
-            }
-            $node = array_pop($nodes);
-            if ($node->isDeletable()) {
-                $node->delete();
-            } else {
-                return false;
-            }
-
-            return true;
-        } catch (\OCP\Files\NotFoundException $exception) {
+        if ($this->userFolder->getId() === $id) {
+            $this->logger->warning('deleteFromStorage: Tried to delete user folder. Access denied.', array('app' => Application::APP_ID));
+            return;
+        }
+        $nodes = $this->userFolder->getById($id);
+        if (sizeof($nodes) > 1) {
+            // To many files found
+            return false;
+        }
+        if (sizeof($nodes) === 0) {
             // Nothing found
             $this->logger->debug('deleteFromStorage: Not found exception.', array('app' => Application::APP_ID));
-
             return true;
         }
+        $node = array_pop($nodes);
+        if ($node->isDeletable()) {
+            $node->delete();
+        } else {
+            return false;
+        }
+
+        return true;
     }
+
 }

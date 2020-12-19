@@ -159,14 +159,16 @@ class FileOperationController extends Controller
         $deleted = 0;
         $recovered = 0;
         $filesRecovered = array();
-        $error = false;
-        $badRequest = false;
 
         foreach ($ids as $id) {
             try {
                 $file = $this->service->find($id);
                 if (is_null($file->getPath()) || $file->getFileId() === $this->userFolder->getId() || is_null($file->getOriginalName())) {
                     $this->logger->warning('recover: File path or name is null or user folder.', array('app' => Application::APP_ID));
+
+                    // clean up file operation cause it will never be recovered
+                    $this->service->deleteById($id, false);
+
                     return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
                 }
                 switch ($file->getCommand()) {
@@ -197,6 +199,10 @@ class FileOperationController extends Controller
                             }
                         } else {
                             $this->logger->warning('recover: File or folder is not located in the trashbin.', array('app' => Application::APP_ID));
+
+                            // clean up file operation cause it will never be recovered
+                            $this->service->deleteById($id, false);
+
                             return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
                         }
                         break;

@@ -96,36 +96,42 @@ class MonitorTest extends TestCase
 
     public function dataAnalyze()
     {
+
+        $source = $this->createMock(File::class);
+        $source->method('getInternalPath')
+            ->willReturn('/admin/files/test.file');
+
         return [
-            ['paths' => ['files/', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time()],
-            ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => false, 'timestamp' => time()],
+            ['source' => $source, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'fileOperation' => false, 'folderOperation' => false],
+            /*['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => false, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::READ, 'userAgent' => true, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::DELETE, 'userAgent' => true, 'timestamp' => time()],
-            ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => 100, 'userAgent' => true, 'timestamp' => time()],
+            ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => 100, 'userAgent' => true, 'timestamp' => time()],*/
         ];
     }
 
     /**
      * @dataProvider dataAnalyze
      *
-     * @param array $paths
+     * @param Node  $source
+     * @param Node  $target
      * @param int   $mode
      * @param bool  $userAgent
      * @param int   $timestamp
+     * @param bool  $fileOperation
+     * @param bool  $folderOperation
      */
-    public function testAnalyze($paths, $mode, $userAgent, $timestamp)
+    public function testAnalyze($source, $target, $mode, $userAgent, $timestamp, $fileOperation, $folderOperation)
     {
         $monitor = $this->getMockBuilder(Monitor::class)
             ->setConstructorArgs([$this->request, $this->config, $this->time,
                 $this->appManager, $this->logger, $this->rootFolder,
                 $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
                 $this->fileCorruptionAnalyzer, $this->userId])
-            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'classifySequence', 'resetProfindCount'])
+            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'classifySequence', 'resetProfindCount', 'addFolderOperation', 'addFileOperation'])
             ->getMock();
-
-        $storage = $this->createMock(IStorage::class);
 
         $monitor->expects($this->any())
             ->method('isUploadedFile')
@@ -183,8 +189,17 @@ class MonitorTest extends TestCase
         $this->fileCorruptionAnalyzer->method('analyze')
             ->willReturn($fileCorruptionResult);
 
-        $monitor->analyze($storage, $paths, $mode);
-        $this->assertTrue(true);
+        $monitor->analyze($source, $target, $mode);
+        if ($fileOperation) {
+            $monitor->expects($this->once())->method('addFileOperation');
+        } else {
+            $monitor->expects($this->never())->method('addFileOperation');
+        }
+        if ($folderOperation) {
+            $monitor->expects($this->once())->method('addFolderOperation');
+        } else {
+            $monitor->expects($this->never())->method('addFolderOperation');
+        }
     }
 
     /**
