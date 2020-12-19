@@ -360,7 +360,7 @@ class Monitor
      * @param Node  $target
      * @param int   $mode
      */
-    private function addFolderOperation($source, $target = null, $mode)
+    protected function addFolderOperation($source, $target = null, $mode)
     {
         $this->logger->debug("Add folder operation.", ['app' =>  Application::APP_ID]);
         if (is_null($source)) {
@@ -420,7 +420,7 @@ class Monitor
      * @param Node  $target
      * @param int   $mode
      */
-    private function addFileOperation($source, $target = null, $mode)
+    protected function addFileOperation($source, $target = null, $mode)
     {
         $this->logger->debug("Add file operation.", ['app' =>  Application::APP_ID]);
         if (is_null($source)) {
