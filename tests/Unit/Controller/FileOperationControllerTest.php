@@ -182,11 +182,17 @@ class FileOperationControllerTest extends TestCase
         $fileOperationEmptyName->setPath('/admin/file');
         $fileOperationEmptyName->setFileId(2);
 
+        $fileOperationEmptyFileId = new FileOperation();
+        $fileOperationEmptyFileId->setCommand(Monitor::RENAME);
+        $fileOperationEmptyFileId->setPath('/admin/file');
+        $fileOperationEmptyFileId->setOriginalName('test.jpg');
+
         return [
             ['id' => 4, 'fileOperation' => new FileOperation(), 'deleted' => false, 'response' => Http::STATUS_BAD_REQUEST],
             ['id' => 3, 'fileOperation' => $fileOperationUserFolder, 'deleted' => false, 'response' => Http::STATUS_BAD_REQUEST],
             ['id' => 2, 'fileOperation' => $fileOperationEmptyPath, 'deleted' => false, 'response' => Http::STATUS_BAD_REQUEST],
             ['id' => 2, 'fileOperation' => $fileOperationEmptyName, 'deleted' => false, 'response' => Http::STATUS_BAD_REQUEST],
+            ['id' => 2, 'fileOperation' => $fileOperationEmptyFileId, 'deleted' => false, 'response' => Http::STATUS_BAD_REQUEST],
             ['id' => 2, 'fileOperation' => $fileOperationRead, 'deleted' => true, 'response' => Http::STATUS_OK],
             ['id' => 2, 'fileOperation' => $fileOperationRename, 'deleted' => true, 'response' => Http::STATUS_OK],
             // needs more mocking

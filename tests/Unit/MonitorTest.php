@@ -102,6 +102,7 @@ class MonitorTest extends TestCase
             ->willReturn('/admin/files/test.file');
 
         return [
+            ['source' => null, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'fileOperation' => false, 'folderOperation' => false],
             ['source' => $source, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'fileOperation' => false, 'folderOperation' => false],
             /*['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => false, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time()],

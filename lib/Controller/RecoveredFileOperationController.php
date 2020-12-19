@@ -163,7 +163,7 @@ class RecoveredFileOperationController extends Controller
         foreach ($ids as $id) {
             try {
                 $file = $this->service->find($id);
-                if (is_null($file->getPath()) || $file->getFileId() === $this->userFolder->getId() || is_null($file->getOriginalName())) {
+                if (is_null($file->getPath()) || is_null($file->getFileId()) || $file->getFileId() === $this->userFolder->getId() || is_null($file->getOriginalName())) {
                     $this->logger->warning('recover: File path or name is null or user folder.', array('app' => Application::APP_ID));
 
                     // clean up file operation cause it will never be recovered
