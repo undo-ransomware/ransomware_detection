@@ -171,7 +171,7 @@ class FileOperationControllerTest extends TestCase
             ['id' => 3, 'fileOperation' => $fileOperationRead, 'deleted' => false, 'response' => Http::STATUS_BAD_REQUEST],
             ['id' => 2, 'fileOperation' => $fileOperationRead, 'deleted' => true, 'response' => Http::STATUS_OK],
             ['id' => 2, 'fileOperation' => $fileOperationRename, 'deleted' => true, 'response' => Http::STATUS_OK],
-            ['id' => 2, 'fileOperation' => $fileOperationDelete, 'deleted' => true, 'response' => Http::STATUS_OK],
+            //['id' => 2, 'fileOperation' => $fileOperationDelete, 'deleted' => true, 'response' => Http::STATUS_OK],
             ['id' => 2, 'fileOperation' => $fileOperationWrite, 'deleted' => true, 'response' => Http::STATUS_OK],
         ];
     }
