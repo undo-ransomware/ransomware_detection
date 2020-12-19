@@ -100,10 +100,18 @@ class MonitorTest extends TestCase
         $source = $this->createMock(File::class);
         $source->method('getInternalPath')
             ->willReturn('/admin/files/test.file');
+        $source->method('getId')
+            ->willReturn(3);
+
+        $target = $this->createMock(File::class);
+        $target->method('getInternalPath')
+            ->willReturn('/admin/files/test.file');
 
         return [
             ['source' => null, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
             ['source' => $source, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
+            ['source' => $source, 'target' => $target, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
+            ['source' => $source, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
             /*['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => false, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::READ, 'userAgent' => true, 'timestamp' => time()],
@@ -182,6 +190,8 @@ class MonitorTest extends TestCase
 
         $this->rootFolder->method('getUserFolder')
             ->willReturn($folder);
+        $this->folder->method('getId')
+            ->willReturn(3);
 
         $fileOperation = new FileOperation();
         $fileOperation->setTimestamp($timestamp);
