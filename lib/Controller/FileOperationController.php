@@ -178,7 +178,7 @@ class FileOperationController extends Controller
                             array_push($filesRecovered, $id);
                         } else {
                             // File cannot be deleted
-                            $error = true;
+                            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_INTERNAL_SERVER_ERROR);
                         }
                         break;
                     case Monitor::DELETE:
@@ -195,11 +195,9 @@ class FileOperationController extends Controller
                                 $recovered++;
                                 array_push($filesRecovered, $id);
                             }
-                            // File does not exist
-                            $badRequest = false;
                         } else {
                             $this->logger->warning('recover: File or folder is not located in the trashbin.', array('app' => Application::APP_ID));
-                            return;
+                            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
                         }
                         break;
                     case Monitor::RENAME:
@@ -217,7 +215,7 @@ class FileOperationController extends Controller
                             array_push($filesRecovered, $id);
                         } else {
                             // File cannot be deleted
-                            $error = true;
+                            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_INTERNAL_SERVER_ERROR);
                         }
                         break;
                     default:
@@ -232,19 +230,13 @@ class FileOperationController extends Controller
                 // Found more than one with the same file name
                 $this->logger->debug('recover: Found more than one with the same file name.', array('app' => Application::APP_ID));
 
-                $badRequest = true;
+                return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
             } catch (\OCP\AppFramework\Db\DoesNotExistException $exception) {
                 // Nothing found
                 $this->logger->debug('recover: Files does not exist.', array('app' => Application::APP_ID));
 
-                $badRequest = true;
+                return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
             }
-        }
-        if ($error) {
-            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_INTERNAL_SERVER_ERROR);
-        }
-        if ($badRequest) {
-            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
         }
         return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_OK);
     }
