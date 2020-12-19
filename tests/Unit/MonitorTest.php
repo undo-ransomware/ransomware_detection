@@ -102,8 +102,8 @@ class MonitorTest extends TestCase
             ->willReturn('/admin/files/test.file');
 
         return [
-            ['source' => null, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'fileOperation' => false, 'folderOperation' => false],
-            ['source' => $source, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'fileOperation' => false, 'folderOperation' => false],
+            ['source' => null, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'fileOperation' => 0, 'folderOperation' => 0],
+            ['source' => $source, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'fileOperation' => 0, 'folderOperation' => 0],
             /*['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => false, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::READ, 'userAgent' => true, 'timestamp' => time()],
@@ -121,8 +121,8 @@ class MonitorTest extends TestCase
      * @param int   $mode
      * @param bool  $userAgent
      * @param int   $timestamp
-     * @param bool  $fileOperation
-     * @param bool  $folderOperation
+     * @param int   $fileOperation
+     * @param int   $folderOperation
      */
     public function testAnalyze($source, $target, $mode, $userAgent, $timestamp, $fileOperation, $folderOperation)
     {
@@ -135,13 +135,15 @@ class MonitorTest extends TestCase
             ->getMock();
 
         $storage = $this->createMock(IStorage::class);
-        $source->method('getStorage')
-            ->willReturn($storage);
-            
-        $monitor->expects($this->any())
-            ->method('isUploadedFile')
-            ->with($storage, $source->getInternalPath())
-            ->willReturn(true);
+        if(!is_null($source)) {
+            $source->method('getStorage')
+                ->willReturn($storage);
+                
+            $monitor->expects($this->any())
+                ->method('isUploadedFile')
+                ->with($storage, $source->getInternalPath())
+                ->willReturn(true);
+        }
 
         $monitor->expects($this->any())
             ->method('isCreatingSkeletonFiles')
@@ -195,16 +197,8 @@ class MonitorTest extends TestCase
             ->willReturn($fileCorruptionResult);
 
         $monitor->analyze($source, $target, $mode);
-        if ($fileOperation) {
-            $monitor->expects($this->once())->method('addFileOperation');
-        } else {
-            $monitor->expects($this->never())->method('addFileOperation');
-        }
-        if ($folderOperation) {
-            $monitor->expects($this->once())->method('addFolderOperation');
-        } else {
-            $monitor->expects($this->never())->method('addFolderOperation');
-        }
+        $monitor->expects($this->exactly($fileOperation))->method('addFileOperation');
+        $monitor->expects($this->exactly($folderOperation))->method('addFolderOperation');
     }
 
     public function dataIsUploadedFile()
