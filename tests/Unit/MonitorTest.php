@@ -135,7 +135,7 @@ class MonitorTest extends TestCase
 
         $monitor->expects($this->any())
             ->method('isUploadedFile')
-            ->with($storage, $paths[0])
+            ->with($storage, $source->getInternalPath())
             ->willReturn(true);
 
         $monitor->expects($this->any())
@@ -200,73 +200,6 @@ class MonitorTest extends TestCase
         } else {
             $monitor->expects($this->never())->method('addFolderOperation');
         }
-    }
-
-    /**
-     * @dataProvider dataAnalyze
-     *
-     * @param array $paths
-     * @param int   $mode
-     * @param bool  $userAgent
-     * @param int   $timestamp
-     */
-    public function testAnalyzeNotFoundException($paths, $mode, $userAgent, $timestamp)
-    {
-        $monitor = $this->getMockBuilder(Monitor::class)
-            ->setConstructorArgs([$this->request, $this->config, $this->time,
-                $this->appManager, $this->logger, $this->rootFolder,
-                $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
-                $this->fileCorruptionAnalyzer, $this->userId])
-            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'resetProfindCount'])
-            ->getMock();
-
-        $storage = $this->createMock(IStorage::class);
-
-        $monitor->expects($this->any())
-            ->method('isUploadedFile')
-            ->with($storage, $paths[0])
-            ->willReturn(true);
-
-        $monitor->expects($this->any())
-            ->method('isCreatingSkeletonFiles')
-            ->willReturn(false);
-
-        $this->request->method('isUserAgent')
-            ->willReturn($userAgent);
-
-        $monitor->expects($this->any())
-            ->method('resetProfindCount');
-
-        $node = $this->createMock(Folder::class);
-        $node->method('getInternalPath')
-            ->willReturn('/admin/files/test.file');
-
-        $userRoot = $this->createMock(Folder::class);
-        $userRoot->method('get')
-            ->willReturn($node);
-
-        $folder = $this->createMock(Folder::class);
-        $folder->method('getParent')
-            ->willReturn($userRoot);
-
-        $this->rootFolder->method('getUserFolder')
-            ->willReturn($folder);
-
-        $fileOperation = new FileOperation();
-        $fileOperation->setTimestamp($timestamp);
-
-        $entity = new FileOperation();
-        $entity->id = 1;
-
-        $this->mapper->method('insert')
-            ->willReturn($entity);
-
-        $fileCorruptionResult = new FileCorruptionResult(true);
-        $this->fileCorruptionAnalyzer->method('analyze')
-            ->willReturn($fileCorruptionResult);
-
-        $monitor->analyze($storage, $paths, $mode);
-        $this->assertTrue(true);
     }
 
     public function dataIsUploadedFile()
