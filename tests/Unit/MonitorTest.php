@@ -197,8 +197,8 @@ class MonitorTest extends TestCase
             ->willReturn($fileCorruptionResult);
 
         $monitor->analyze($source, $target, $mode);
-        $monitor->expects($this->exactly($fileOperation))->method('addFileOperation');
-        $monitor->expects($this->exactly($folderOperation))->method('addFolderOperation');
+        $monitor->expects($this->exactly(intval($fileOperation)))->method('addFileOperation');
+        $monitor->expects($this->exactly(intval($folderOperation)))->method('addFolderOperation');
     }
 
     public function dataIsUploadedFile()
