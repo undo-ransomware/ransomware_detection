@@ -102,8 +102,8 @@ class MonitorTest extends TestCase
             ->willReturn('/admin/files/test.file');
 
         return [
-            ['source' => null, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'fileOperation' => 0, 'folderOperation' => 0],
-            ['source' => $source, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'fileOperation' => 0, 'folderOperation' => 0],
+            ['source' => null, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
+            ['source' => $source, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
             /*['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => false, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::READ, 'userAgent' => true, 'timestamp' => time()],
@@ -121,10 +121,10 @@ class MonitorTest extends TestCase
      * @param int   $mode
      * @param bool  $userAgent
      * @param int   $timestamp
-     * @param int   $fileOperation
-     * @param int   $folderOperation
+     * @param int   $addFileOperation
+     * @param int   $addFolderOperation
      */
-    public function testAnalyze($source, $target, $mode, $userAgent, $timestamp, $fileOperation, $folderOperation)
+    public function testAnalyze($source, $target, $mode, $userAgent, $timestamp, $addFileOperation, $addFolderOperation)
     {
         $monitor = $this->getMockBuilder(Monitor::class)
             ->setConstructorArgs([$this->request, $this->config, $this->time,
@@ -197,8 +197,8 @@ class MonitorTest extends TestCase
             ->willReturn($fileCorruptionResult);
 
         $monitor->analyze($source, $target, $mode);
-        $monitor->expects($this->exactly(intval($fileOperation)))->method('addFileOperation');
-        $monitor->expects($this->exactly(intval($folderOperation)))->method('addFolderOperation');
+        $monitor->expects($this->exactly($addFileOperation))->method('addFileOperation');
+        $monitor->expects($this->exactly($addFolderOperation))->method('addFolderOperation');
     }
 
     public function dataIsUploadedFile()
