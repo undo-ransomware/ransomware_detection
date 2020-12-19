@@ -188,10 +188,11 @@ class MonitorTest extends TestCase
         $folder->method('getParent')
             ->willReturn($userRoot);
 
+        $folder->method('getId')
+            ->willReturn(3);
+
         $this->rootFolder->method('getUserFolder')
             ->willReturn($folder);
-        $this->folder->method('getId')
-            ->willReturn(3);
 
         $fileOperation = new FileOperation();
         $fileOperation->setTimestamp($timestamp);
