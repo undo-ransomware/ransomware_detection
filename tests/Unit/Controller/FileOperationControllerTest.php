@@ -219,8 +219,7 @@ class FileOperationControllerTest extends TestCase
 
     public function testRecoverMultipleObjectsReturnedException()
     {
-        $controller = $this->getMockBuilder(FileOperationController::class)
-            ->setConstructorArgs([
+        $controller = new FileOperationController(
                 'ransomware_detection',
                 $this->request,
                 $this->userSession,
@@ -232,9 +231,7 @@ class FileOperationControllerTest extends TestCase
                 $this->trashManager,
                 $this->userManager,
                 'john'
-            ])
-            ->setMethods([])
-            ->getMock();
+            );
 
         $this->service->method('find')
             ->will($this->throwException(new \OCP\AppFramework\Db\MultipleObjectsReturnedException('test')));
@@ -259,11 +256,6 @@ class FileOperationControllerTest extends TestCase
                 $this->userManager,
                 'john'
         );
-
-        $fileOperationWrite = new FileOperation();
-        $fileOperationWrite->setCommand(Monitor::WRITE);
-        $fileOperationWrite->setPath('/admin/files');
-        $fileOperationWrite->setOriginalName('test.jpg');
 
         $this->service->method('find')
             ->will($this->throwException(new \OCP\AppFramework\Db\DoesNotExistException('test')));
