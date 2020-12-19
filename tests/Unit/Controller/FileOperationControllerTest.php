@@ -145,25 +145,25 @@ class FileOperationControllerTest extends TestCase
         $fileOperationWrite = new FileOperation();
         $fileOperationWrite->setCommand(Monitor::WRITE);
         $fileOperationWrite->setPath('/admin/files');
-        $fileOperationWrite->setId(1);
+        $fileOperationWrite->setFileId(1);
         $fileOperationWrite->setOriginalName('test.jpg');
 
         $fileOperationRead = new FileOperation();
         $fileOperationRead->setCommand(Monitor::READ);
         $fileOperationRead->setPath('/admin/files');
-        $fileOperationWrite->setId(1);
+        $fileOperationRead->setFileId(1);
         $fileOperationRead->setOriginalName('test.jpg');
 
         $fileOperationDelete = new FileOperation();
         $fileOperationDelete->setCommand(Monitor::DELETE);
         $fileOperationDelete->setPath('/admin/file');
-        $fileOperationWrite->setId(1);
+        $fileOperationDelete->setFileId(1);
         $fileOperationDelete->setOriginalName('test.jpg');
 
         $fileOperationRename = new FileOperation();
         $fileOperationRename->setCommand(Monitor::RENAME);
         $fileOperationRename->setPath('/admin/file');
-        $fileOperationWrite->setId(1);
+        $fileOperationRename->setFileId(1);
         $fileOperationRename->setOriginalName('test.jpg');
 
         return [
