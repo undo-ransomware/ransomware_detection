@@ -133,6 +133,10 @@ class MonitorTest extends TestCase
             ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'classifySequence', 'resetProfindCount', 'addFolderOperation', 'addFileOperation'])
             ->getMock();
 
+        $storage = $this->createMock(IStorage::class);
+        $source->method('getStorage')
+            ->willReturn($storage);
+            
         $monitor->expects($this->any())
             ->method('isUploadedFile')
             ->with($storage, $source->getInternalPath())
