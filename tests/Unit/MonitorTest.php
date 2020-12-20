@@ -112,6 +112,7 @@ class MonitorTest extends TestCase
             ['source' => $source, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
             ['source' => $source, 'target' => $target, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
             ['source' => $source, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
+            ['source' => $source, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 1, 'addFolderOperation' => 0],
             /*['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => false, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::READ, 'userAgent' => true, 'timestamp' => time()],
