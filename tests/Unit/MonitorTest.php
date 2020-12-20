@@ -167,7 +167,7 @@ class MonitorTest extends TestCase
         $monitor->expects($this->any())
             ->method('classifySequence');
 
-        $monitor->expects($this->any())
+        $monitor->expects($this->exactly($addFileOperation + $addFolderOperation))
             ->method('resetProfindCount');
 
         $entropyResult = new EntropyResult(EntropyResult::COMPRESSED, 7.99, 0.004);
