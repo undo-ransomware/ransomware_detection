@@ -95,8 +95,8 @@ class RecoveredFileOperationControllerTest extends TestCase
         $recoveredMapper = $this->getMockBuilder('OCA\RansomwareDetection\Db\RecoveredFileOperationMapper')
             ->setConstructorArgs([$connection])
             ->getMock();
-        $this->service = $this->getMockBuilder('OCA\RansomwareDetection\Service\FileOperationService')
-            ->setConstructorArgs([$mapper, $recoveredMapper, $this->userId])
+        $this->service = $this->getMockBuilder('OCA\RansomwareDetection\Service\RecoveredFileOperationService')
+            ->setConstructorArgs([$recoveredMapper, $mapper, $this->userId])
             ->getMock();
         $this->classifier = $this->getMockBuilder('OCA\RansomwareDetection\Classifier')
             ->setConstructorArgs([$this->logger, $mapper, $this->service])
