@@ -72,7 +72,6 @@ class FilesEvents {
 	 * @param array $params
 	 */
 	public function onFileRename(Node $source, Node $target) {
-        $this->logger->warning($target->getId());
         $this->logger->debug("Renaming ".$source->getPath()." to ".$target->getPath(), ['app' =>  Application::APP_ID]);
         $this->analyze($source, $target, Monitor::RENAME);
     }

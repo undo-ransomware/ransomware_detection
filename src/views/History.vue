@@ -17,7 +17,6 @@
                     class="ransomware-table"
                     :headers="headers"
                     :items="fileOperations"
-                    hide-default-footer
                     show-select
                     item-key="id"
                 >

@@ -19,7 +19,6 @@
                             class="ransomware-table"
                             :headers="headers"
                             :items="detection.fileOperations"
-                            hide-default-footer
                         >
                             <template v-slot:item.timestamp = "{ item }">
                                 <local-time>{{ moment(item.timestamp) }}</local-time>

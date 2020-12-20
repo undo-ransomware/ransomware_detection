@@ -158,6 +158,7 @@ class FileOperationController extends Controller
     {
         $deleted = 0;
         $recovered = 0;
+        $couldNotBeRecovered = 0;
         $filesRecovered = array();
 
         foreach ($ids as $id) {
@@ -169,7 +170,9 @@ class FileOperationController extends Controller
                     // clean up file operation cause it will never be recovered
                     $this->service->deleteById($id, false);
 
-                    return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
+                    $couldNotBeRecovered++;
+                    array_push($filesRecovered, $id);
+                    break;
                 }
                 switch ($file->getCommand()) {
                     case Monitor::WRITE:
@@ -180,13 +183,31 @@ class FileOperationController extends Controller
                             array_push($filesRecovered, $id);
                         } else {
                             // File cannot be deleted
-                            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_INTERNAL_SERVER_ERROR);
+                            $this->logger->warning('recover: File cannot be deleted.', array('app' => Application::APP_ID));
+
+                            // clean up file operation cause it will never be recovered
+                            $this->service->deleteById($id, false);
+
+                            $couldNotBeRecovered++;
+                            array_push($filesRecovered, $id);
+                            break;
                         }
                         break;
                     case Monitor::DELETE:
                         // Recover deleted files by restoring them from the trashbin
                         // It's not necessary to use the real path
                         $trashItem = $this->trashManager->getTrashNodeById($this->userManager->get($this->userId), $file->getFileId());
+                        if (is_null($trashItem)) {
+                            // no item found in trashbin
+                            $this->logger->warning('recover: File or folder is not located in the trashbin.', array('app' => Application::APP_ID));
+
+                            // clean up file operation cause it will never be recovered
+                            $this->service->deleteById($id, false);
+
+                            $couldNotBeRecovered++;
+                            array_push($filesRecovered, $id);
+                            break;
+                        }
                         $name = substr($trashItem->getName(), 0, strrpos($trashItem->getName(), "."));
                         if (strpos($trashItem->getInternalPath(), "files_trashbin/files/") !== false) {
                             $path = str_replace("files_trashbin/files/", "", $trashItem->getInternalPath());
@@ -203,11 +224,13 @@ class FileOperationController extends Controller
                             // clean up file operation cause it will never be recovered
                             $this->service->deleteById($id, false);
 
-                            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
+                            $couldNotBeRecovered++;
+                            array_push($filesRecovered, $id);
+                            break;
                         }
                         break;
                     case Monitor::RENAME:
-                        $this->service->deleteById($id, true);
+                        $this->service->deleteById($id, false);
 
                         $deleted++;
                         array_push($filesRecovered, $id);
@@ -221,7 +244,14 @@ class FileOperationController extends Controller
                             array_push($filesRecovered, $id);
                         } else {
                             // File cannot be deleted
-                            return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_INTERNAL_SERVER_ERROR);
+                            $this->logger->warning('recover: File cannot be deleted.', array('app' => Application::APP_ID));
+
+                            // clean up file operation cause it will never be recovered
+                            $this->service->deleteById($id, false);
+
+                            $couldNotBeRecovered++;
+                            array_push($filesRecovered, $id);
+                            break;
                         }
                         break;
                     default:
@@ -236,15 +266,25 @@ class FileOperationController extends Controller
                 // Found more than one with the same file name
                 $this->logger->debug('recover: Found more than one with the same file name.', array('app' => Application::APP_ID));
 
-                return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
+                // clean up file operation cause it will never be recovered
+                $this->service->deleteById($id, false);
+
+                $couldNotBeRecovered++;
+                array_push($filesRecovered, $id);
+                break;
             } catch (\OCP\AppFramework\Db\DoesNotExistException $exception) {
                 // Nothing found
                 $this->logger->debug('recover: Files does not exist.', array('app' => Application::APP_ID));
 
-                return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_BAD_REQUEST);
+                // clean up file operation cause it will never be recovered
+                $this->service->deleteById($id, false);
+
+                $couldNotBeRecovered++;
+                array_push($filesRecovered, $id);
+                break;
             }
         }
-        return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered), Http::STATUS_OK);
+        return new JSONResponse(array('recovered' => $recovered, 'deleted' => $deleted, 'filesRecovered' => $filesRecovered, 'couldNotBeRecovered' => $couldNotBeRecovered), Http::STATUS_OK);
     }
 
     /**

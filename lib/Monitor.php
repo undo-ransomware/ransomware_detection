@@ -151,9 +151,17 @@ class Monitor
 			return;
         }
 
-        if ($source->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
-            $this->logger->warning("The source node is the user folder.", ['app' =>  Application::APP_ID]);
-			return;
+        if ($mode !== self::RENAME) {
+            // the source file does not exist if it is renamed
+            if ($source->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
+                $this->logger->warning("The source node is the user folder.", ['app' =>  Application::APP_ID]);
+                return;
+            }
+        } else {
+            if ($target->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
+                $this->logger->warning("The target node is the user folder.", ['app' =>  Application::APP_ID]);
+                return;
+            }
         }
         
         $storage = $source->getStorage();
@@ -378,15 +386,23 @@ class Monitor
 			return;
         }
 
-        if ($source->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
-            $this->logger->warning("The source node is the user folder.", ['app' =>  Application::APP_ID]);
-			return;
+        if ($mode !== self::RENAME) {
+            // the source file does not exist if it is renamed
+            if ($source->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
+                $this->logger->warning("The source node is the user folder.", ['app' =>  Application::APP_ID]);
+                return;
+            }
+        } else {
+            if ($target->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
+                $this->logger->warning("The target node is the user folder.", ['app' =>  Application::APP_ID]);
+                return;
+            }
         }
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
         $fileOperation->setPath(str_replace('files', '', pathinfo($source->getInternalPath())['dirname']));
         $fileOperation->setOriginalName($source->getName());
-        if ($operation === self::RENAME) {
+        if ($mode === self::RENAME) {
             $fileOperation->setNewName(pathinfo($target->getInternalPath())['basename']);
             $fileOperation->setMimeType($target->getMimeType());
             $fileOperation->setFileId($target->getId());
@@ -438,15 +454,23 @@ class Monitor
 			return;
         }
 
-        if ($source->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
-            $this->logger->warning("The source node is the user folder.", ['app' =>  Application::APP_ID]);
-			return;
+        if ($mode !== self::RENAME) {
+            // the source file does not exist if it is renamed
+            if ($source->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
+                $this->logger->warning("The source node is the user folder.", ['app' =>  Application::APP_ID]);
+                return;
+            }
+        } else {
+            if ($target->getId() === $this->rootFolder->getUserFolder($this->userId)->getId()) {
+                $this->logger->warning("The target node is the user folder.", ['app' =>  Application::APP_ID]);
+                return;
+            }
         }
         $fileOperation = new FileOperation();
         $fileOperation->setUserId($this->userId);
         $fileOperation->setPath(str_replace('files', '', pathinfo($source->getInternalPath())['dirname']));
         $fileOperation->setOriginalName($source->getName());
-        if ($operation === self::RENAME) {
+        if ($mode === self::RENAME) {
             $fileOperation->setNewName(pathinfo($target->getInternalPath())['basename']);
             $fileOperation->setMimeType($target->getMimeType());
             $fileOperation->setFileId($target->getId());
