@@ -1,4 +1,4 @@
-# **WARNING: Because of an open [problem](https://github.com/undo-ransomware/ransomware_detection/issues/48#issue-763599989) that can lead to the deletion of all files, I advise against using the current version 0.9.0. I have already removed this version from the Appstore. I recommend disabling the app until a fix is released.**
+# **WARNING: The app was removed and replaced by a dummy app in the app store because of an open [problem](https://github.com/undo-ransomware/ransomware_detection/issues/48#issue-763599989) that can lead to the deletion of all files. I recommend disabling or remove the app.**
 
 # Nextcloud Ransomware Recovery
 
