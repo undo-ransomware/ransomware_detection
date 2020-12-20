@@ -54,9 +54,6 @@ class RecoveredFileOperationControllerTest extends TestCase
     /** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
     protected $logger;
 
-    /** @var Classifier|\PHPUnit_Framework_MockObject_MockObject */
-    protected $classifier;
-
     /** @var Folder|\PHPUnit_Framework_MockObject_MockObject */
     protected $folder;
 
@@ -98,9 +95,6 @@ class RecoveredFileOperationControllerTest extends TestCase
         $this->service = $this->getMockBuilder('OCA\RansomwareDetection\Service\RecoveredFileOperationService')
             ->setConstructorArgs([$recoveredMapper, $mapper, $this->userId])
             ->getMock();
-        $this->classifier = $this->getMockBuilder('OCA\RansomwareDetection\Classifier')
-            ->setConstructorArgs([$this->logger, $mapper, $this->service])
-            ->getMock();
         $this->sequenceAnalyzer = $this->createMock(SequenceAnalyzer::class);
     }
 
@@ -114,7 +108,6 @@ class RecoveredFileOperationControllerTest extends TestCase
             $this->logger,
             $this->folder,
             $this->service,
-            $this->classifier,
             $this->trashManager,
             $this->userManager,
             'john'
@@ -131,7 +124,6 @@ class RecoveredFileOperationControllerTest extends TestCase
         $this->service->method('findAll')
             ->willReturn([$file]);
 
-        $this->classifier->method('classifyFile');
         $this->sequenceAnalyzer->method('analyze')
             ->willReturn($sequenceResult);
 
@@ -220,7 +212,6 @@ class RecoveredFileOperationControllerTest extends TestCase
                 $this->logger,
                 $this->folder,
                 $this->service,
-                $this->classifier,
                 $this->trashManager,
                 $this->userManager,
                 'john'
@@ -255,7 +246,6 @@ class RecoveredFileOperationControllerTest extends TestCase
                 $this->logger,
                 $this->folder,
                 $this->service,
-                $this->classifier,
                 $this->trashManager,
                 $this->userManager,
                 'john'
@@ -279,7 +269,6 @@ class RecoveredFileOperationControllerTest extends TestCase
                 $this->logger,
                 $this->folder,
                 $this->service,
-                $this->classifier,
                 $this->trashManager,
                 $this->userManager,
                 'john'
@@ -303,7 +292,6 @@ class RecoveredFileOperationControllerTest extends TestCase
             $this->logger,
             $this->folder,
             $this->service,
-            $this->classifier,
             $this->trashManager,
             $this->userManager,
             'john'
@@ -333,7 +321,6 @@ class RecoveredFileOperationControllerTest extends TestCase
             $this->logger,
             $this->folder,
             $this->service,
-            $this->classifier,
             $this->trashManager,
             $this->userManager,
             'john'
@@ -363,7 +350,6 @@ class RecoveredFileOperationControllerTest extends TestCase
             $this->logger,
             $this->folder,
             $this->service,
-            $this->classifier,
             $this->trashManager,
             $this->userManager,
             'john'

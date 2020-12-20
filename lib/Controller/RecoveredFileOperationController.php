@@ -57,9 +57,6 @@ class RecoveredFileOperationController extends Controller
     /** @var RecoveredFileOperationService */
     protected $service;
 
-    /** @var Classifier */
-    protected $classifier;
-
     /** @var ITrashManager */
     protected $trashManager;
 
@@ -77,7 +74,6 @@ class RecoveredFileOperationController extends Controller
      * @param ILogger              $logger
      * @param Folder               $userFolder
      * @param RecoveredFileOperationService $service
-     * @param Classifier           $classifier
      * @param ITrashManager        $trashManager
      * @param IUserManager         $userManager
      * @param string               $userId
@@ -90,7 +86,6 @@ class RecoveredFileOperationController extends Controller
         ILogger $logger,
         Folder $userFolder,
         RecoveredFileOperationService $service,
-        Classifier $classifier,
         ITrashManager $trashManager,
         IUserManager $userManager,
         $userId
@@ -102,7 +97,6 @@ class RecoveredFileOperationController extends Controller
         $this->userFolder = $userFolder;
         $this->logger = $logger;
         $this->service = $service;
-        $this->classifier = $classifier;
         $this->trashManager = $trashManager;
         $this->userManager = $userManager;
         $this->userId = $userId;
