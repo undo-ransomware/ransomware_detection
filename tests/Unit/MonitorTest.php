@@ -97,11 +97,17 @@ class MonitorTest extends TestCase
     public function dataAnalyze()
     {
 
-        $source = $this->createMock(File::class);
-        $source->method('getInternalPath')
+        $sourceUserFolder = $this->createMock(File::class);
+        $sourceUserFolder->method('getInternalPath')
             ->willReturn('/admin/files/test.file');
-        $source->method('getId')
+        $sourceUserFolder->method('getId')
             ->willReturn(3);
+
+        $sourceNotUserFolder = $this->createMock(File::class);
+        $sourceNotUserFolder->method('getInternalPath')
+            ->willReturn('/admin/files/test.file');
+        $sourceNotUserFolder->method('getId')
+            ->willReturn(1);
 
         $target = $this->createMock(File::class);
         $target->method('getInternalPath')
@@ -109,10 +115,10 @@ class MonitorTest extends TestCase
 
         return [
             ['source' => null, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
-            ['source' => $source, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
-            ['source' => $source, 'target' => $target, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
-            ['source' => $source, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
-            ['source' => $source, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 1, 'addFolderOperation' => 0],
+            ['source' => $sourceNotUserFolder, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
+            ['source' => $sourceNotUserFolder, 'target' => $target, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
+            ['source' => $sourceUserFolder, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
+            ['source' => $sourceNotUserFolder, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 1, 'addFolderOperation' => 0],
             /*['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => false, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time()],
             ['paths' => ['/admin/files/test/files.extension', 'files/'], 'mode' => Monitor::READ, 'userAgent' => true, 'timestamp' => time()],
