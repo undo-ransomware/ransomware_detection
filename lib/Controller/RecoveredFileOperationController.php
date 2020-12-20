@@ -120,10 +120,6 @@ class RecoveredFileOperationController extends Controller
     {
         $files = $this->service->findAll();
 
-        foreach ($files as $file) {
-            $this->classifier->classifyFile($file);
-        }
-
         return new JSONResponse($files, Http::STATUS_OK);
     }
 
@@ -138,8 +134,6 @@ class RecoveredFileOperationController extends Controller
     public function find($id)
     {
         $file = $this->service->find($id);
-
-        $this->classifier->classifyFile($file);
 
         return new JSONResponse($file, Http::STATUS_OK);
     }
