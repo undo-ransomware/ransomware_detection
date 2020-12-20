@@ -146,7 +146,7 @@ class MonitorTest extends TestCase
                 $this->appManager, $this->logger, $this->rootFolder,
                 $this->entropyAnalyzer, $this->mapper, $this->fileExtensionAnalyzer,
                 $this->fileCorruptionAnalyzer, $this->userId])
-            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'classifySequence', 'resetProfindCount', 'addFolderOperation', 'addFileOperation'])
+            ->setMethods(['isUploadedFile', 'isCreatingSkeletonFiles', 'resetProfindCount', 'addFolderOperation', 'addFileOperation'])
             ->getMock();
 
         $storage = $this->createMock(IStorage::class);
@@ -164,21 +164,8 @@ class MonitorTest extends TestCase
             ->method('isCreatingSkeletonFiles')
             ->willReturn(false);
 
-        $monitor->expects($this->any())
-            ->method('classifySequence');
-
         $monitor->expects($this->exactly($addFileOperation + $addFolderOperation))
             ->method('resetProfindCount');
-
-        $entropyResult = new EntropyResult(EntropyResult::COMPRESSED, 7.99, 0.004);
-
-        $this->entropyAnalyzer->method('analyze')
-            ->willReturn($entropyResult);
-
-        $fileExtensionResult = new FileExtensionResult(FileExtensionResult::NOT_SUSPICIOUS, true, 4.0);
-
-        $this->fileExtensionAnalyzer->method('analyze')
-            ->willReturn($fileExtensionResult);
 
         $this->request->method('isUserAgent')
             ->willReturn($userAgent);
@@ -201,22 +188,10 @@ class MonitorTest extends TestCase
         $this->rootFolder->method('getUserFolder')
             ->willReturn($folder);
 
-        $fileOperation = new FileOperation();
-        $fileOperation->setTimestamp($timestamp);
-
-        $entity = new FileOperation();
-        $entity->id = 1;
-
-        $this->mapper->method('insert')
-            ->willReturn($entity);
-
-        $fileCorruptionResult = new FileCorruptionResult(true);
-        $this->fileCorruptionAnalyzer->method('analyze')
-            ->willReturn($fileCorruptionResult);
-
-        $monitor->analyze($source, $target, $mode);
         $monitor->expects($this->exactly($addFileOperation))->method('addFileOperation');
         $monitor->expects($this->exactly($addFolderOperation))->method('addFolderOperation');
+
+        $monitor->analyze($source, $target, $mode);
     }
 
     public function dataIsUploadedFile()

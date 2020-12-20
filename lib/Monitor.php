@@ -204,7 +204,7 @@ class Monitor
 
                 // not a file no need to analyze
                 if (!($source instanceof File)) {
-                    $this->addFolderOperation($source->getPath(), null, self::WRITE);
+                    $this->addFolderOperation($source, null, self::WRITE);
                     $this->nestingLevel--;
 
                     return;
