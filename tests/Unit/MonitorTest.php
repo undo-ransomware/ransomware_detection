@@ -100,17 +100,23 @@ class MonitorTest extends TestCase
         $sourceUserFolder = $this->createMock(File::class);
         $sourceUserFolder->method('getInternalPath')
             ->willReturn('/admin/files/test.file');
+        $sourceUserFolder->method('getPath')
+            ->willReturn('/admin/files/test.file');
         $sourceUserFolder->method('getId')
             ->willReturn(3);
 
         $sourceNotUserFolder = $this->createMock(File::class);
         $sourceNotUserFolder->method('getInternalPath')
             ->willReturn('/admin/files/test.file');
+        $sourceNotUserFolder->method('getPath')
+            ->willReturn('/admin/files/test.file');
         $sourceNotUserFolder->method('getId')
             ->willReturn(1);
 
         $target = $this->createMock(File::class);
         $target->method('getInternalPath')
+            ->willReturn('/admin/files/test.file');
+        $target->method('getPath')
             ->willReturn('/admin/files/test.file');
 
         return [
@@ -119,7 +125,7 @@ class MonitorTest extends TestCase
             ['source' => $sourceNotUserFolder, 'target' => $target, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
             ['source' => $sourceUserFolder, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
             ['source' => $sourceNotUserFolder, 'target' => null, 'mode' => Monitor::WRITE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 1, 'addFolderOperation' => 0],
-            ['source' => $sourceNotUserFolder, 'target' => null, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 1, 'addFolderOperation' => 0],
+            ['source' => $sourceNotUserFolder, 'target' => $target, 'mode' => Monitor::RENAME, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 1, 'addFolderOperation' => 0],
             ['source' => $sourceNotUserFolder, 'target' => null, 'mode' => Monitor::DELETE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 1, 'addFolderOperation' => 0],
             ['source' => $sourceNotUserFolder, 'target' => null, 'mode' => Monitor::CREATE, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 1, 'addFolderOperation' => 0],
             ['source' => $sourceNotUserFolder, 'target' => null, 'mode' => Monitor::READ, 'userAgent' => true, 'timestamp' => time(), 'addFileOperation' => 0, 'addFolderOperation' => 0],
